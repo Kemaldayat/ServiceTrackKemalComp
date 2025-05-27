@@ -3,101 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Service Track Kemal Computer</title>
+  <title>Login</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1581090700227-1e8c570ff9b2?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
-      height: 100vh;
+      font-family: sans-serif;
+      background: #f0f4f8;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
     .login-box {
-      background: rgba(255, 255, 255, 0.95);
+      background: white;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       max-width: 400px;
+      width: 100%;
     }
-
     .login-box h2 {
-      text-align: center;
       margin-bottom: 1rem;
     }
-
-    .logo {
-      display: block;
-      margin: 0 auto 1rem;
-      width: 80px;
-    }
-
     input, button {
       width: 100%;
       padding: 0.75rem;
       margin-top: 1rem;
-      border-radius: 6px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      font-size: 1rem;
+      box-sizing: border-box;
     }
-
-    .password-wrapper {
-      position: relative;
-    }
-
-    .password-wrapper span {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
     button {
       background: #007bff;
       color: white;
       border: none;
     }
-
     button:hover {
       background: #0056b3;
     }
-
-    .remember {
-      display: flex;
-      align-items: center;
-      margin-top: 1rem;
-    }
-
-    .remember input {
-      width: auto;
-      margin-right: 0.5rem;
-    }
-
     .msg {
       margin-top: 1rem;
       text-align: center;
       font-weight: bold;
       color: red;
     }
+    .remember-row {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .remember-row input {
+      margin-right: 5px;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 <body>
   <div class="login-box">
-    <img src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" alt="Logo" class="logo">
-    <h2>Login ServiceTrack</h2>
+    <h2>Login</h2>
     <input type="email" id="email" placeholder="Email" />
     <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" />
-      <span onclick="togglePassword()">👁️</span>
+      <input type="password" id="password" placeholder="Password" style="padding-right: 40px;" />
+      <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
     </div>
-    <div class="remember">
+    <div class="remember-row">
       <input type="checkbox" id="remember" />
-      <label for="remember">Remember Me</label>
+      <label for="remember">Ingat saya</label>
     </div>
     <button onclick="login()">Login</button>
     <div class="msg" id="msg"></div>
@@ -105,7 +88,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
@@ -120,52 +103,42 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const rememberMe = document.getElementById("remember");
-    const msg = document.getElementById("msg");
-
-    window.togglePassword = () => {
-      const type = passwordInput.type === "password" ? "text" : "password";
-      passwordInput.type = type;
-    };
-
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        window.location.href = "admin.html";
-      }
-    });
-
     window.login = () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const remember = document.getElementById("remember").checked;
+      const msg = document.getElementById("msg");
 
       if (!email || !password) {
         msg.textContent = "Email dan password wajib diisi.";
         return;
       }
 
-      if (password.length < 6) {
-        msg.textContent = "Password minimal 6 karakter.";
-        return;
-      }
+      const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
 
-      signInWithEmailAndPassword(auth, email, password)
+      setPersistence(auth, persistence)
+        .then(() => signInWithEmailAndPassword(auth, email, password))
         .then(userCredential => {
-          if (email === "dayatkemal16@gmail.com") {
-            if (rememberMe.checked) {
-              localStorage.setItem("rememberUser", email);
-            }
+          const userEmail = userCredential.user.email;
+
+          // Role-based redirect
+          if (userEmail === "dayatkemal16@gmail.com") {
             window.location.href = "admin.html";
           } else {
-            msg.textContent = "Akun tidak diizinkan.";
-            signOut(auth);
+            window.location.href = "teknisi.html";
           }
         })
         .catch(err => {
           msg.textContent = "Email atau password salah.";
         });
     };
+  </script>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
   </script>
 </body>
 </html>

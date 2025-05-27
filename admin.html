@@ -1,43 +1,84 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Update Antrian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Update Status Service</title>
   <style>
-    body { font-family: sans-serif; background: #f4f4f4; padding: 2rem; text-align: center; }
-    input, button, select { padding: 0.5rem; margin: 0.5rem; width: 90%; max-width: 400px; }
-    form { background: white; padding: 1rem; border-radius: 8px; display: inline-block; }
-    .success { color: green; margin-top: 1rem; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.8rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .logout {
+      margin-top: 1rem;
+      background: #dc3545;
+    }
+    .logout:hover {
+      background: #c82333;
+    }
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <h1>Form Admin Antrian Service</h1>
-  <form onsubmit="submitData(event)">
-    <input type="text" id="kode" placeholder="Nomor Antrian (contoh: SVC001)" required /><br />
-    <input type="text" id="nama" placeholder="Nama Pelanggan" required /><br />
-    <input type="text" id="barang" placeholder="Jenis Barang" required /><br />
+  <div class="container">
+    <h2>Panel Admin</h2>
+    <p>Masukkan kode antrian dan update status service:</p>
+
+    <input type="text" id="kode" placeholder="Contoh: SVC001" />
+    <input type="text" id="nama" placeholder="Nama pelanggan" />
+    <input type="text" id="barang" placeholder="Jenis barang" />
     <select id="status">
       <option value="Menunggu">Menunggu</option>
-      <option value="Sedang Diperbaiki">Sedang Diperbaiki</option>
+      <option value="Proses">Proses</option>
       <option value="Selesai">Selesai</option>
-      <option value="Diambil">Diambil</option>
-    </select><br />
-    <button type="submit">Simpan / Update</button>
-    <div class="success" id="msg"></div>
-  </form>
+    </select>
+    <button onclick="simpanData()">Simpan / Update</button>
+
+    <button class="logout" onclick="logout()">Logout</button>
+    <div class="message" id="msg"></div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
       authDomain: "website-track-service.firebaseapp.com",
       databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "website-track-service",
-      storageBucket: "website-track-service.firebasestorage.app",
+      storageBucket: "website-track-service.appspot.com",
       messagingSenderId: "87573564376",
       appId: "1:87573564376:web:c93c07f0506d00535a00ad",
       measurementId: "G-64T8XNWK5F"
@@ -45,25 +86,50 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
 
-    window.submitData = async function(e) {
-      e.preventDefault();
-      const kode = document.getElementById("kode").value;
-      const nama = document.getElementById("nama").value;
-      const barang = document.getElementById("barang").value;
+    // Cek login
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("Anda belum login.");
+        window.location.href = "login.html";
+      }
+    });
+
+    // Simpan data ke Firebase
+    window.simpanData = () => {
+      const kode = document.getElementById("kode").value.trim().toUpperCase();
+      const nama = document.getElementById("nama").value.trim();
+      const barang = document.getElementById("barang").value.trim();
       const status = document.getElementById("status").value;
       const msg = document.getElementById("msg");
 
-      await set(ref(db, "antrian/" + kode), {
-        nama: nama,
-        barang: barang,
-        status: status
-      });
+      if (!kode || !nama || !barang) {
+        msg.style.color = "red";
+        msg.textContent = "Semua field harus diisi.";
+        return;
+      }
 
-      msg.innerText = "Data berhasil disimpan!";
-      setTimeout(() => { msg.innerText = "" }, 3000);
-    }
+      set(ref(db, "antrian/" + kode), {
+        nama,
+        barang,
+        status
+      }).then(() => {
+        msg.style.color = "green";
+        msg.textContent = "✅ Data berhasil disimpan.";
+      }).catch((error) => {
+        console.error(error);
+        msg.style.color = "red";
+        msg.textContent = "❌ Gagal menyimpan data.";
+      });
+    };
+
+    // Logout
+    window.logout = () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    };
   </script>
 </body>
 </html>
-

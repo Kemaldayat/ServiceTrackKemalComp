@@ -6,8 +6,8 @@
   <title>Login Admin</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      font-family: sans-serif;
+      background: #eef2f5;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,53 +18,52 @@
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
+      width: 100%;
+      max-width: 400px;
     }
     input, button {
       width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.8rem;
+      padding: 0.7rem;
+      margin-top: 1rem;
       border-radius: 5px;
       border: 1px solid #ccc;
-      font-size: 1rem;
     }
     button {
       background: #007bff;
       color: white;
       border: none;
-      cursor: pointer;
     }
     button:hover {
       background: #0056b3;
     }
-    .message {
+    .msg {
       margin-top: 1rem;
-      color: red;
       text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="login-box">
     <h2>Login Admin</h2>
-    <input type="email" id="email" placeholder="Email admin" />
+    <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
-    <div class="message" id="msg"></div>
+    <div class="msg" id="msg"></div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
       authDomain: "website-track-service.firebaseapp.com",
+      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "website-track-service",
       storageBucket: "website-track-service.appspot.com",
       messagingSenderId: "87573564376",
-      appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-      measurementId: "G-64T8XNWK5F"
+      appId: "1:87573564376:web:c93c07f0506d00535a00ad"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -76,18 +75,26 @@
       const msg = document.getElementById("msg");
 
       if (!email || !password) {
-        msg.textContent = "Email dan password harus diisi.";
+        msg.textContent = "Email dan password wajib diisi.";
+        return;
+      }
+
+      if (password.length < 6) {
+        msg.textContent = "Password minimal 6 karakter.";
         return;
       }
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          // 🔥 LANGKAH 4: Redirect ke halaman admin
+        .then(userCredential => {
+          if (email !== "admin@gmail.com") {
+            msg.textContent = "Akun tidak diizinkan.";
+            signOut(auth);
+            return;
+          }
           window.location.href = "admin.html";
         })
-        .catch(error => {
-          console.error(error);
-          msg.textContent = "Login gagal. Periksa email/password.";
+        .catch(err => {
+          msg.textContent = "Email atau password salah.";
         });
     };
   </script>

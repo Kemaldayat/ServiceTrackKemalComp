@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin - Update Status Service</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* Menggunakan font Inter secara global */
@@ -15,35 +15,36 @@
 </head>
 <body class="bg-gray-100 p-4 sm:p-8 flex items-center justify-center min-h-screen">
   <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Panel Admin</h2>
-    <p class="text-gray-600 text-center mb-6">Masukkan kode antrian dan update status service:</p>
+    <img src="/_api/gcs/uploaded:Kemal Computer (1).png-23dfdc7c-63b7-42dc-ab99-42e9223e535d" alt="Logo Kemal Computer"
+         class="w-32 h-auto mx-auto mb-6">     <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Panel Admin</h2>
+    <p class="text-gray-600 text-center mb-4">Masukkan kode antrian dan update status service:</p>
 
-        <div class="mb-4">
-      <label for="kode" class="block text-gray-700 text-sm font-medium mb-2">Kode Service</label>
+    <div class="mb-2">
+      <label for="kode" class="block text-gray-700 text-sm font-medium mb-1">Kode Service</label>
       <input type="text" id="kode" placeholder="Kode akan terisi otomatis" readonly
         class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
     </div>
 
-    <div class="mb-4">
-      <label for="nama" class="block text-gray-700 text-sm font-medium mb-2">Nama Pelanggan</label>
+    <div class="mb-2">
+      <label for="nama" class="block text-gray-700 text-sm font-medium mb-1">Nama Pelanggan</label>
       <input type="text" id="nama" placeholder="Nama pelanggan"
         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
     </div>
 
-    <div class="mb-4">
-      <label for="device" class="block text-gray-700 text-sm font-medium mb-2">Seri Device / Barang</label>
+    <div class="mb-2">
+      <label for="device" class="block text-gray-700 text-sm font-medium mb-1">Seri Device / Barang</label>
       <input type="text" id="device" placeholder="Seri Device / Barang"
         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
     </div>
 
-    <div class="mb-6">
-      <label for="kerusakan" class="block text-gray-700 text-sm font-medium mb-2">Keluhan / Kerusakan</label>
+    <div class="mb-3">
+      <label for="kerusakan" class="block text-gray-700 text-sm font-medium mb-1">Keluhan / Kerusakan</label>
       <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan"
         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
     </div>
 
-    <div class="mb-6">
-      <label for="status" class="block text-gray-700 text-sm font-medium mb-2">Status</label>
+    <div class="mb-3">
+      <label for="status" class="block text-gray-700 text-sm font-medium mb-1">Status</label>
       <select id="status"
         class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
         <option value="Menunggu">Menunggu</option>
@@ -53,18 +54,18 @@
     </div>
 
     <button onclick="simpanData()"
-      class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mb-3">
+      class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mb-1">
       Simpan / Update
     </button>
-    <button onclick="window.location.href='dashboard.html'"
-      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-3">
+    <button onclick="window.location.href='/dashboard.html'"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-1">
       Lihat Dashboard
     </button>
     <button class="logout w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
       Logout
     </button>
 
-    <div class="message mt-6 text-center font-semibold" id="msg"></div>
+    <div class="message mt-4 text-center font-semibold" id="msg"></div>
   </div>
 
   <script type="module">
@@ -95,10 +96,9 @@
     onAuthStateChanged(auth, user => {
       if (!user) {
         // Jika pengguna belum login, arahkan ke halaman login
-        // Menggunakan modal kustom sebagai pengganti alert untuk pengalaman pengguna yang lebih baik
         showCustomMessage("Anda belum login. Mengarahkan ke halaman login...", "red");
         setTimeout(() => {
-          window.location.href = "login.html";
+          window.location.href = "/login.html";
         }, 2000); // Tunggu 2 detik sebelum redirect
       } else {
         // Jika sudah login, generate kode service berikutnya
@@ -180,10 +180,7 @@
     // Fungsi untuk logout
     window.logout = () => {
       signOut(auth).then(() => {
-        showCustomMessage("Berhasil logout. Mengarahkan ke halaman login...", "green");
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500); // Tunggu sebentar sebelum redirect
+        window.location.href = "/login.html";
       }).catch((error) => {
         console.error("Error logging out:", error);
         showCustomMessage("Gagal logout. Silakan coba lagi.", "red");

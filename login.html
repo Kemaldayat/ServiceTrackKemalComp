@@ -9,40 +9,38 @@
       font-family: Arial, sans-serif;
       background: #f0f2f5;
       display: flex;
-      height: 100vh;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
     .login-box {
-      background: #fff;
+      background: white;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
+      width: 300px;
     }
-    input {
+    input, button {
       width: 100%;
       padding: 0.6rem;
-      margin: 0.5rem 0;
+      margin-top: 0.8rem;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      font-size: 1rem;
     }
     button {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 1rem;
       background: #007bff;
       color: white;
       border: none;
-      border-radius: 4px;
       cursor: pointer;
     }
     button:hover {
       background: #0056b3;
     }
-    .error {
-      color: red;
+    .message {
       margin-top: 1rem;
+      color: red;
+      text-align: center;
     }
   </style>
 </head>
@@ -51,8 +49,8 @@
     <h2>Login Admin</h2>
     <input type="email" id="email" placeholder="Email admin" />
     <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Masuk</button>
-    <div id="error" class="error"></div>
+    <button onclick="login()">Login</button>
+    <div class="message" id="msg"></div>
   </div>
 
   <script type="module">
@@ -73,26 +71,25 @@
     const auth = getAuth(app);
 
     window.login = () => {
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const errorDiv = document.getElementById("error");
+      const msg = document.getElementById("msg");
 
       if (!email || !password) {
-        errorDiv.textContent = "Silakan isi email dan password.";
+        msg.textContent = "Email dan password harus diisi.";
         return;
       }
 
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          // Redirect ke halaman admin
+          // 🔥 LANGKAH 4: Redirect ke halaman admin
           window.location.href = "admin.html";
         })
         .catch(error => {
           console.error(error);
-          errorDiv.textContent = "Login gagal: " + error.message;
+          msg.textContent = "Login gagal. Periksa email/password.";
         });
     };
   </script>
 </body>
 </html>
-

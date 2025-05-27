@@ -1,1 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Service</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.6rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #007bff;
+      color: white;
+    }
+    .logout {
+      margin-top: 2rem;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .logout:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Data Antrian Service</h2>
+    <input type="text" id="search" placeholder="Cari berdasarkan kode / nama / barang...">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Kode</th>
+          <th>Nama</th>
+          <th>Barang</th>
+          <th>Keluhan</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="dataBody"></tbody>
+    </table>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+      authDomain: "website-track-service.firebaseapp.com",
+      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "website-track-service",
+      storageBucket: "website-track-service.appspot.com",
+      messagingSenderId: "87573564376",
+      appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("Harap login terlebih dahulu.");
+        window.location.href = "login.html";
+      }
+    });
+
+    const dataBody = document.getElementById("dataBody");
+    const searchInput = document.getElementById("search");
+
+    const renderTable = (data) => {
+      dataBody.innerHTML = "";
+      Object.entries(data).forEach(([kode, item]) => {
+        const row = `
+          <tr>
+            <td>${kode}</td>
+            <td>${item.nama}</td>
+            <td>${item.barang}</td>
+            <td>${item.kerusakan || "-"}</td>
+            <td>${item.status}</td>
+          </tr>`;
+        dataBody.innerHTML += row;
+      });
+    };
+
+    let allData = {};
+    onValue(ref(db, "antrian"), (snapshot) => {
+      if (snapshot.exists()) {
+        allData = snapshot.val();
+        renderTable(allData);
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = Object.entries(allData).filter(([kode, val]) =>
+        kode.toLowerCase().includes(keyword) ||
+        val.nama.toLowerCase().includes(keyword) ||
+        val.barang.toLowerCase().includes(keyword)
+      );
+      dataBody.innerHTML = "";
+      filtered.forEach(([kode, val]) => {
+        const row = `
+          <tr>
+            <td>${kode}</td>
+            <td>${val.nama}</td>
+            <td>${val.barang}</td>
+            <td>${val.kerusakan || "-"}</td>
+            <td>${val.status}</td>
+          </tr>`;
+        dataBody.innerHTML += row;
+      });
+    });
+
+    window.logout = () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    };
+  </script>
+</body>
+</html>
 

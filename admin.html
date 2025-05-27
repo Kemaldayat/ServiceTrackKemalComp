@@ -56,7 +56,7 @@
 
     <input type="text" id="kode" placeholder="Contoh: SVC001" />
     <input type="text" id="nama" placeholder="Nama pelanggan" />
-    <input type="text" id="barang" placeholder="Seri Device / Barang" />
+    <input type="text" id="device" placeholder="Seri Device / Barang" />
     <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan" />
 
     <select id="status">
@@ -104,7 +104,7 @@
     window.simpanData = () => {
       const kode = document.getElementById("kode").value.trim().toUpperCase();
       const nama = document.getElementById("nama").value.trim();
-      const barang = document.getElementById("barang").value.trim();
+      const device = document.getElementById("device").value.trim();
       const kerusakan = document.getElementById("kerusakan").value.trim();
       const status = document.getElementById("status").value;
       const msg = document.getElementById("msg");
@@ -117,7 +117,7 @@
 
       set(ref(db, "antrian/" + kode), {
         nama,
-        barang,
+        device,
         kerusakan,
         status
       }).then(() => {

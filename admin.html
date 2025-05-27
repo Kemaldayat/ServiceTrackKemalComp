@@ -4,79 +4,76 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin - Update Status Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Menggunakan font Inter secara global */
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, select, button {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.8rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    button {
-      background: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
-    .logout {
-      margin-top: 1rem;
-      background: #dc3545;
-    }
-    .logout:hover {
-      background: #c82333;
-    }
-    .message {
-      margin-top: 1rem;
-      font-weight: bold;
-      text-align: center;
+      font-family: 'Inter', sans-serif;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h2>Panel Admin</h2>
-    <p>Masukkan kode antrian dan update status service:</p>
+<body class="bg-gray-100 p-4 sm:p-8 flex items-center justify-center min-h-screen">
+  <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Panel Admin</h2>
+    <p class="text-gray-600 text-center mb-6">Masukkan kode antrian dan update status service:</p>
 
-    <input type="text" id="kode" placeholder="Kode akan terisi otomatis" readonly />
-    <input type="text" id="nama" placeholder="Nama pelanggan" />
-    <input type="text" id="device" placeholder="Seri Device / Barang" />
-    <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan" />
+        <div class="mb-4">
+      <label for="kode" class="block text-gray-700 text-sm font-medium mb-2">Kode Service</label>
+      <input type="text" id="kode" placeholder="Kode akan terisi otomatis" readonly
+        class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+    </div>
 
-    <select id="status">
-      <option value="Menunggu">Menunggu</option>
-      <option value="Proses">Proses</option>
-      <option value="Selesai">Selesai</option>
-    </select>
+    <div class="mb-4">
+      <label for="nama" class="block text-gray-700 text-sm font-medium mb-2">Nama Pelanggan</label>
+      <input type="text" id="nama" placeholder="Nama pelanggan"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+    </div>
 
-    <button onclick="simpanData()">Simpan / Update</button>
-    <button onclick="window.location.href='dashboard.html'">Lihat Dashboard</button>
-    <button class="logout" onclick="logout()">Logout</button>
+    <div class="mb-4">
+      <label for="device" class="block text-gray-700 text-sm font-medium mb-2">Seri Device / Barang</label>
+      <input type="text" id="device" placeholder="Seri Device / Barang"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+    </div>
 
-    <div class="message" id="msg"></div>
+    <div class="mb-6">
+      <label for="kerusakan" class="block text-gray-700 text-sm font-medium mb-2">Keluhan / Kerusakan</label>
+      <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+    </div>
+
+    <div class="mb-6">
+      <label for="status" class="block text-gray-700 text-sm font-medium mb-2">Status</label>
+      <select id="status"
+        class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
+        <option value="Menunggu">Menunggu</option>
+        <option value="Proses">Proses</option>
+        <option value="Selesai">Selesai</option>
+      </select>
+    </div>
+
+    <button onclick="simpanData()"
+      class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mb-3">
+      Simpan / Update
+    </button>
+    <button onclick="window.location.href='dashboard.html'"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-3">
+      Lihat Dashboard
+    </button>
+    <button class="logout w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+      Logout
+    </button>
+
+    <div class="message mt-6 text-center font-semibold" id="msg"></div>
   </div>
 
   <script type="module">
+    // Import modul Firebase yang dibutuhkan
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
+    // Konfigurasi Firebase Anda
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
       authDomain: "website-track-service.firebaseapp.com",
@@ -88,75 +85,108 @@
       measurementId: "G-64T8XNWK5F"
     };
 
+    // Inisialisasi Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
     const kodeInput = document.getElementById("kode");
 
-    // Cek login
+    // Cek status autentikasi pengguna
     onAuthStateChanged(auth, user => {
       if (!user) {
-        alert("Anda belum login.");
-        window.location.href = "login.html";
+        // Jika pengguna belum login, arahkan ke halaman login
+        // Menggunakan modal kustom sebagai pengganti alert untuk pengalaman pengguna yang lebih baik
+        showCustomMessage("Anda belum login. Mengarahkan ke halaman login...", "red");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000); // Tunggu 2 detik sebelum redirect
       } else {
-        generateDateCode(); // Panggil fungsi untuk menghasilkan kode tanggal
+        // Jika sudah login, generate kode service berikutnya
+        generateNextServiceCode();
       }
     });
 
-    // Fungsi untuk menghasilkan kode service berdasarkan tanggal dan waktu
-    function generateDateCode() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-
-      kodeInput.value = `SVC-${year}${month}${day}-${hours}${minutes}${seconds}`;
+    // Fungsi untuk menampilkan pesan kustom (pengganti alert)
+    function showCustomMessage(message, color) {
+      const msgElement = document.getElementById("msg");
+      msgElement.textContent = message;
+      msgElement.style.color = color;
     }
 
-    // Simpan data ke Firebase
-    window.simpanData = () => {
-      const kode = kodeInput.value.trim(); // Ambil dari input yang sudah otomatis
+    // Fungsi untuk menghasilkan kode service berikutnya secara otomatis
+    async function generateNextServiceCode() {
+      const antrianRef = ref(db, "antrian");
+      try {
+        const snapshot = await get(antrianRef);
+        let nextNumber = 1;
+
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const keys = Object.keys(data);
+          
+          let maxNumber = 0;
+          keys.forEach(key => {
+            const numMatch = key.match(/^SVC(\d+)$/);
+            if (numMatch && parseInt(numMatch[1]) > maxNumber) {
+              maxNumber = parseInt(numMatch[1]);
+            }
+          });
+          nextNumber = maxNumber + 1;
+        }
+        
+        const formattedNumber = String(nextNumber).padStart(3, '0');
+        kodeInput.value = `SVC${formattedNumber}`;
+      } catch (error) {
+        console.error("Error generating service code:", error);
+        showCustomMessage("❌ Gagal menghasilkan kode service otomatis.", "red");
+      }
+    }
+
+    // Fungsi untuk menyimpan atau memperbarui data service
+    window.simpanData = async () => {
+      const kode = kodeInput.value.trim();
       const nama = document.getElementById("nama").value.trim();
       const device = document.getElementById("device").value.trim();
       const kerusakan = document.getElementById("kerusakan").value.trim();
       const status = document.getElementById("status").value;
-      const msg = document.getElementById("msg");
 
       if (!kode || !nama || !device || !kerusakan) {
-        msg.style.color = "red";
-        msg.textContent = "Semua field harus diisi.";
+        showCustomMessage("Semua field harus diisi.", "red");
         return;
       }
 
-      set(ref(db, "antrian/" + kode), {
-        nama,
-        device,
-        kerusakan,
-        status,
-        timestamp: new Date().toISOString()
-      }).then(() => {
-        msg.style.color = "green";
-        msg.textContent = "✅ Data berhasil disimpan.";
-        // Setelah berhasil simpan, kosongkan form dan generate kode baru
+      try {
+        await set(ref(db, "antrian/" + kode), {
+          nama: nama,
+          device: device,
+          kerusakan: kerusakan,
+          status: status,
+          timestamp: new Date().toISOString()
+        });
+
+        showCustomMessage("✅ Data berhasil disimpan.", "green");
+
         document.getElementById("nama").value = "";
         document.getElementById("device").value = "";
         document.getElementById("kerusakan").value = "";
         document.getElementById("status").value = "Menunggu";
-        generateDateCode(); // Generate kode baru untuk entri berikutnya
-      }).catch((error) => {
-        console.error(error);
-        msg.style.color = "red";
-        msg.textContent = "❌ Gagal menyimpan data.";
-      });
+        generateNextServiceCode();
+      } catch (error) {
+        console.error("Error saving data:", error);
+        showCustomMessage("❌ Gagal menyimpan data.", "red");
+      }
     };
 
-    // Logout
+    // Fungsi untuk logout
     window.logout = () => {
       signOut(auth).then(() => {
-        window.location.href = "login.html";
+        showCustomMessage("Berhasil logout. Mengarahkan ke halaman login...", "green");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500); // Tunggu sebentar sebelum redirect
+      }).catch((error) => {
+        console.error("Error logging out:", error);
+        showCustomMessage("Gagal logout. Silakan coba lagi.", "red");
       });
     };
   </script>

@@ -1,7 +1,62 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html>
-<head><title>Tracking Service</title></head>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cek Status Service</title>
+  <style>
+    body { font-family: sans-serif; background: #f7f7f7; text-align: center; padding: 2rem; }
+    input, button { padding: 0.5rem; margin-top: 1rem; }
+    #result { margin-top: 2rem; background: #fff; padding: 1rem; border-radius: 8px; display: inline-block; }
+  </style>
+</head>
 <body>
-  <h1>Halo, ini halaman utama!</h1>
+  <h1>Pelacakan Status Service</h1>
+  <p>Masukkan nomor antrian service Anda:</p>
+  <input type="text" id="kode" placeholder="Contoh: SVC001" />
+  <button onclick="cekStatus()">Cek Status</button>
+  <div id="result"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+      authDomain: "website-track-service.firebaseapp.com",
+      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "website-track-service",
+      storageBucket: "website-track-service.firebasestorage.app",
+      messagingSenderId: "87573564376",
+      appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+      measurementId: "G-64T8XNWK5F"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.cekStatus = async function() {
+      const kode = document.getElementById("kode").value;
+      const resultDiv = document.getElementById("result");
+
+      if (!kode) {
+        resultDiv.innerHTML = "Silakan masukkan nomor antrian.";
+        return;
+      }
+
+      const snap = await get(ref(db, "antrian/" + kode));
+      if (snap.exists()) {
+        const data = snap.val();
+        resultDiv.innerHTML = `
+          <strong>Nama:</strong> ${data.nama}<br>
+          <strong>Barang:</strong> ${data.barang}<br>
+          <strong>Status:</strong> ${data.status}<br>
+        `;
+      } else {
+        resultDiv.innerHTML = "Data tidak ditemukan.";
+      }
+    }
+  </script>
 </body>
 </html>

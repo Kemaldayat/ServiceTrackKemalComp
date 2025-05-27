@@ -56,15 +56,19 @@
 
     <input type="text" id="kode" placeholder="Contoh: SVC001" />
     <input type="text" id="nama" placeholder="Nama pelanggan" />
-    <input type="text" id="barang" placeholder="Jenis barang" />
+    <input type="text" id="barang" placeholder="Seri Device / Barang" />
+    <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan" />
+
     <select id="status">
       <option value="Menunggu">Menunggu</option>
       <option value="Proses">Proses</option>
       <option value="Selesai">Selesai</option>
     </select>
-    <button onclick="simpanData()">Simpan / Update</button>
 
+    <button onclick="simpanData()">Simpan / Update</button>
+    <button onclick="window.location.href='dashboard.html'">Lihat Dashboard</button>
     <button class="logout" onclick="logout()">Logout</button>
+
     <div class="message" id="msg"></div>
   </div>
 
@@ -101,10 +105,11 @@
       const kode = document.getElementById("kode").value.trim().toUpperCase();
       const nama = document.getElementById("nama").value.trim();
       const barang = document.getElementById("barang").value.trim();
+      const kerusakan = document.getElementById("kerusakan").value.trim();
       const status = document.getElementById("status").value;
       const msg = document.getElementById("msg");
 
-      if (!kode || !nama || !barang) {
+      if (!kode || !nama || !barang || !kerusakan) {
         msg.style.color = "red";
         msg.textContent = "Semua field harus diisi.";
         return;
@@ -113,6 +118,7 @@
       set(ref(db, "antrian/" + kode), {
         nama,
         barang,
+        kerusakan,
         status
       }).then(() => {
         msg.style.color = "green";

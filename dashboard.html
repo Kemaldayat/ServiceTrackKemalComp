@@ -70,7 +70,7 @@
     </div>
 
     <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 w-full">
-      <button onclick="window.location.href='admin.html'"
+      <button onclick="window.location.href='add-service.html'"
         class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
         Tambah Service Baru
       </button>
@@ -105,7 +105,6 @@
       messagingSenderId: "87573564376",
       appId: "1:87573564376:web:c93c07f0506d00535a00ad",
       measurementId: "G-64T8XNWK5F"
-
     };
     // =====================================================================================================================================================================
 
@@ -177,7 +176,7 @@
         if (
           kode.toLowerCase().includes(searchTerm) ||
           (item.nama && item.nama.toLowerCase().includes(searchTerm)) ||
-          (item.barang && item.barang.toLowerCase().includes(searchTerm)) ||
+          (item.device && item.device.toLowerCase().includes(searchTerm)) || /* Changed from item.barang */
           (item.kerusakan && item.kerusakan.toLowerCase().includes(searchTerm)) ||
           (item.status && item.status.toLowerCase().includes(searchTerm))
         ) {
@@ -200,8 +199,7 @@
           row.innerHTML = `
             <td class="py-3 px-4 text-gray-700 font-medium whitespace-nowrap" data-field="kode">${kode}</td>
             <td class="py-3 px-4 text-gray-700 whitespace-nowrap" data-field="nama">${item.nama || '-'}</td>
-            <td class="py-3 px-4 text-gray-700 whitespace-nowrap" data-field="barang">${item.barang || '-'}</td>
-            <td class="py-3 px-4 text-gray-700" data-field="kerusakan">${item.kerusakan || '-'}</td>
+            <td class="py-3 px-4 text-gray-700 whitespace-nowrap" data-field="device">${item.device || '-'}</td> <td class="py-3 px-4 text-gray-700" data-field="kerusakan">${item.kerusakan || '-'}</td>
             <td class="py-3 px-4 whitespace-nowrap">
               <span class="status-badge ${statusClass}" data-field="status">${item.status || '-'}</span>
             </td>
@@ -259,7 +257,7 @@
 
     // --- In-place Editing Logic (Toggle Edit/View Mode for a Row) ---
     function toggleEditMode(row, kode, isEditMode) {
-      const fields = ['nama', 'barang', 'kerusakan', 'status']; // Fields that can be edited (code is not editable)
+      const fields = ['nama', 'device', 'kerusakan', 'status']; // Changed from 'barang' to 'device'
       const currentItem = currentData[kode]; // Get the current data for the specific item
 
       fields.forEach(field => {
@@ -333,13 +331,13 @@
     async function saveRow(row, kode) {
       const updatedData = {
         nama: row.querySelector('[data-field="nama"] input')?.value || '',
-        barang: row.querySelector('[data-field="barang"] input')?.value || '',
+        device: row.querySelector('[data-field="device"] input')?.value || '', /* Changed from barang to device */
         kerusakan: row.querySelector('[data-field="kerusakan"] input')?.value || '',
         status: row.querySelector('[data-field="status"] select')?.value || '',
       };
 
       // Simple validation: ensure all required fields are filled
-      if (!updatedData.nama || !updatedData.barang || !updatedData.kerusakan || !updatedData.status) {
+      if (!updatedData.nama || !updatedData.device || !updatedData.kerusakan || !updatedData.status) { /* Changed from barang */
         showModal('Error', 'Semua kolom (Nama, Device, Keluhan, Status) harus diisi.', false);
         return;
       }

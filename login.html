@@ -120,28 +120,26 @@
 
     /* Password Input Wrapper for Toggle Button */
     .password-wrapper {
-      position: relative;
+    position: relative;
     }
 
-    /* Toggle Password Button */
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 0px; /* Moved to the absolute far right edge */
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem; /* Smaller icon size */
-      padding: 0; /* Remove padding from button */
-      margin: 0; /* Remove margin from button */
-      color: #6C757D; /* Softer icon color */
-      transition: color 0.2s ease;
+    .password-wrapper input {
+    padding-right: 40px; /* Tambah padding agar teks tidak ketutup icon */
     }
 
-    .toggle-password:hover {
-      color: #343A40; /* Darker color on hover */
-    }
+   .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px; /* Jarak dari sisi kanan input */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    color: #6C757D;
+}
+
 
     /* Responsive adjustments */
     @media (max-width: 480px) {

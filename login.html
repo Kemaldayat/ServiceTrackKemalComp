@@ -5,56 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Global Styles */
     body {
       font-family: 'Inter', sans-serif; /* Using Inter from Google Fonts */
-      background: #F8F9FA; /* Lighter background */
+      background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%); /* Soft gradient background */
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh; /* Ensure full viewport height */
       margin: 0; /* Remove default body margin */
+      padding: 1rem; /* Add some padding for smaller screens */
+      box-sizing: border-box; /* Include padding in element's total width and height */
     }
+
+    /* Login Box Container */
     .login-box {
       background: white;
       padding: 2.5rem; /* Slightly more padding */
-      border-radius: 12px; /* Slightly more rounded corners */
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12); /* Softer, more spread out shadow */
+      border-radius: 16px; /* More rounded corners for modern look */
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08); /* Layered shadow for depth */
       max-width: 420px; /* Slightly wider */
       width: 100%;
       box-sizing: border-box; /* Ensure padding doesn't add to width */
+      transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
     }
+
+    .login-box:hover {
+        transform: translateY(-5px); /* Slight lift on hover */
+    }
+
+    /* Logo Styling */
+    .login-logo {
+        max-width: 100px; /* Adjust logo size */
+        height: auto;
+        margin-bottom: 1.5rem; /* Space below logo */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for logo */
+    }
+
+    /* Heading inside Login Box */
     .login-box h2 {
       text-align: center;
       margin-bottom: 2rem; /* More space below heading */
-      color: #343A40; /* Darker text for heading */
-      font-weight: 600; /* Bolder heading */
+      color: #2C3E50; /* Darker, more prominent heading */
+      font-weight: 700; /* Bolder heading */
     }
+
+    /* Input Fields and Buttons General Styling */
     input, button {
       width: 100%;
       padding: 0.9rem; /* Slightly more vertical padding */
       margin-top: 1.2rem; /* More space between elements */
-      border-radius: 8px; /* Slightly more rounded inputs */
-      border: 1px solid #CED4DA; /* Softer border color */
+      border-radius: 10px; /* More rounded inputs */
+      border: 1px solid #D1D8E0; /* Softer border color */
       box-sizing: border-box;
       font-size: 1rem; /* Consistent font size */
     }
+
+    /* Input Focus State */
     input:focus {
-      border-color: #80BDFF; /* Highlight on focus */
+      border-color: #6AAFE6; /* Highlight on focus */
       outline: none; /* Remove default outline */
-      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Subtle shadow on focus */
+      box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2); /* Softer, wider shadow on focus */
     }
+
+    /* Button Specific Styling */
     button {
-      background: #4A90E2; /* New primary blue */
+      background: #007BFF; /* Primary blue */
       color: white;
       border: none;
-      font-weight: 600; /* Bolder button text */
+      font-weight: 700; /* Bolder button text */
       cursor: pointer;
-      transition: background 0.3s ease; /* Smooth transition */
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transition */
+      box-shadow: 0 5px 15px rgba(0,123,255,0.2); /* Subtle shadow for button */
     }
+
+    /* Button Hover State */
     button:hover {
-      background: #357ABD; /* Darker blue on hover */
+      background: #0056b3; /* Darker blue on hover */
+      transform: translateY(-3px); /* Slight lift on hover */
+      box-shadow: 0 8px 20px rgba(0,123,255,0.3); /* Stronger shadow on hover */
     }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+    }
+
+    /* Message Display Area (for errors) */
     .msg {
       margin-top: 1.5rem; /* More space above message */
       text-align: center;
@@ -62,6 +101,8 @@
       color: #DC3545; /* Standard red for error */
       min-height: 1.2em; /* Reserve space to prevent layout shift */
     }
+
+    /* Remember Me Checkbox Row */
     .remember-row {
       display: flex;
       align-items: center;
@@ -69,39 +110,78 @@
       font-size: 0.95rem;
       color: #495057;
     }
+
     .remember-row input[type="checkbox"] {
       width: auto; /* Allow checkbox to be its natural size */
       margin-right: 8px; /* Space between checkbox and label */
       margin-top: 0; /* Remove top margin for checkbox */
+      border-radius: 4px; /* Rounded checkbox */
     }
+
+    /* Password Input Wrapper for Toggle Button */
     .password-wrapper {
       position: relative;
     }
+
+    /* Toggle Password Button */
     .toggle-password {
       position: absolute;
       top: 50%;
-      right: 15px; /* Slightly more padding from right */
+      right: 0px; /* Moved to the absolute far right edge */
       transform: translateY(-50%);
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.2rem; /* Slightly larger icon */
+      font-size: 0.9rem; /* Smaller icon size */
       padding: 0; /* Remove padding from button */
       margin: 0; /* Remove margin from button */
       color: #6C757D; /* Softer icon color */
+      transition: color 0.2s ease;
     }
+
     .toggle-password:hover {
-        color: #343A40;
+      color: #343A40; /* Darker color on hover */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 1.5rem; /* Reduce padding on very small screens */
+        margin: 1rem; /* Add margin to prevent sticking to edges */
+        border-radius: 12px;
+      }
+      .login-logo {
+        max-width: 80px;
+        margin-bottom: 1rem;
+      }
+      .login-box h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      input, button {
+        padding: 0.8rem;
+        font-size: 0.95rem;
+        border-radius: 8px;
+      }
+      .toggle-password {
+        font-size: 0.8rem; /* Even smaller on mobile */
+        right: 0px; /* Adjust right for mobile */
+      }
+      .remember-row {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="login-box">
+    <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="login-logo block mx-auto">
     <h2>Login Admin</h2>
     <input type="email" id="email" placeholder="Email" />
     <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" style="padding-right: 45px;" />
-      <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+      <input type="password" id="password" placeholder="Password" style="padding-right: 25px;" /> 
+      <button type="button" class="toggle-password" onclick="togglePassword()">
+        <i class="fas fa-eye"></i> </button>
     </div>
     <div class="remember-row">
       <input type="checkbox" id="remember" />
@@ -112,9 +192,7 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
+    // Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
       authDomain: "website-track-service.firebaseapp.com",
@@ -125,9 +203,19 @@
       appId: "1:87573564376:web:c93c07f0506d00535a00ad"
     };
 
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    // Initialize Firebase app and authentication
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    /**
+     * Handles the login process.
+     * Sets user persistence based on 'Remember me' checkbox.
+     * Authenticates with Firebase and redirects to admin page if successful.
+     */
     window.login = () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -135,33 +223,41 @@
       const msg = document.getElementById("msg");
 
       // Clear previous message
-      msg.textContent = ""; 
+      msg.textContent = "";
 
+      // Basic input validation
       if (!email || !password) {
         msg.textContent = "Email dan password wajib diisi.";
         return;
       }
 
+      // Determine persistence type (local storage for 'remember me', session for temporary)
       const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
 
+      // Set persistence and then attempt to sign in
       setPersistence(auth, persistence)
         .then(() => signInWithEmailAndPassword(auth, email, password))
         .then(userCredential => {
           const userEmail = userCredential.user.email;
-          if (userEmail === "dayatkemal16@gmail.com") {
-            window.location.href = "admin.html";
+          // Check if the logged-in user's email matches the allowed admin email
+          if (userEmail === "dayatkemal16@gmail.com") { // IMPORTANT: Change this to your actual admin email
+            window.location.href = "dashboard.html"; // Redirect to dashboard.html
           } else {
             msg.textContent = "Akun ini tidak memiliki akses admin.";
+            // Optionally, sign out users who are not admins
+            // auth.signOut();
           }
         })
         .catch(err => {
-          console.error(err);
-          // More specific error messages for better UX
+          console.error("Login error:", err);
+          // Provide more specific error messages for a better user experience
           let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
           if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
             errorMessage = "Email atau password salah.";
           } else if (err.code === "auth/invalid-email") {
             errorMessage = "Format email tidak valid.";
+          } else if (err.code === "auth/missing-password") {
+            errorMessage = "Password tidak boleh kosong.";
           }
           msg.textContent = errorMessage;
         });
@@ -169,15 +265,23 @@
   </script>
 
   <script>
+    /**
+     * Toggles the visibility of the password input field.
+     * Changes input type between 'password' and 'text' and updates the eye icon.
+     */
     function togglePassword() {
       const input = document.getElementById("password");
       const toggleButton = document.querySelector(".toggle-password");
+      const eyeIcon = toggleButton.querySelector('i'); // Get the <i> tag inside the button
+
       if (input.type === "password") {
         input.type = "text";
-        toggleButton.textContent = "🙈"; // Change icon to hide
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash'); // Change icon to hide
       } else {
         input.type = "password";
-        toggleButton.textContent = "👁️"; // Change icon to show
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye'); // Change icon to show
       }
     }
   </script>

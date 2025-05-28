@@ -4,56 +4,75 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
-      background: #f0f4f8;
+      font-family: 'Inter', sans-serif; /* Using Inter from Google Fonts */
+      background: #F8F9FA; /* Lighter background */
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0; /* Remove default body margin */
     }
     .login-box {
       background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      max-width: 400px;
+      padding: 2.5rem; /* Slightly more padding */
+      border-radius: 12px; /* Slightly more rounded corners */
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12); /* Softer, more spread out shadow */
+      max-width: 420px; /* Slightly wider */
       width: 100%;
+      box-sizing: border-box; /* Ensure padding doesn't add to width */
     }
     .login-box h2 {
-      margin-bottom: 1rem;
+      text-align: center;
+      margin-bottom: 2rem; /* More space below heading */
+      color: #343A40; /* Darker text for heading */
+      font-weight: 600; /* Bolder heading */
     }
     input, button {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      padding: 0.9rem; /* Slightly more vertical padding */
+      margin-top: 1.2rem; /* More space between elements */
+      border-radius: 8px; /* Slightly more rounded inputs */
+      border: 1px solid #CED4DA; /* Softer border color */
       box-sizing: border-box;
+      font-size: 1rem; /* Consistent font size */
+    }
+    input:focus {
+      border-color: #80BDFF; /* Highlight on focus */
+      outline: none; /* Remove default outline */
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Subtle shadow on focus */
     }
     button {
-      background: #007bff;
+      background: #4A90E2; /* New primary blue */
       color: white;
       border: none;
+      font-weight: 600; /* Bolder button text */
+      cursor: pointer;
+      transition: background 0.3s ease; /* Smooth transition */
     }
     button:hover {
-      background: #0056b3;
+      background: #357ABD; /* Darker blue on hover */
     }
     .msg {
-      margin-top: 1rem;
+      margin-top: 1.5rem; /* More space above message */
       text-align: center;
       font-weight: bold;
-      color: red;
+      color: #DC3545; /* Standard red for error */
+      min-height: 1.2em; /* Reserve space to prevent layout shift */
     }
     .remember-row {
       display: flex;
       align-items: center;
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
+      margin-top: 0.8rem; /* More space from previous input */
+      font-size: 0.95rem;
+      color: #495057;
     }
-    .remember-row input {
-      margin-right: 5px;
+    .remember-row input[type="checkbox"] {
+      width: auto; /* Allow checkbox to be its natural size */
+      margin-right: 8px; /* Space between checkbox and label */
+      margin-top: 0; /* Remove top margin for checkbox */
     }
     .password-wrapper {
       position: relative;
@@ -61,12 +80,18 @@
     .toggle-password {
       position: absolute;
       top: 50%;
-      right: 10px;
+      right: 15px; /* Slightly more padding from right */
       transform: translateY(-50%);
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.2rem; /* Slightly larger icon */
+      padding: 0; /* Remove padding from button */
+      margin: 0; /* Remove margin from button */
+      color: #6C757D; /* Softer icon color */
+    }
+    .toggle-password:hover {
+        color: #343A40;
     }
   </style>
 </head>
@@ -75,7 +100,7 @@
     <h2>Login Admin</h2>
     <input type="email" id="email" placeholder="Email" />
     <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" style="padding-right: 40px;" />
+      <input type="password" id="password" placeholder="Password" style="padding-right: 45px;" />
       <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
     </div>
     <div class="remember-row">
@@ -86,7 +111,6 @@
     <div class="msg" id="msg"></div>
   </div>
 
-  <!-- Firebase Authentication Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
@@ -110,6 +134,9 @@
       const remember = document.getElementById("remember").checked;
       const msg = document.getElementById("msg");
 
+      // Clear previous message
+      msg.textContent = ""; 
+
       if (!email || !password) {
         msg.textContent = "Email dan password wajib diisi.";
         return;
@@ -129,7 +156,14 @@
         })
         .catch(err => {
           console.error(err);
-          msg.textContent = "Email atau password salah.";
+          // More specific error messages for better UX
+          let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+          if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+            errorMessage = "Email atau password salah.";
+          } else if (err.code === "auth/invalid-email") {
+            errorMessage = "Format email tidak valid.";
+          }
+          msg.textContent = errorMessage;
         });
     };
   </script>
@@ -137,7 +171,14 @@
   <script>
     function togglePassword() {
       const input = document.getElementById("password");
-      input.type = input.type === "password" ? "text" : "password";
+      const toggleButton = document.querySelector(".toggle-password");
+      if (input.type === "password") {
+        input.type = "text";
+        toggleButton.textContent = "🙈"; // Change icon to hide
+      } else {
+        input.type = "password";
+        toggleButton.textContent = "👁️"; // Change icon to show
+      }
     }
   </script>
 </body>

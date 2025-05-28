@@ -1,71 +1,296 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Service</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
+// dashboard-enhanced.js
+
+// =====================================================================================================================================================================
+// PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
+// Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
+// =====================================================================================================================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+      authDomain: "website-track-service.firebaseapp.com",
+      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "website-track-service",
+      storageBucket: "website-track-service.firebasestorage.app",
+      messagingSenderId: "87573564376",
+      appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+      measurementId: "G-64T8XNWK5F"
+};
+// =====================================================================================================================================================================
+
+
+// Inisialisasi Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+
+// Ambil elemen DOM
+const dataTable = document.getElementById('dataTable');
+const dataBody = document.getElementById('dataBody');
+const searchInput = document.getElementById('search');
+const refreshBtn = document.getElementById('refreshBtn');
+const logoutBtn = document.querySelector('.logout');
+
+// Elemen Modal Kustom
+const customModal = document.getElementById('customModal');
+const modalMessage = document.getElementById('modalMessage');
+const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+const modalCancelBtn = document.getElementById('modalCancelBtn');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+let currentData = {}; // Menyimpan data yang diambil untuk pencarian dan pemfilteran
+
+// --- Cek Autentikasi Pengguna ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Pengguna sudah login:", user.uid);
+    fetchServiceData(); // Ambil data jika pengguna login
+  } else {
+    console.log("Pengguna belum login, mengarahkan ke halaman login...");
+    // Arahkan ke halaman login Anda (misal: login.html)
+    window.location.href = 'login.html'; // Pastikan Anda memiliki halaman login ini
+  }
+});
+
+// --- Mengambil dan Menampilkan Data dari Firebase ---
+function fetchServiceData() {
+  const antrianRef = ref(db, 'antrian');
+  // Gunakan onValue untuk mendengarkan pembaruan real-time
+  onValue(antrianRef, (snapshot) => {
+    currentData = {}; // Hapus data sebelumnya
+    if (snapshot.exists()) {
+      currentData = snapshot.val();
+      renderTable(currentData); // Render ulang tabel dengan data terbaru
+    } else {
+      dataBody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-gray-500">Tidak ada data service.</td></tr>';
     }
-    .table-container {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+  });
+}
+
+// --- Merender Tabel Data ---
+function renderTable(data) {
+  dataBody.innerHTML = ''; // Hapus baris tabel yang ada
+  const searchTerm = searchInput.value.toLowerCase();
+
+  let hasFilteredData = false;
+  for (const kode in data) {
+    const item = data[kode];
+    // Filter berdasarkan istilah pencarian
+    if (
+      kode.toLowerCase().includes(searchTerm) ||
+      (item.nama && item.nama.toLowerCase().includes(searchTerm)) ||
+      (item.barang && item.barang.toLowerCase().includes(searchTerm))
+    ) {
+      hasFilteredData = true;
+      const row = document.createElement('tr');
+      row.id = `row-${kode}`; // Tetapkan ID untuk akses mudah
+      row.className = 'hover:bg-gray-50 transition duration-150 ease-in-out';
+
+      // Tentukan warna badge status
+      let statusClass = '';
+      if (item.status && item.status.toLowerCase().includes('selesai')) {
+        statusClass = 'bg-green-100 text-green-800';
+      } else if (item.status && item.status.toLowerCase().includes('proses')) {
+        statusClass = 'bg-yellow-100 text-yellow-800';
+      } else {
+        statusClass = 'bg-red-100 text-red-800'; // Default: Menunggu
+      }
+
+      row.innerHTML = `
+        <td class="py-3 px-4 text-gray-700 font-medium whitespace-nowrap" data-field="kode">${kode}</td>
+        <td class="py-3 px-4 text-gray-700 whitespace-nowrap" data-field="nama">${item.nama || '-'}</td>
+        <td class="py-3 px-4 text-gray-700 whitespace-nowrap" data-field="barang">${item.barang || '-'}</td>
+        <td class="py-3 px-4 text-gray-700" data-field="kerusakan">${item.kerusakan || '-'}</td>
+        <td class="py-3 px-4 whitespace-nowrap">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}" data-field="status">${item.status || '-'}</span>
+        </td>
+        <td class="py-3 px-4 whitespace-nowrap">
+          <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-md mr-2 transition duration-200">Edit</button>
+          <button class="delete-btn bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2 px-4 rounded-md transition duration-200">Hapus</button>
+        </td>
+      `;
+      dataBody.appendChild(row);
     }
-  </style>
-</head>
-<body class="bg-gray-100 p-4 sm:p-8 flex flex-col items-center min-h-screen">
-  <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-4xl w-full">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Data Antrian Service Kemal Computer</h2>
+  }
 
-    <div class="flex flex-col sm:flex-row justify-between mb-4 gap-2">
-      <input type="text" id="search" placeholder="Cari berdasarkan kode / nama / device..."
-        class="w-full sm:w-2/3 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-      <button id="refreshBtn" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        🔄 Refresh
-      </button>
-    </div>
+  if (!hasFilteredData) {
+    dataBody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-gray-500">Tidak ada data yang cocok dengan pencarian Anda.</td></tr>';
+  }
+}
 
-    <div class="table-container">
-      <table id="dataTable" class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <thead>
-          <tr class="bg-blue-600 text-white text-left">
-            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tl-lg">Kode</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Nama</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Device</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Keluhan</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Status</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tr-lg">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="dataBody" class="divide-y divide-gray-200"></tbody>
-      </table>
-    </div>
+// --- Event Listeners ---
+refreshBtn.addEventListener('click', fetchServiceData);
+searchInput.addEventListener('input', () => renderTable(currentData)); // Render ulang tabel saat input pencarian berubah
 
-    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 w-full">
-      <button onclick="window.location.href='admin.html'"
-        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-        Tambah/Edit Service
-      </button>
-      <button class="logout bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-        Logout
-      </button>
-    </div>
-  </div>
+logoutBtn.addEventListener('click', async () => {
+  showModal('Konfirmasi Logout', 'Apakah Anda yakin ingin logout?', true, async () => {
+    try {
+      await signOut(auth);
+      // Pengalihan halaman akan ditangani oleh onAuthStateChanged
+    } catch (error) {
+      console.error("Error logout:", error);
+      showModal('Error', 'Terjadi kesalahan saat logout. Silakan coba lagi.', false);
+    }
+  });
+});
 
-  <div id="customModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-      <p id="modalMessage" class="text-gray-800 text-lg mb-4"></p>
-      <div id="modalActions" class="flex justify-center gap-4">
-        <button id="modalConfirmBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Ya</button>
-        <button id="modalCancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg hidden">Batal</button>
-        <button id="modalCloseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Oke</button>
-      </div>
-    </div>
-  </div>
+// Delegasi event untuk tombol Edit, Simpan, Batal, Hapus
+dataTable.addEventListener('click', (event) => {
+  const target = event.target;
+  const row = target.closest('tr');
+  if (!row) return;
 
-  <script type="module" src="dashboard-enhanced.js"></script>
-</body>
-</html>
+  const kode = row.id.replace('row-', '');
+
+  if (target.classList.contains('edit-btn')) {
+    toggleEditMode(row, kode, true); // Aktifkan mode edit
+  } else if (target.classList.contains('save-btn')) {
+    saveRow(row, kode); // Simpan perubahan
+  } else if (target.classList.contains('cancel-btn')) {
+    toggleEditMode(row, kode, false); // Batalkan mode edit
+  } else if (target.classList.contains('delete-btn')) {
+    showModal('Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus antrian dengan kode <strong>${kode}</strong>?`, true, () => deleteRow(kode));
+  }
+});
+
+// --- Logika Pengeditan In-place ---
+function toggleEditMode(row, kode, isEditMode) {
+  const fields = ['nama', 'barang', 'kerusakan', 'status']; // Kode tidak dapat diedit
+  const currentItem = currentData[kode];
+
+  fields.forEach(field => {
+    const cell = row.querySelector(`[data-field="${field}"]`);
+    if (cell) {
+      if (isEditMode) {
+        let inputElement;
+        if (field === 'status') {
+          // Gunakan dropdown untuk status
+          inputElement = document.createElement('select');
+          inputElement.className = 'w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 text-gray-700';
+          const options = ['Menunggu', 'Proses', 'Selesai'];
+          options.forEach(optionText => {
+            const option = document.createElement('option');
+            option.value = optionText;
+            option.textContent = optionText;
+            if (currentItem[field] && currentItem[field].toLowerCase() === optionText.toLowerCase()) {
+              option.selected = true;
+            }
+            inputElement.appendChild(option);
+          });
+        } else {
+          // Gunakan input teks untuk field lainnya
+          inputElement = document.createElement('input');
+          inputElement.type = 'text';
+          inputElement.value = currentItem[field] || '';
+          inputElement.className = 'w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 text-gray-700';
+        }
+        cell.dataset.originalValue = currentItem[field] || ''; // Simpan nilai asli
+        cell.innerHTML = ''; // Hapus konten sel
+        cell.appendChild(inputElement); // Masukkan input element
+      } else {
+        // Kembali ke nilai asli atau nilai yang disimpan
+        const originalStatus = cell.dataset.originalValue || (currentItem && currentItem[field]) || '-';
+        if (field === 'status') {
+            // Apply badge class when reverting status
+            let statusClass = '';
+            if (originalStatus.toLowerCase().includes('selesai')) {
+              statusClass = 'bg-green-100 text-green-800';
+            } else if (originalStatus.toLowerCase().includes('proses')) {
+              statusClass = 'bg-yellow-100 text-yellow-800';
+            } else {
+              statusClass = 'bg-red-100 text-red-800';
+            }
+            cell.innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}">${originalStatus}</span>`;
+        } else {
+            cell.innerHTML = originalStatus;
+        }
+      }
+    }
+  });
+
+  const actionCell = row.querySelector('td:last-child');
+  if (isEditMode) {
+    actionCell.innerHTML = `
+      <button class="save-btn bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 px-4 rounded-md mr-2 transition duration-200">Simpan</button>
+      <button class="cancel-btn bg-gray-400 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-4 rounded-md transition duration-200">Batal</button>
+    `;
+  } else {
+    // Kembalikan tombol aksi
+    actionCell.innerHTML = `
+      <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-md mr-2 transition duration-200">Edit</button>
+      <button class="delete-btn bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-2 px-4 rounded-md transition duration-200">Hapus</button>
+    `;
+    // Panggil renderTable kembali untuk memastikan semua baris dirender dengan benar setelah pembatalan
+    // Ini penting agar badge status kembali muncul jika diubah saat diedit lalu dibatalkan.
+    renderTable(currentData);
+  }
+}
+
+// --- Menyimpan Baris yang Diedit ke Firebase ---
+async function saveRow(row, kode) {
+  const updatedData = {
+    nama: row.querySelector('[data-field="nama"] input')?.value || currentData[kode].nama,
+    barang: row.querySelector('[data-field="barang"] input')?.value || currentData[kode].barang,
+    kerusakan: row.querySelector('[data-field="kerusakan"] input')?.value || currentData[kode].kerusakan,
+    status: row.querySelector('[data-field="status"] select')?.value || currentData[kode].status,
+  };
+
+  // Validasi sederhana: pastikan semua kolom tidak kosong
+  if (!updatedData.nama || !updatedData.barang || !updatedData.kerusakan || !updatedData.status) {
+    showModal('Error', 'Semua kolom harus diisi.', false);
+    return;
+  }
+
+  try {
+    await update(ref(db, 'antrian/' + kode), updatedData);
+    showModal('Berhasil!', 'Data antrian berhasil diperbarui.', false);
+    // Data akan otomatis dirender ulang oleh listener onValue
+  } catch (error) {
+    console.error("Error memperbarui dokumen:", error);
+    showModal('Error', 'Gagal memperbarui data antrian. Silakan coba lagi.', false);
+  }
+}
+
+// --- Menghapus Baris dari Firebase ---
+async function deleteRow(kode) {
+  try {
+    await remove(ref(db, 'antrian/' + kode));
+    showModal('Berhasil!', 'Antrian berhasil dihapus.', false);
+    // Data akan otomatis dirender ulang oleh listener onValue
+  } catch (error) {
+    console.error("Error menghapus dokumen:", error);
+    showModal('Error', 'Gagal menghapus antrian. Silakan coba lagi.', false);
+  }
+}
+
+// --- Fungsi Modal Kustom ---
+function showModal(title, message, isConfirm, onConfirmCallback = null) {
+  modalMessage.innerHTML = `${title}<br><span class="text-sm font-normal">${message}</span>`;
+  customModal.classList.remove('hidden');
+
+  // Sembunyikan semua tombol default
+  modalConfirmBtn.classList.add('hidden');
+  modalCancelBtn.classList.add('hidden');
+  modalCloseBtn.classList.add('hidden');
+
+  if (isConfirm) {
+    // Tampilkan tombol konfirmasi
+    modalConfirmBtn.classList.remove('hidden');
+    modalCancelBtn.classList.remove('hidden');
+    modalConfirmBtn.onclick = () => {
+      onConfirmCallback();
+      customModal.classList.add('hidden');
+    };
+    modalCancelBtn.onclick = () => {
+      customModal.classList.add('hidden');
+    };
+  } else {
+    // Tampilkan tombol tutup (Oke)
+    modalCloseBtn.classList.remove('hidden');
+    modalCloseBtn.onclick = () => {
+      customModal.classList.add('hidden');
+    };
+  }
+}

@@ -4,60 +4,308 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cek Status Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Basic reset and font application */
     body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      text-align: center;
+      font-family: 'Inter', sans-serif; /* Modern font */
+      background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%); /* Soft gradient background */
+      display: flex;
+      flex-direction: column; /* Stack elements vertically */
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Ensure full viewport height */
+      margin: 0;
       padding: 2rem;
+      box-sizing: border-box; /* Include padding in element's total width and height */
+      color: #343A40; /* Default text color */
     }
-    input, button {
-      padding: 0.6rem 1rem;
-      font-size: 1rem;
-      margin-top: 1rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+
+    /* Heading styles */
+    h1 {
+      color: #2C3E50; /* Darker, more prominent heading */
+      margin-bottom: 0.75rem;
+      font-weight: 800; /* Extra bold heading */
+      letter-spacing: -0.5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
     }
+
+    /* Paragraph styles */
+    p {
+      color: #6C757D;
+      margin-top: 0;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    /* Main container for input and button */
+    .container {
+      background: white;
+      padding: 3rem; /* More padding */
+      border-radius: 16px; /* More rounded corners */
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08); /* Layered shadow for depth */
+      max-width: 550px; /* Slightly wider container */
+      width: 100%;
+      text-align: center;
+      margin-top: 2rem; /* More space from top */
+      box-sizing: border-box;
+      transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
+    }
+
+    .container:hover {
+        transform: translateY(-5px); /* Slight lift on hover */
+    }
+
+    /* Input field styles */
+    input[type="text"] {
+      width: calc(100% - 2.4rem); /* Account for padding */
+      padding: 1.2rem; /* More padding */
+      font-size: 1.1rem;
+      margin-top: 2rem; /* More space */
+      border-radius: 10px; /* More rounded corners */
+      border: 1px solid #D1D8E0; /* Softer border */
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for focus */
+      background-color: #F8F9FA; /* Slightly off-white input background */
+      color: #343A40;
+    }
+
+    /* Input focus styles */
+    input[type="text"]:focus {
+      border-color: #6AAFE6; /* Highlight on focus */
+      outline: none; /* Remove default outline */
+      box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2); /* Softer, wider shadow on focus */
+      background-color: white; /* White background on focus */
+    }
+
+    /* Button styles */
     button {
-      background-color: #007bff;
+      background-color: #007BFF;
       color: white;
       border: none;
+      padding: 1.2rem 2.5rem; /* More padding */
+      font-size: 1.15rem; /* Slightly larger font */
+      margin-top: 2rem;
+      border-radius: 10px;
       cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      font-weight: 700; /* Bolder button text */
+      box-shadow: 0 5px 15px rgba(0,123,255,0.2); /* Subtle shadow for button */
     }
+
+    /* Button hover effect */
     button:hover {
       background-color: #0056b3;
+      transform: translateY(-3px); /* More pronounced lift effect */
+      box-shadow: 0 8px 20px rgba(0,123,255,0.3); /* Stronger shadow on hover */
     }
+
+    /* Button active effect */
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+    }
+
+    /* Result display area */
     #result {
-      margin-top: 2rem;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      display: inline-block;
+      margin-top: 3rem; /* More space above result */
+      background: white;
+      padding: 2.5rem; /* More padding */
+      border-radius: 16px;
       min-width: 300px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 550px; /* Match container max-width */
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05); /* Layered shadow */
+      text-align: left; /* Align text within result */
+      line-height: 1.8; /* Better line spacing */
+      color: #343A40;
+      box-sizing: border-box;
+      transition: transform 0.3s ease-in-out;
     }
+
+    #result:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Strong tag within result */
+    #result strong {
+        color: #495057;
+    }
+
+    /* Status badge styles */
     .status {
-      font-weight: bold;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      display: inline-block;
-      margin-top: 0.5rem;
+      font-weight: 700; /* Bolder status text */
+      padding: 0.5rem 1.2rem; /* More padding for status badges */
+      border-radius: 25px; /* More pill-shaped badges */
+      display: inline-flex; /* Use flex for icon alignment */
+      align-items: center;
+      margin-top: 1rem;
+      font-size: 1rem;
+      text-transform: uppercase; /* Uppercase status */
+      letter-spacing: 0.7px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for badges */
     }
-    .status-selesai { background: #28a745; color: white; }
-    .status-proses { background: #ffc107; color: black; }
-    .status-menunggu { background: #dc3545; color: white; }
+
+    .status i {
+        margin-right: 8px; /* Space between icon and text */
+    }
+
+    /* Specific status colors */
+    .status-selesai { background: #28a745; color: white; } /* Green */
+    .status-proses { background: #ffc107; color: #343A40; } /* Yellow */
+    .status-menunggu { background: #dc3545; color: white; } /* Red */
+    .status-warning { background: #ffc107; color: #343A40; } /* For general warnings */
+    .status-error { background: #dc3545; color: white; } /* For general errors */
+
+    /* Admin Contact Section */
+    .admin-contact {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+        max-width: 550px;
+        width: 100%;
+        text-align: center;
+        margin-top: 3rem; /* Space from previous container */
+        box-sizing: border-box;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .admin-contact:hover {
+        transform: translateY(-5px);
+    }
+
+    .admin-contact h3 {
+        color: #2C3E50;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .admin-contact .button-group {
+        display: flex;
+        flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        justify-content: center;
+        gap: 1.2rem; /* Increased space between buttons for better precision */
+        margin-bottom: 0; /* Removed bottom margin as buttons are now direct children */
+    }
+
+    .admin-contact .whatsapp-button,
+    .admin-contact .instagram-button { /* Combined styles for both buttons */
+        display: inline-flex; /* Allows icon and text to be side-by-side */
+        align-items: center;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none; /* Remove underline for links */
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* General button shadow */
+        flex-grow: 1; /* Allow buttons to grow and fill space */
+        max-width: 250px; /* Limit individual button width */
+        justify-content: center; /* Center content within button */
+    }
+
+    .admin-contact .whatsapp-button {
+        background-color: #25D366; /* WhatsApp green */
+    }
+
+    .admin-contact .whatsapp-button:hover {
+        background-color: #1DA851;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(37,211,102,0.3);
+    }
+
+    .admin-contact .instagram-button {
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); /* Instagram gradient */
+    }
+
+    .admin-contact .instagram-button:hover {
+        background: linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%); /* Shift gradient on hover */
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(220,40,67,0.3); /* Shadow reflecting Instagram red */
+    }
+
+    .admin-contact .whatsapp-button img { /* WhatsApp icon styling */
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        vertical-align: middle; /* Ensure vertical alignment */
+    }
+
+    .admin-contact .instagram-button i { /* Instagram icon styling */
+        font-size: 24px; /* Set font-size for Font Awesome icon */
+        margin-right: 10px;
+        vertical-align: middle; /* Ensure vertical alignment */
+    }
+
+    /* Basic responsiveness for smaller screens */
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem; /* Reduce overall padding on small screens */
+      }
+      .container, .admin-contact, #result {
+        padding: 1.5rem;
+        border-radius: 12px; /* Slightly less rounded on small screens */
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      input[type="text"], button, .admin-contact .whatsapp-button, .admin-contact .instagram-button {
+        font-size: 1rem;
+        padding: 0.8rem;
+      }
+      .status {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+      }
+      .admin-contact h3 {
+        font-size: 1.3rem;
+      }
+      .admin-contact .button-group {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+        gap: 0.8rem;
+      }
+      .admin-contact .whatsapp-button,
+      .admin-contact .instagram-button {
+        max-width: 100%; /* Allow buttons to take full width on small screens */
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Pelacakan Status Service</h1>
-  <p>Masukkan nomor antrian service Anda:</p>
-  <input type="text" id="kode" placeholder="Contoh: SVC001" />
-  <br>
-  <button onclick="cekStatus()">Cek Status</button>
+  <div class="container">
+    <h1>Pelacakan Status Service</h1>
+    <p>Masukkan nomor antrian service Anda:</p>
+    <input type="text" id="kode" placeholder="Contoh: SVC001" />
+    <button onclick="cekStatus()">Cek Status</button>
+  </div>
+
+  <div class="admin-contact">
+    <h3>Hubungi Admin</h3>
+    <div class="button-group">
+        <a href="https://wa.me/6288228977367" target="_blank" class="whatsapp-button">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+            Chat via WhatsApp
+        </a>
+        <a href="https://www.instagram.com/kemal_computer?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="instagram-button">
+            <i class="fab fa-instagram"></i>
+            Follow Kemal_Computer
+        </a>
+    </div>
+  </div>
 
   <div id="result"></div>
 
   <script type="module">
+    // Firebase configuration
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
     import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
@@ -72,46 +320,72 @@
       measurementId: "G-64T8XNWK5F"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    /**
+     * Function to check the service status based on the input code.
+     */
     window.cekStatus = async function () {
       const kode = document.getElementById("kode").value.trim().toUpperCase();
       const resultDiv = document.getElementById("result");
 
+      // Clear previous result and set loading state
+      resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-spinner fa-spin"></i> Mencari data...</span>`;
+      resultDiv.style.textAlign = 'center'; // Center the loading message
+
+      // Validate if the input code is empty
       if (!kode) {
-        resultDiv.innerHTML = "❗ Silakan masukkan nomor antrian.";
+        resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-exclamation-triangle"></i> Silakan masukkan nomor antrian.</span>`;
         return;
       }
 
+      // Validate the format of the input code using regex
+      // This regex ensures the format is like SVC001 (3 letters, then 3 or more digits)
       if (!/^[A-Z]{3}\d{3,}$/i.test(kode)) {
-        resultDiv.innerHTML = "⚠ Format kode tidak valid. Gunakan format seperti SVC001.";
+        resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-exclamation-circle"></i> Format kode tidak valid. Gunakan format seperti SVC001.</span>`;
         return;
       }
-
-      resultDiv.innerHTML = "🔍 Mencari data...";
 
       try {
+        // Fetch data from Firebase Realtime Database
         const snap = await get(ref(db, "antrian/" + kode));
+
+        // Check if data exists for the given code
         if (snap.exists()) {
           const data = snap.val();
           const status = (data.status || "").toLowerCase();
-          let statusClass = "status-menunggu";
-          if (status.includes("selesai")) statusClass = "status-selesai";
-          else if (status.includes("proses")) statusClass = "status-proses";
+          let statusClass = "status-menunggu"; // Default to red (menunggu)
+          let statusIcon = "fas fa-hourglass-half"; // Default icon for pending
 
+          // Determine the status class and icon based on the fetched status
+          if (status.includes("selesai")) {
+            statusClass = "status-selesai"; // Green for finished
+            statusIcon = "fas fa-check-circle";
+          } else if (status.includes("proses")) {
+            statusClass = "status-proses"; // Yellow for in process
+            statusIcon = "fas fa-cogs";
+          }
+
+          // Display the service details
+          resultDiv.style.textAlign = 'left'; // Align content to left for details
           resultDiv.innerHTML = `
-            <strong>Nama:</strong> ${data.nama || "-"}<br>
-            <strong>Barang:</strong> ${data.barang || "-"}<br>
-            <strong>Kerusakan:</strong> ${data.kerusakan || "-"}<br>
-            <strong>Status:</strong> <span class="status ${statusClass}">${data.status}</span>
+            <strong>Nama:</strong> ${data.nama || "-"} <br>
+            <strong>Barang:</strong> ${data.barang || "-"} <br>
+            <strong>Kerusakan:</strong> ${data.kerusakan || "-"} <br>
+            <strong>Status:</strong> <span class="status ${statusClass}"><i class="${statusIcon}"></i> ${data.status || "Tidak Diketahui"}</span>
           `;
         } else {
-          resultDiv.innerHTML = "❌ Data tidak ditemukan.";
+          // Display message if data is not found
+          resultDiv.style.textAlign = 'center'; // Center the error message
+          resultDiv.innerHTML = `<span class="status status-error"><i class="fas fa-times-circle"></i> Data tidak ditemukan untuk nomor antrian ini.</span>`;
         }
       } catch (error) {
-        console.error(error);
-        resultDiv.innerHTML = "⚠ Terjadi kesalahan saat mengambil data.";
+        // Handle any errors during data fetching
+        console.error("Firebase Error:", error);
+        resultDiv.style.textAlign = 'center'; // Center the error message
+        resultDiv.innerHTML = `<span class="status status-error"><i class="fas fa-exclamation-circle"></i> Terjadi kesalahan saat mengambil data. Silakan coba lagi.</span>`;
       }
     }
   </script>

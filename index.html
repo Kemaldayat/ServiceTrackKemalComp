@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cek Status Service</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Status Service Kemal Computer</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -150,6 +150,12 @@
     .status i {
         margin-right: 8px; /* Space between icon and text */
     }
+    .status img { /* Styling for status images */
+        width: 24px; /* Consistent size for images */
+        height: 24px;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
 
     /* Specific status colors */
     .status-selesai { background: #28a745; color: white; } /* Green */
@@ -288,6 +294,8 @@
     <button onclick="cekStatus()">Cek Status</button>
   </div>
 
+  <div id="result"></div>
+
   <div class="admin-contact">
     <h3>Hubungi Admin</h3>
     <div class="button-group">
@@ -302,13 +310,11 @@
     </div>
   </div>
 
-  <div id="result"></div>
-
   <script type="module">
-    // Firebase configuration
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-
+    // =====================================================================================================================================================================
+    // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
+    // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
+    // =====================================================================================================================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
       authDomain: "website-track-service.firebaseapp.com",
@@ -319,8 +325,12 @@
       appId: "1:87573564376:web:c93c07f0506d00535a00ad",
       measurementId: "G-64T8XNWK5F"
     };
+    // =====================================================================================================================================================================
 
     // Initialize Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
@@ -357,15 +367,15 @@
           const data = snap.val();
           const status = (data.status || "").toLowerCase();
           let statusClass = "status-menunggu"; // Default to red (menunggu)
-          let statusIcon = "fas fa-hourglass-half"; // Default icon for pending
+          let statusImageUrl = "https://placehold.co/32x32/DC3545/FFFFFF?text=⏳"; // Default image for pending
 
-          // Determine the status class and icon based on the fetched status
+          // Determine the status class and image URL based on the fetched status
           if (status.includes("selesai")) {
             statusClass = "status-selesai"; // Green for finished
-            statusIcon = "fas fa-check-circle";
+            statusImageUrl = "https://placehold.co/32x32/28A745/FFFFFF?text=✅"; // Green checkmark
           } else if (status.includes("proses")) {
             statusClass = "status-proses"; // Yellow for in process
-            statusIcon = "fas fa-cogs";
+            statusImageUrl = "https://placehold.co/32x32/FFC107/333333?text=⚙️"; // Yellow gears
           }
 
           // Display the service details
@@ -374,7 +384,7 @@
             <strong>Nama:</strong> ${data.nama || "-"} <br>
             <strong>Device:</strong> ${data.device || "-"} <br>
             <strong>Kerusakan:</strong> ${data.kerusakan || "-"} <br>
-            <strong>Status:</strong> <span class="status ${statusClass}"><i class="${statusIcon}"></i> ${data.status || "Tidak Diketahui"}</span>
+            <strong>Status:</strong> <span class="status ${statusClass}"><img src="${statusImageUrl}" alt="Status Icon"> ${data.status || "Tidak Diketahui"}</span>
           `;
         } else {
           // Display message if data is not found

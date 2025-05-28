@@ -57,6 +57,15 @@
         transform: translateY(-5px); /* Slight lift on hover */
     }
 
+    /* Logo styling */
+    .logo {
+        max-width: 150px; /* Max width for the logo */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 2rem; /* Space below the logo */
+        border-radius: 8px; /* Slightly rounded corners for the logo */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Subtle shadow for the logo */
+    }
+
     /* Input field styles */
     input[type="text"] {
       width: calc(100% - 2.4rem); /* Account for padding */
@@ -288,6 +297,7 @@
 </head>
 <body>
   <div class="container">
+    <img src="images/KemalComputer (1).png" alt="Logo Kemal Computer" class="logo">
     <h1>Pelacakan Status Service</h1>
     <p>Masukkan nomor antrian service Anda:</p>
     <input type="text" id="kode" placeholder="Contoh: SVC001" />

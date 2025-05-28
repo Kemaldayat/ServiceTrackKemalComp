@@ -1,255 +1,71 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Service</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* Menggunakan font Inter secara global */
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    /* Gaya untuk scrollbar pada tabel, jika diperlukan */
-    .table-container {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch; /* untuk iOS */
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Service</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 p-4 sm:p-8 flex flex-col items-center min-h-screen">
-  <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-4xl w-full">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Data Antrian Service Kemal Computer</h2>
-    
-    <div class="mb-6">
-      <input type="text" id="search" placeholder="Cari berdasarkan kode / nama / device..."
-        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-    </div>
+  <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-4xl w-full">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Data Antrian Service Kemal Computer</h2>
 
-    <div class="table-container">
-      <table id="dataTable" class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <thead>
-          <tr class="bg-blue-600 text-white text-left">
-            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tl-lg">Kode</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Nama</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Device</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Keluhan</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm">Status</th>
-            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tr-lg">Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="dataBody" class="divide-y divide-gray-200">
-                  </tbody>
-      </table>
-    </div>
+    <div class="flex flex-col sm:flex-row justify-between mb-4 gap-2">
+      <input type="text" id="search" placeholder="Cari berdasarkan kode / nama / device..."
+        class="w-full sm:w-2/3 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+      <button id="refreshBtn" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        🔄 Refresh
+      </button>
+    </div>
 
-    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 w-full">
-      <button onclick="window.location.href='admin.html'"
-        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-        Tambah/Edit Service
-      </button>
-      <button class="logout bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-        Logout
-      </button>
-    </div>
-  </div>
+    <div class="table-container">
+      <table id="dataTable" class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <thead>
+          <tr class="bg-blue-600 text-white text-left">
+            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tl-lg">Kode</th>
+            <th class="py-3 px-4 uppercase font-semibold text-sm">Nama</th>
+            <th class="py-3 px-4 uppercase font-semibold text-sm">Device</th>
+            <th class="py-3 px-4 uppercase font-semibold text-sm">Keluhan</th>
+            <th class="py-3 px-4 uppercase font-semibold text-sm">Status</th>
+            <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tr-lg">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="dataBody" class="divide-y divide-gray-200"></tbody>
+      </table>
+    </div>
 
-    <div id="customModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-      <p id="modalMessage" class="text-gray-800 text-lg mb-4"></p>
-      <div id="modalActions" class="flex justify-center gap-4">
-        <button id="modalConfirmBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Ya</button>
-        <button id="modalCancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg hidden">Batal</button>
-        <button id="modalCloseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Oke</button>
-      </div>
-    </div>
-  </div>
+    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 w-full">
+      <button onclick="window.location.href='admin.html'"
+        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+        Tambah/Edit Service
+      </button>
+      <button class="logout bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+        Logout
+      </button>
+    </div>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"; // Menambahkan 'update' dan 'remove'
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  <div id="customModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+      <p id="modalMessage" class="text-gray-800 text-lg mb-4"></p>
+      <div id="modalActions" class="flex justify-center gap-4">
+        <button id="modalConfirmBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Ya</button>
+        <button id="modalCancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg hidden">Batal</button>
+        <button id="modalCloseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hidden">Oke</button>
+      </div>
+    </div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-      authDomain: "website-track-service.firebaseapp.com",
-      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "website-track-service",
-      storageBucket: "website-track-service.appspot.com",
-      messagingSenderId: "87573564376",
-      appId: "1:87573564376:web:c93c07f0506d00535a00ad"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-
-    const dataBody = document.getElementById("dataBody");
-    const searchInput = document.getElementById("search");
-    const logoutButton = document.querySelector(".logout");
-
-    // Elemen Modal Kustom
-    const customModal = document.getElementById("customModal");
-    const modalMessage = document.getElementById("modalMessage");
-    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
-    const modalCancelBtn = document.getElementById("modalCancelBtn");
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-
-    let allData = {}; // Menyimpan semua data untuk filtering
-
-    // Fungsi untuk menampilkan pesan atau konfirmasi kustom
-    function showCustomModal(message, type = 'alert', onConfirmCallback = null) {
-      modalMessage.textContent = message;
-      modalConfirmBtn.classList.add('hidden');
-      modalCancelBtn.classList.add('hidden');
-      modalCloseBtn.classList.add('hidden');
-
-      if (type === 'confirm') {
-        modalConfirmBtn.classList.remove('hidden');
-        modalCancelBtn.classList.remove('hidden');
-        modalConfirmBtn.onclick = () => {
-          customModal.classList.add('hidden');
-          if (onConfirmCallback) onConfirmCallback(true);
-        };
-        modalCancelBtn.onclick = () => {
-          customModal.classList.add('hidden');
-          if (onConfirmCallback) onConfirmCallback(false);
-        };
-      } else { // type === 'alert'
-        modalCloseBtn.classList.remove('hidden');
-        modalCloseBtn.onclick = () => {
-          customModal.classList.add('hidden');
-          if (onConfirmCallback) onConfirmCallback();
-        };
-      }
-      customModal.classList.remove('hidden');
-    }
-
-    // Cek status autentikasi pengguna
-    onAuthStateChanged(auth, user => {
-      if (!user) {
-        showCustomModal("Harap login terlebih dahulu.", 'alert', () => {
-          window.location.href = "login.html";
-        });
-      }
-    });
-
-    // Fungsi untuk merender tabel dengan data yang diberikan
-    const renderTable = (dataToRender) => {
-      dataBody.innerHTML = ""; // Kosongkan tabel
-      
-      // Mengurutkan data berdasarkan timestamp terbaru (jika ada) atau kode
-      const sortedEntries = Object.entries(dataToRender).sort(([, a], [, b]) => {
-        // Urutkan berdasarkan timestamp (terbaru di atas)
-        if (a.timestamp && b.timestamp) {
-          return new Date(b.timestamp) - new Date(a.timestamp);
-        }
-        // Fallback ke pengurutan kode jika timestamp tidak ada
-        return a.kode.localeCompare(b.kode);
-      });
-
-      sortedEntries.forEach(([kode, item]) => {
-        const row = document.createElement('tr');
-        row.className = 'hover:bg-gray-50'; // Efek hover pada baris
-        
-        row.innerHTML = `
-          <td class="py-3 px-4 text-sm text-gray-700">${kode}</td>
-          <td class="py-3 px-4 text-sm text-gray-700">${item.nama}</td>
-          <td class="py-3 px-4 text-sm text-gray-700">${item.device || "-"}</td>           <td class="py-3 px-4 text-sm text-gray-700">${item.kerusakan || "-"}</td>
-          <td class="py-3 px-4 text-sm text-gray-700">
-            <select data-kode="${kode}" class="status-select p-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
-              <option value="Menunggu" ${item.status === 'Menunggu' ? 'selected' : ''}>Menunggu</option>
-              <option value="Proses" ${item.status === 'Proses' ? 'selected' : ''}>Proses</option>
-              <option value="Selesai" ${item.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
-            </select>
-          </td>
-          <td class="py-3 px-4 text-sm text-gray-700">
-            <button data-kode="${kode}" class="delete-btn bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-xs transition duration-200">Hapus</button>
-          </td>
-        `;
-        dataBody.appendChild(row);
-      });
-
-      // Tambahkan event listener setelah semua baris dirender
-      addEventListenersToTableRows();
-    };
-
-    // Fungsi untuk menambahkan event listener ke elemen-elemen tabel
-    function addEventListenersToTableRows() {
-      // Event listener untuk perubahan status
-      document.querySelectorAll('.status-select').forEach(selectElement => {
-        selectElement.onchange = async (event) => {
-          const kode = event.target.dataset.kode;
-          const newStatus = event.target.value;
-          try {
-            await update(ref(db, `antrian/${kode}`), { status: newStatus });
-            showCustomModal(`Status untuk ${kode} berhasil diperbarui menjadi ${newStatus}.`, 'alert');
-          } catch (error) {
-            console.error("Error updating status:", error);
-            showCustomModal("Gagal memperbarui status.", 'alert');
-          }
-        };
-      });
-
-      // Event listener untuk tombol hapus
-      document.querySelectorAll('.delete-btn').forEach(button => {
-        button.onclick = (event) => {
-          const kode = event.target.dataset.kode;
-          showCustomModal(`Apakah Anda yakin ingin menghapus data service dengan kode ${kode}?`, 'confirm', async (confirmed) => {
-            if (confirmed) {
-              try {
-                await remove(ref(db, `antrian/${kode}`));
-                showCustomModal(`Data service ${kode} berhasil dihapus.`, 'alert');
-              } catch (error) {
-                console.error("Error deleting data:", error);
-                showCustomModal("Gagal menghapus data.", 'alert');
-              }
-            }
-          });
-        };
-      });
-    }
-
-    // Listener untuk perubahan data di Firebase Realtime Database
-    onValue(ref(db, "antrian"), (snapshot) => {
-      if (snapshot.exists()) {
-        allData = snapshot.val();
-        renderTable(allData); // Render ulang tabel setiap kali ada perubahan data
-      } else {
-        allData = {}; // Kosongkan data jika tidak ada snapshot
-        renderTable({}); // Render tabel kosong
-        showCustomModal("Tidak ada data antrian service.", 'alert');
-      }
-    });
-
-    // Event listener untuk fitur pencarian
-    searchInput.addEventListener("input", () => {
-      const keyword = searchInput.value.toLowerCase();
-      const filtered = Object.entries(allData).filter(([kode, val]) =>
-        kode.toLowerCase().includes(keyword) ||
-        (val.nama && val.nama.toLowerCase().includes(keyword)) ||
-        (val.device && val.device.toLowerCase().includes(keyword)) || // Menggunakan 'device'
-        (val.kerusakan && val.kerusakan.toLowerCase().includes(keyword)) ||
-        (val.status && val.status.toLowerCase().includes(keyword))
-      );
-      
-      // Ubah array kembali ke objek untuk renderTable
-      const filteredData = Object.fromEntries(filtered);
-      renderTable(filteredData);
-    });
-
-    // Event listener untuk tombol logout
-    logoutButton.addEventListener("click", () => {
-      signOut(auth).then(() => {
-        showCustomModal("Berhasil logout. Mengarahkan ke halaman login...", 'alert', () => {
-          window.location.href = "login.html";
-        });
-      }).catch((error) => {
-        console.error("Error logging out:", error);
-        showCustomModal("Gagal logout. Silakan coba lagi.", 'alert');
-      });
-    });
-  </script>
+  <script type="module" src="dashboard-enhanced.js"></script>
 </body>
 </html>

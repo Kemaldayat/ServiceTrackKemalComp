@@ -1,186 +1,527 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Update Status Service</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* Menggunakan font Inter secara global */
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Kemal Computer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Reset & Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+            color: #343A40;
+        }
+
+        /* Main Container */
+        .main-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 600px; /* Lebar yang lebih luas untuk formulir */
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 2rem; /* Ruang di bawah kontainer utama */
+        }
+
+        .main-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            color: #2C3E50;
+            font-weight: 800;
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        .logout-button {
+            background-color: #dc3545; /* Merah untuk logout */
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Form Container */
+        .form-container {
+            text-align: left; /* Biarkan teks di dalam formulir rata kiri */
+        }
+
+        .form-container h2 {
+            color: #2C3E50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-align: center; /* Judul form tetap di tengah */
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem; /* Lebih banyak ruang antar grup input */
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: #495057;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="tel"],
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #D1D8E0;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="tel"]:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            border-color: #6AAFE6;
+            outline: none;
+            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
+            background-color: white;
+        }
+
+        .input-group input[readonly] {
+            background-color: #e9ecef; /* Warna abu-abu untuk readonly */
+            cursor: not-allowed;
+        }
+
+        .input-group textarea {
+            min-height: 100px; /* Tinggi minimum untuk textarea */
+            resize: vertical; /* Hanya bisa resize vertikal */
+        }
+
+        /* Form Button */
+        .form-container button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.15rem;
+            margin-top: 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
+            width: auto; /* Agar tidak 100% lebar */
+            display: block; /* Agar bisa di tengah */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+        }
+
+        .form-container button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #343A40;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: none; /* Hilangkan shadow tambahan untuk tombol modal */
+            transform: none;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #0056b3;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .main-container {
+                padding: 1.5rem;
+                border-radius: 12px;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+            .logout-button {
+                width: 100%;
+                margin-top: 1rem;
+            }
+            .form-container h2 {
+                font-size: 1.5rem;
+            }
+            .input-group input,
+            .input-group textarea,
+            .input-group select {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+                border-radius: 8px;
+            }
+            .form-container button {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-content p {
+                font-size: 1rem;
+            }
+            .modal-buttons button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-4 sm:p-8 flex items-center justify-center min-h-screen">
-  <div class="container bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-md w-full">
-    <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer"
-         class="w-32 h-auto mx-auto mb-6">
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Admin Panel</h1>
+            <button class="logout-button" onclick="logoutAdmin()">Logout</button>
+        </header>
 
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Panel Admin</h2>
-    <p class="text-gray-600 text-center mb-4">Masukkan kode antrian dan update status service:</p>
+        <div class="form-container">
+            <h2>Tambah Service Baru</h2>
+            <div class="input-group">
+                <label for="kode">Kode Service</label>
+                <input type="text" id="kode" placeholder="Otomatis" readonly>
+            </div>
+            <div class="input-group">
+                <label for="nama">Nama Pelanggan</label>
+                <input type="text" id="nama" placeholder="Masukkan nama pelanggan" required>
+            </div>
+            <div class="input-group">
+                <label for="device">Jenis Device</label>
+                <input type="text" id="device" placeholder="Contoh: Laptop Asus, HP Samsung" required>
+            </div>
+            <div class="input-group">
+                <label for="kerusakan">Deskripsi Kerusakan</label>
+                <textarea id="kerusakan" placeholder="Jelaskan kerusakan detail" required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="nomor_hp">Nomor HP Pengguna (tanpa +)</label>
+                <input type="tel" id="nomor_hp" placeholder="Contoh: 6281234567890" required>
+            </div>
+            <div class="input-group">
+                <label for="status">Status</label>
+                <select id="status" required>
+                    <option value="Menunggu">Menunggu</option>
+                    <option value="Proses">Proses</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
+            <button onclick="tambahService()">Tambah Service</button>
+        </div>
+    </div>
 
-    <div class="mb-2">
-      <label for="kode" class="block text-gray-700 text-sm font-medium mb-1">Kode Service</label>
-      <input type="text" id="kode" placeholder="Kode akan terisi otomatis" readonly
-        class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-    </div>
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p id="modalMessage"></p>
+            <div class="modal-buttons">
+                <button id="modalConfirmBtn">Oke</button>
+                <button id="modalCancelBtn">Batal</button>
+            </div>
+        </div>
+    </div>
 
-    <div class="mb-2">
-      <label for="nama" class="block text-gray-700 text-sm font-medium mb-1">Nama Pelanggan</label>
-      <input type="text" id="nama" placeholder="Nama pelanggan"
-        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-    </div>
+    <script type="module">
+        // =====================================================================================================================================================================
+        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
+        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
+        // =====================================================================================================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", // GANTI DENGAN API KEY ANDA
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.appspot.com",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+        };
+        // =====================================================================================================================================================================
 
-    <div class="mb-2">
-      <label for="device" class="block text-gray-700 text-sm font-medium mb-1">Seri Device / Barang</label>
-      <input type="text" id="device" placeholder="Seri Device / Barang"
-        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-    </div>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-    <div class="mb-3">
-      <label for="kerusakan" class="block text-gray-700 text-sm font-medium mb-1">Keluhan / Kerusakan</label>
-      <input type="text" id="kerusakan" placeholder="Keluhan / Kerusakan"
-        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-    </div>
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
 
-    <div class="mb-3">
-      <label for="status" class="block text-gray-700 text-sm font-medium mb-1">Status</label>
-      <select id="status"
-        class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
-        <option value="Menunggu">Menunggu</option>
-        <option value="Proses">Proses</option>
-        <option value="Selesai">Selesai</option>
-      </select>
-    </div>
+        // Fungsi untuk menghasilkan kode service unik berdasarkan timestamp
+        function generateServiceCode() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed (0-11)
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            // Format: SVC/YYYYMMDD/HHMMSS
+            return `SVC/${year}${month}${day}/${hours}${minutes}${seconds}`;
+        }
 
-    <button onclick="simpanData()"
-      class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mb-1">
-      Simpan / Update
-    </button>
-    <button onclick="window.location.href='/ServiceTrackKemalComp/dashboard.html'"
-      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-1">
-      Lihat Dashboard
-    </button>
-    <button onclick="window.location.href='/ServiceTrackKemalComp/login.html'"
-      class="logout w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-      Logout
-    </button>
-
-    <div class="message mt-4 text-center font-semibold" id="msg"></div>
-  </div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-    authDomain: "website-track-service.firebaseapp.com",
-    databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "website-track-service",
-    storageBucket: "website-track-service.appspot.com",
-    messagingSenderId: "87573564376",
-    appId: "1:87573564376:web:c93c07f0506d00535a00ad"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const auth = getAuth(app);
-  const kodeInput = document.getElementById("kode");
-
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      showCustomMessage("Anda belum login. Mengarahkan ke halaman login...", "red");
-      setTimeout(() => window.location.href = "/login.html", 2000);
-    } else if (user.email !== "dayatkemal16@gmail.com") {
-      showCustomMessage("Akses ditolak. Anda bukan admin.", "red");
-      setTimeout(() => {
-        signOut(auth).then(() => window.location.href = "/login.html");
-      }, 2000);
-    } else {
-      generateNextServiceCode();
-    }
-  });
-
-  function showCustomMessage(message, color) {
-    const msgElement = document.getElementById("msg");
-    msgElement.textContent = message;
-    msgElement.style.color = color;
-  }
-
-  async function generateNextServiceCode() {
-    const antrianRef = ref(db, "antrian");
-    try {
-      const snapshot = await get(antrianRef);
-      let nextNumber = 1;
-
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const keys = Object.keys(data);
-
-        let maxNumber = 0;
-        keys.forEach(key => {
-          const numMatch = key.match(/^SVC(\d+)$/);
-          if (numMatch && parseInt(numMatch[1]) > maxNumber) {
-            maxNumber = parseInt(numMatch[1]);
-          }
+        // Pastikan admin login sebelum bisa mengakses halaman ini
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Jika user login, pastikan user adalah admin yang diizinkan
+                // PENTING: GANTI DENGAN EMAIL ADMIN ANDA YANG SEBENARNYA!
+                if (user.email === "dayatkemal16@gmail.com") {
+                    console.log("Admin logged in:", user.email);
+                    // Generate kode saat halaman dimuat (setelah admin diverifikasi)
+                    document.getElementById('kode').value = generateServiceCode();
+                } else {
+                    // User bukan admin, log out dan redirect
+                    signOut(auth).then(() => {
+                        alert("Anda tidak memiliki akses admin.");
+                        window.location.href = "login.html";
+                    }).catch((error) => {
+                        console.error("Error signing out non-admin:", error);
+                        alert("Terjadi kesalahan saat logout. Silakan coba lagi.");
+                        window.location.href = "login.html"; // Pastikan tetap dialihkan
+                    });
+                }
+            } else {
+                // User tidak login, redirect ke halaman login
+                window.location.href = "login.html";
+            }
         });
-        nextNumber = maxNumber + 1;
-      }
 
-      const formattedNumber = String(nextNumber).padStart(3, '0');
-      kodeInput.value = `SVC${formattedNumber}`;
-    } catch (error) {
-      console.error("Error generating service code:", error);
-      showCustomMessage("❌ Gagal menghasilkan kode service otomatis.", "red");
-    }
-  }
+        // Fungsi untuk menampilkan modal kustom (digunakan untuk konfirmasi dan info)
+        function showModal(message, type = 'info', confirmAction = null, cancelAction = null) {
+            const modal = document.getElementById('customModal');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+            const modalCloseBtn = document.querySelector('.modal-content .close-button');
 
-  window.simpanData = async () => {
-    const kode = kodeInput.value.trim();
-    const nama = document.getElementById("nama").value.trim();
-    const device = document.getElementById("device").value.trim();
-    const kerusakan = document.getElementById("kerusakan").value.trim();
-    const status = document.getElementById("status").value;
+            modalMessage.innerHTML = message; // Menggunakan innerHTML untuk mendukung tag HTML seperti <br>
 
-    if (!kode || !nama || !device || !kerusakan) {
-      showCustomMessage("Semua field harus diisi.", "red");
-      return;
-    }
+            modalConfirmBtn.onclick = () => {
+                if (confirmAction) confirmAction();
+                modal.style.display = 'none';
+            };
 
-    try {
-      await set(ref(db, "antrian/" + kode), {
-        nama: nama,
-        device: device,
-        kerusakan: kerusakan,
-        status: status,
-        timestamp: new Date().toISOString()
-      });
+            modalCancelBtn.onclick = () => {
+                if (cancelAction) cancelAction();
+                modal.style.display = 'none';
+            };
 
-      showCustomMessage("✅ Data berhasil disimpan.", "green");
+            modalCloseBtn.onclick = () => {
+                modal.style.display = 'none';
+            };
 
-      document.getElementById("nama").value = "";
-      document.getElementById("device").value = "";
-      document.getElementById("kerusakan").value = "";
-      document.getElementById("status").value = "Menunggu";
-      generateNextServiceCode();
-    } catch (error) {
-      console.error("Error saving data:", error);
-      showCustomMessage("❌ Gagal menyimpan data.", "red");
-    }
-  };
+            // Tampilkan/sembunyikan tombol berdasarkan tipe modal
+            if (type === 'confirm') {
+                modalConfirmBtn.style.display = 'inline-block';
+                modalCancelBtn.style.display = 'inline-block';
+                modalConfirmBtn.textContent = 'Ya';
+                modalCancelBtn.textContent = 'Tidak';
+            } else { // 'info'
+                modalConfirmBtn.style.display = 'inline-block';
+                modalCancelBtn.style.display = 'none';
+                modalConfirmBtn.textContent = 'Oke';
+            }
+            modal.style.display = 'flex'; // Menggunakan flex untuk menengahkan modal
+        }
 
-  window.logout = () => {
-    signOut(auth).then(() => {
-      window.location.href = "/login.html";
-    }).catch((error) => {
-      console.error("Error logging out:", error);
-      showCustomMessage("Gagal logout. Silakan coba lagi.", "red");
-    });
-  };
-</script>
+        // Fungsi utama untuk menambah service
+        window.tambahService = async function () {
+            const kode = document.getElementById("kode").value; // Ambil kode yang sudah ter-generate otomatis
+            const nama = document.getElementById("nama").value.trim();
+            const device = document.getElementById("device").value.trim();
+            const kerusakan = document.getElementById("kerusakan").value.trim();
+            const status = document.getElementById("status").value;
+            const nomorHp = document.getElementById("nomor_hp").value.trim(); // Ambil nomor HP
+
+            // Validasi input
+            if (!nama || !device || !kerusakan || !status || !nomorHp) {
+                showModal('Semua kolom wajib diisi!', 'info');
+                return;
+            }
+
+            // Validasi format nomor HP (hanya angka, dimulai 62)
+            if (!/^\d+$/.test(nomorHp) || !nomorHp.startsWith('62')) {
+                showModal('Nomor HP tidak valid. Gunakan format dimulai 62 (misal: 6281234567890) dan hanya angka.', 'info');
+                return;
+            }
+
+            try {
+                // Cek apakah kode sudah ada di database (meskipun seharusnya unik karena timestamp)
+                const snapshot = await get(ref(db, `antrian/${kode}`));
+                if (snapshot.exists()) {
+                    showModal('Kode service ini sudah ada. Silakan coba lagi atau refresh halaman.', 'info');
+                    document.getElementById('kode').value = generateServiceCode(); // Regenerate kode jika sudah ada
+                    return;
+                }
+
+                // Simpan data ke Firebase Realtime Database
+                await set(ref(db, `antrian/${kode}`), {
+                    nama: nama,
+                    device: device,
+                    kerusakan: kerusakan,
+                    status: status,
+                    nomorHp: nomorHp // Simpan nomor HP pengguna
+                });
+
+                // Buat link WhatsApp
+                const whatsappMessage = encodeURIComponent(
+                    `Halo ${nama},\n\nService Anda dengan kode *${kode}* (${device} - ${kerusakan}) telah terdaftar di Kemal Computer.\n\nStatus awal: *${status}*.\n\nAnda bisa melacak status service Anda di: ${window.location.origin}/index.html`
+                );
+                const whatsappLink = `https://wa.me/${nomorHp}?text=${whatsappMessage}`;
+
+                // Tampilkan modal sukses dengan opsi WhatsApp
+                showModal(
+                    `Data berhasil ditambahkan!<br>Kode Service: <strong>${kode}</strong><br><br>` +
+                    `Apakah Anda ingin mengirim notifikasi WhatsApp ke pengguna?`,
+                    'confirm', // Tipe modal 'confirm' untuk dua tombol
+                    () => { // Action jika 'Ya' diklik
+                        window.open(whatsappLink, '_blank'); // Buka link WhatsApp di tab baru
+                        // Reset form dan generate kode baru setelah link WhatsApp dibuka
+                        document.getElementById("nama").value = "";
+                        document.getElementById("device").value = "";
+                        document.getElementById("kerusakan").value = "";
+                        document.getElementById("status").value = "Menunggu";
+                        document.getElementById("nomor_hp").value = "";
+                        document.getElementById('kode').value = generateServiceCode(); // Generate kode baru
+                    },
+                    () => { // Action jika 'Tidak' diklik
+                        // Reset form dan generate kode baru tanpa membuka WhatsApp
+                        document.getElementById("nama").value = "";
+                        document.getElementById("device").value = "";
+                        document.getElementById("kerusakan").value = "";
+                        document.getElementById("status").value = "Menunggu";
+                        document.getElementById("nomor_hp").value = "";
+                        document.getElementById('kode').value = generateServiceCode(); // Generate kode baru
+                    }
+                );
+
+            } catch (error) {
+                console.error("Error adding service: ", error);
+                showModal('Terjadi kesalahan saat menambahkan data. Silakan coba lagi.', 'info');
+            }
+        };
+
+        // Fungsi Logout
+        window.logoutAdmin = async function () {
+            try {
+                await signOut(auth);
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Error logging out:", error);
+                alert("Gagal logout. Silakan coba lagi.");
+            }
+        };
+    </script>
 </body>
 </html>

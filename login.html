@@ -1,287 +1,306 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* Global Styles */
-    body {
-      font-family: 'Inter', sans-serif; /* Using Inter from Google Fonts */
-      background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%); /* Soft gradient background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh; /* Ensure full viewport height */
-      margin: 0; /* Remove default body margin */
-      padding: 1rem; /* Add some padding for smaller screens */
-      box-sizing: border-box; /* Include padding in element's total width and height */
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Admin - Kemal Computer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Reset & Body Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #A7D9EB 0%, #7AC8E4 100%); /* Gradien biru yang lembut */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+            color: #343A40;
+        }
 
-    /* Login Box Container */
-    .login-box {
-      background: white;
-      padding: 2.5rem; /* Slightly more padding */
-      border-radius: 16px; /* More rounded corners for modern look */
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08); /* Layered shadow for depth */
-      max-width: 420px; /* Slightly wider */
-      width: 100%;
-      box-sizing: border-box; /* Ensure padding doesn't add to width */
-      transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
-    }
+        /* Login Container */
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease-in-out;
+        }
 
-    .login-box:hover {
-        transform: translateY(-5px); /* Slight lift on hover */
-    }
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
 
-    /* Logo Styling */
-    .login-logo {
-        max-width: 100px; /* Adjust logo size */
-        height: auto;
-        margin-bottom: 1.5rem; /* Space below logo */
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for logo */
-    }
+        /* Logo Styling */
+        .logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            border-radius: 8px; /* Jika logo Anda berbentuk persegi */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-    /* Heading inside Login Box */
-    .login-box h2 {
-      text-align: center;
-      margin-bottom: 2rem; /* More space below heading */
-      color: #2C3E50; /* Darker, more prominent heading */
-      font-weight: 700; /* Bolder heading */
-    }
+        .login-container h1 {
+            color: #2C3E50;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
 
-    /* Input Fields and Buttons General Styling */
-    input, button {
-      width: 100%;
-      padding: 0.9rem; /* Slightly more vertical padding */
-      margin-top: 1.2rem; /* More space between elements */
-      border-radius: 10px; /* More rounded inputs */
-      border: 1px solid #D1D8E0; /* Softer border color */
-      box-sizing: border-box;
-      font-size: 1rem; /* Consistent font size */
-    }
+        /* Input Group */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left; /* Rata kiri untuk label dan input */
+            position: relative; /* Untuk ikon mata password */
+        }
 
-    /* Input Focus State */
-    input:focus {
-      border-color: #6AAFE6; /* Highlight on focus */
-      outline: none; /* Remove default outline */
-      box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2); /* Softer, wider shadow on focus */
-    }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: #495057;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
 
-    /* Button Specific Styling */
-    button {
-      background: #007BFF; /* Primary blue */
-      color: white;
-      border: none;
-      font-weight: 700; /* Bolder button text */
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transition */
-      box-shadow: 0 5px 15px rgba(0,123,255,0.2); /* Subtle shadow for button */
-    }
+        .input-group input[type="email"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #D1D8E0;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
 
-    /* Button Hover State */
-    button:hover {
-      background: #0056b3; /* Darker blue on hover */
-      transform: translateY(-3px); /* Slight lift on hover */
-      box-shadow: 0 8px 20px rgba(0,123,255,0.3); /* Stronger shadow on hover */
-    }
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 5px rgba(0,123,255,0.2);
-    }
+        .input-group input[type="email"]:focus,
+        .input-group input[type="password"]:focus {
+            border-color: #6AAFE6;
+            outline: none;
+            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
+            background-color: white;
+        }
 
-    /* Message Display Area (for errors) */
-    .msg {
-      margin-top: 1.5rem; /* More space above message */
-      text-align: center;
-      font-weight: bold;
-      color: #DC3545; /* Standard red for error */
-      min-height: 1.2em; /* Reserve space to prevent layout shift */
-    }
-
-    /* Remember Me Checkbox Row */
-    .remember-row {
-      display: flex;
-      align-items: center;
-      margin-top: 0.8rem; /* More space from previous input */
-      font-size: 0.95rem;
-      color: #495057;
-    }
-
-    .remember-row input[type="checkbox"] {
-      width: auto; /* Allow checkbox to be its natural size */
-      margin-right: 8px; /* Space between checkbox and label */
-      margin-top: 0; /* Remove top margin for checkbox */
-      border-radius: 4px; /* Rounded checkbox */
-    }
-
-    /* Password Input Wrapper for Toggle Button */
-    .password-wrapper {
-    position: relative;
-    }
-
-    .password-wrapper input {
-    padding-right: 40px; /* Tambah padding agar teks tidak ketutup icon */
-    }
-
-   .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 12px; /* Jarak dari sisi kanan input */
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0;
-    color: #6C757D;
-}
+        /* Password Toggle Icon */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 60%; /* Sesuaikan posisi vertikal agar sejajar dengan input */
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6C757D;
+            font-size: 1.1rem;
+        }
+        .password-toggle:hover {
+            color: #343A40;
+        }
 
 
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .login-box {
-        padding: 1.5rem; /* Reduce padding on very small screens */
-        margin: 1rem; /* Add margin to prevent sticking to edges */
-        border-radius: 12px;
-      }
-      .login-logo {
-        max-width: 80px;
-        margin-bottom: 1rem;
-      }
-      .login-box h2 {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-      }
-      input, button {
-        padding: 0.8rem;
-        font-size: 0.95rem;
-        border-radius: 8px;
-      }
-      .toggle-password {
-        font-size: 0.8rem; /* Even smaller on mobile */
-        right: 0px; /* Adjust right for mobile */
-      }
-      .remember-row {
-        font-size: 0.9rem;
-      }
-    }
-  </style>
+        /* Login Button */
+        .login-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.15rem;
+            margin-top: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
+            width: 100%; /* Tombol memenuhi lebar container */
+        }
+
+        .login-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+        }
+
+        /* Error Message */
+        #errorMessage {
+            color: #DC3545;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            display: none; /* Sembunyikan secara default */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .login-container {
+                padding: 2rem;
+                border-radius: 12px;
+            }
+            .login-container h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .input-group input {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+                border-radius: 8px;
+            }
+            .login-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+            .password-toggle {
+                right: 10px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="login-box">
-    <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="login-logo block mx-auto">
-    <h2>Login Admin</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" style="padding-right: 25px;" /> 
-      <button type="button" class="toggle-password" onclick="togglePassword()">
-        <i class="fas fa-eye"></i> </button>
+    <div class="login-container">
+        <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
+        <h1>Admin Login</h1>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Masukkan email admin Anda" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Masukkan password Anda" required>
+            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                <i id="passwordIcon" class="fas fa-eye"></i>
+            </span>
+        </div>
+        <button class="login-button" onclick="loginAdmin()">
+            Login <span id="loginSpinner" class="loading-spinner"></span>
+        </button>
+        <p id="errorMessage"></p>
     </div>
-    <div class="remember-row">
-      <input type="checkbox" id="remember" />
-      <label for="remember">Ingat saya</label>
-    </div>
-    <button onclick="login()">Login</button>
-    <div class="msg" id="msg"></div>
-  </div>
 
-  <script type="module">
-    // Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-      authDomain: "website-track-service.firebaseapp.com",
-      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "website-track-service",
-      storageBucket: "website-track-service.appspot.com",
-      messagingSenderId: "87573564376",
-      appId: "1:87573564376:web:c93c07f0506d00535a00ad"
-    };
+    <script type="module">
+        // =====================================================================================================================================================================
+        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
+        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
+        // =====================================================================================================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", // GANTI DENGAN API KEY ANDA
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.appspot.com",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+        };
+        // =====================================================================================================================================================================
 
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-    // Initialize Firebase app and authentication
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    /**
-     * Handles the login process.
-     * Sets user persistence based on 'Remember me' checkbox.
-     * Authenticates with Firebase and redirects to admin page if successful.
-     */
-    window.login = () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const remember = document.getElementById("remember").checked;
-      const msg = document.getElementById("msg");
+        // Fungsi untuk menampilkan/menyembunyikan password
+        window.togglePasswordVisibility = () => {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        };
 
-      // Clear previous message
-      msg.textContent = "";
+        // Fungsi untuk login admin
+        window.loginAdmin = async () => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            const loginButton = document.querySelector('.login-button');
+            const loginSpinner = document.getElementById('loginSpinner');
 
-      // Basic input validation
-      if (!email || !password) {
-        msg.textContent = "Email dan password wajib diisi.";
-        return;
-      }
+            errorMessage.textContent = ''; // Bersihkan pesan error sebelumnya
+            loginButton.disabled = true; // Disable tombol login
+            loginSpinner.style.display = 'inline-block'; // Tampilkan spinner
 
-      // Determine persistence type (local storage for 'remember me', session for temporary)
-      const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
+            if (!email || !password) {
+                errorMessage.textContent = 'Email dan password tidak boleh kosong.';
+                loginButton.disabled = false;
+                loginSpinner.style.display = 'none';
+                return;
+            }
 
-      // Set persistence and then attempt to sign in
-      setPersistence(auth, persistence)
-        .then(() => signInWithEmailAndPassword(auth, email, password))
-        .then(userCredential => {
-          const userEmail = userCredential.user.email;
-          // Check if the logged-in user's email matches the allowed admin email
-          if (userEmail === "dayatkemal16@gmail.com") { // IMPORTANT: Change this to your actual admin email
-            window.location.href = "dashboard.html"; // Redirect to dashboard.html
-          } else {
-            msg.textContent = "Akun ini tidak memiliki akses admin.";
-            // Optionally, sign out users who are not admins
-            // auth.signOut();
-          }
-        })
-        .catch(err => {
-          console.error("Login error:", err);
-          // Provide more specific error messages for a better user experience
-          let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
-          if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
-            errorMessage = "Email atau password salah.";
-          } else if (err.code === "auth/invalid-email") {
-            errorMessage = "Format email tidak valid.";
-          } else if (err.code === "auth/missing-password") {
-            errorMessage = "Password tidak boleh kosong.";
-          }
-          msg.textContent = errorMessage;
-        });
-    };
-  </script>
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-  <script>
-    /**
-     * Toggles the visibility of the password input field.
-     * Changes input type between 'password' and 'text' and updates the eye icon.
-     */
-    function togglePassword() {
-      const input = document.getElementById("password");
-      const toggleButton = document.querySelector(".toggle-password");
-      const eyeIcon = toggleButton.querySelector('i'); // Get the <i> tag inside the button
-
-      if (input.type === "password") {
-        input.type = "text";
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash'); // Change icon to hide
-      } else {
-        input.type = "password";
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye'); // Change icon to show
-      }
-    }
-  </script>
+                // Verifikasi apakah email yang login adalah email admin yang diizinkan
+                // PENTING: GANTI DENGAN EMAIL ADMIN ANDA YANG SEBENARNYA!
+                if (user.email === "dayatkemal16@gmail.com") {
+                    console.log("Admin logged in successfully!");
+                    window.location.href = "dashboard.html"; // Arahkan ke dashboard admin
+                } else {
+                    // Jika bukan email admin yang diizinkan, logout dan tampilkan pesan error
+                    await auth.signOut();
+                    errorMessage.textContent = 'Akses ditolak: Anda bukan admin yang terdaftar.';
+                    loginButton.disabled = false;
+                    loginSpinner.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Login Error:", error.code, error.message);
+                loginButton.disabled = false;
+                loginSpinner.style.display = 'none';
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage.textContent = 'Email atau password salah.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage.textContent = 'Terlalu banyak percobaan login. Silakan coba lagi nanti.';
+                        break;
+                    default:
+                        errorMessage.textContent = 'Terjadi kesalahan login. Silakan coba lagi.';
+                        break;
+                }
+            }
+        };
+    </script>
 </body>
 </html>

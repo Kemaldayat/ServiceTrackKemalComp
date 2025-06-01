@@ -1,413 +1,473 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cek Status Service Kemal Computer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* Basic reset and font application */
-    body {
-      font-family: 'Inter', sans-serif; /* Modern font */
-      background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%); /* Soft gradient background */
-      display: flex;
-      flex-direction: column; /* Stack elements vertically */
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh; /* Ensure full viewport height */
-      margin: 0;
-      padding: 2rem;
-      box-sizing: border-box; /* Include padding in element's total width and height */
-      color: #343A40; /* Default text color */
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lacak Status Service - Kemal Computer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* === PERUBAHAN UTAMA UNTUK BACKGROUND GAMBAR === */
+            background-image: url('images/background_service.jpg'); /* Ganti dengan path gambar Anda */
+            background-size: cover; /* Untuk mengisi seluruh layar */
+            background-repeat: no-repeat; /* Untuk mencegah pengulangan gambar */
+            background-position: center center; /* Posisikan gambar di tengah */
+            background-attachment: fixed; /* Agar gambar tidak ikut scroll */
+            /* ============================================== */
+            display: flex;
+            flex-direction: column; /* Mengatur item secara vertikal */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem; /* Tambah padding keseluruhan */
+            box-sizing: border-box;
+            color: #343A40;
+        }
 
-    /* Heading styles */
-    h1 {
-      color: #2C3E50; /* Darker, more prominent heading */
-      margin-bottom: 0.75rem;
-      font-weight: 800; /* Extra bold heading */
-      letter-spacing: -0.5px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
-    }
+        /* Container Utama (Search Box) */
+        .search-container {
+            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar background terlihat */
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 2rem; /* Jarak antara search-container dan elemen di bawahnya */
+        }
 
-    /* Paragraph styles */
-    p {
-      color: #6C757D;
-      margin-top: 0;
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
+        .search-container:hover {
+            transform: translateY(-5px);
+        }
 
-    /* Main container for input and button */
-    .container {
-      background: white;
-      padding: 3rem; /* More padding */
-      border-radius: 16px; /* More rounded corners */
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08); /* Layered shadow for depth */
-      max-width: 550px; /* Slightly wider container */
-      width: 100%;
-      text-align: center;
-      margin-top: 2rem; /* More space from top */
-      box-sizing: border-box;
-      transition: transform 0.3s ease-in-out; /* Smooth transform on hover */
-    }
+        /* Logo Styling */
+        .logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-    .container:hover {
-        transform: translateY(-5px); /* Slight lift on hover */
-    }
+        .search-container h1 {
+            color: #2C3E50;
+            margin-bottom: 1.8rem;
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
 
-    /* Logo styling */
-    .logo {
-        max-width: 150px; /* Max width for the logo */
-        height: auto; /* Maintain aspect ratio */
-        margin-bottom: 2rem; /* Space below the logo */
-        border-radius: 8px; /* Slightly rounded corners for the logo */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Subtle shadow for the logo */
-    }
+        /* Input Field & Button */
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 1px solid #D1D8E0;
+            box-sizing: border-box;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    /* Input field styles */
-    input[type="text"] {
-      width: calc(100% - 2.4rem); /* Account for padding */
-      padding: 1.2rem; /* More padding */
-      font-size: 1.1rem;
-      margin-top: 2rem; /* More space */
-      border-radius: 10px; /* More rounded corners */
-      border: 1px solid #D1D8E0; /* Softer border */
-      box-sizing: border-box;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for focus */
-      background-color: #F8F9FA; /* Slightly off-white input background */
-      color: #343A40;
-    }
+        .search-input:focus {
+            border-color: #6AAFE6;
+            outline: none;
+            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
+        }
 
-    /* Input focus styles */
-    input[type="text"]:focus {
-      border-color: #6AAFE6; /* Highlight on focus */
-      outline: none; /* Remove default outline */
-      box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2); /* Softer, wider shadow on focus */
-      background-color: white; /* White background on focus */
-    }
+        .search-button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
+            width: 100%; /* Tombol memenuhi lebar */
+        }
 
-    /* Button styles */
-    button {
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      padding: 1.2rem 2.5rem; /* More padding */
-      font-size: 1.15rem; /* Slightly larger font */
-      margin-top: 2rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      font-weight: 700; /* Bolder button text */
-      box-shadow: 0 5px 15px rgba(0,123,255,0.2); /* Subtle shadow for button */
-    }
+        .search-button:hover {
+            background: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+        }
+        .search-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+        }
 
-    /* Button hover effect */
-    button:hover {
-      background-color: #0056b3;
-      transform: translateY(-3px); /* More pronounced lift effect */
-      box-shadow: 0 8px 20px rgba(0,123,255,0.3); /* Stronger shadow on hover */
-    }
+        /* Result Area */
+        #result {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            text-align: left; /* Teks hasil rata kiri */
+            box-sizing: border-box;
+            margin-top: 2rem; /* Jarak dari search-container */
+            min-height: 100px; /* Agar tidak collapse saat kosong */
+            display: none; /* Hide by default, show on result */
+            position: relative; /* Untuk loading spinner */
+        }
 
-    /* Button active effect */
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 5px rgba(0,123,255,0.2);
-    }
+        #result h2 {
+            color: #2C3E50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+        }
 
-    /* Result display area */
-    #result {
-      margin-top: 3rem; /* More space above result */
-      background: white;
-      padding: 2.5rem; /* More padding */
-      border-radius: 16px;
-      min-width: 300px;
-      max-width: 550px; /* Match container max-width */
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05); /* Layered shadow */
-      text-align: left; /* Align text within result */
-      line-height: 1.8; /* Better line spacing */
-      color: #343A40;
-      box-sizing: border-box;
-      transition: transform 0.3s ease-in-out;
-    }
+        #result p {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+            color: #495057;
+            font-size: 1rem;
+        }
 
-    #result:hover {
-        transform: translateY(-5px);
-    }
+        #result p strong {
+            color: #2C3E50;
+            font-weight: 600;
+        }
 
-    /* Strong tag within result */
-    #result strong {
-        color: #495057;
-    }
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-    /* Status badge styles */
-    .status {
-      font-weight: 700; /* Bolder status text */
-      padding: 0.5rem 1.2rem; /* More padding for status badges */
-      border-radius: 25px; /* More pill-shaped badges */
-      display: inline-flex; /* Use flex for icon alignment */
-      align-items: center;
-      margin-top: 1rem;
-      font-size: 1rem;
-      text-transform: uppercase; /* Uppercase status */
-      letter-spacing: 0.7px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for badges */
-    }
+        .status-waiting {
+            background-color: #FFC107; /* Kuning */
+        }
+        .status-process {
+            background-color: #007BFF; /* Biru */
+        }
+        .status-finished {
+            background-color: #28A745; /* Hijau */
+        }
 
-    .status i {
-        margin-right: 8px; /* Space between icon and text */
-    }
-    .status img { /* Styling for status images */
-        width: 24px; /* Consistent size for images */
-        height: 24px;
-        margin-right: 8px;
-        vertical-align: middle;
-    }
+        /* Loading Spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
 
-    /* Specific status colors */
-    .status-selesai { background: #28a745; color: white; } /* Green */
-    .status-proses { background: #ffc107; color: #343A40; } /* Yellow */
-    .status-menunggu { background: #dc3545; color: white; } /* Red */
-    .status-warning { background: #ffc107; color: #343A40; } /* For general warnings */
-    .status-error { background: #dc3545; color: white; } /* For general errors */
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
 
-    /* Admin Contact Section */
-    .admin-contact {
-        background: white;
-        padding: 2.5rem;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
-        max-width: 550px;
-        width: 100%;
-        text-align: center;
-        margin-top: 3rem; /* Space from previous container */
-        box-sizing: border-box;
-        transition: transform 0.3s ease-in-out;
-    }
+        /* Admin Contact Section */
+        .admin-contact {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+            box-sizing: border-box;
+        }
 
-    .admin-contact:hover {
-        transform: translateY(-5px);
-    }
+        .admin-contact h3 {
+            color: #2C3E50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
 
-    .admin-contact h3 {
-        color: #2C3E50;
-        margin-bottom: 1.5rem;
-        font-weight: 700;
-        font-size: 1.5rem;
-    }
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem; /* Jarak antar tombol */
+        }
 
-    .admin-contact .button-group {
-        display: flex;
-        flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-        justify-content: center;
-        gap: 1.2rem; /* Increased space between buttons for better precision */
-        margin-bottom: 0; /* Removed bottom margin as buttons are now direct children */
-    }
+        .contact-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
 
-    .admin-contact .whatsapp-button,
-    .admin-contact .instagram-button { /* Combined styles for both buttons */
-        display: inline-flex; /* Allows icon and text to be side-by-side */
-        align-items: center;
-        color: white;
-        border: none;
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
-        border-radius: 10px;
-        cursor: pointer;
-        text-decoration: none; /* Remove underline for links */
-        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-        font-weight: 600;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* General button shadow */
-        flex-grow: 1; /* Allow buttons to grow and fill space */
-        max-width: 250px; /* Limit individual button width */
-        justify-content: center; /* Center content within button */
-    }
+        .contact-button i {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
 
-    .admin-contact .whatsapp-button {
-        background-color: #25D366; /* WhatsApp green */
-    }
+        .whatsapp-button {
+            background-color: #25D366; /* WhatsApp Green */
+        }
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(37, 211, 102, 0.3);
+        }
 
-    .admin-contact .whatsapp-button:hover {
-        background-color: #1DA851;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(37,211,102,0.3);
-    }
+        .instagram-button {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); /* Instagram Gradient */
+        }
+        .instagram-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(220, 39, 67, 0.3);
+        }
 
-    .admin-contact .instagram-button {
-        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); /* Instagram gradient */
-    }
+        /* === PERUBAHAN UTAMA UNTUK LOKASI & MAPS === */
+        .location-contact {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+            box-sizing: border-box;
+        }
 
-    .admin-contact .instagram-button:hover {
-        background: linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%); /* Shift gradient on hover */
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(220,40,67,0.3); /* Shadow reflecting Instagram red */
-    }
+        .location-contact h3 {
+            color: #2C3E50;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
 
-    .admin-contact .whatsapp-button img { /* WhatsApp icon styling */
-        width: 24px;
-        height: 24px;
-        margin-right: 10px;
-        vertical-align: middle; /* Ensure vertical alignment */
-    }
+        .location-contact p {
+            margin-bottom: 1.5rem;
+            color: #495057;
+            line-height: 1.6;
+        }
 
-    .admin-contact .instagram-button i { /* Instagram icon styling */
-        font-size: 24px; /* Set font-size for Font Awesome icon */
-        margin-right: 10px;
-        vertical-align: middle; /* Ensure vertical alignment */
-    }
+        .map-embed {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            overflow: hidden; /* Penting untuk radius iframe */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
-    /* Basic responsiveness for smaller screens */
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem; /* Reduce overall padding on small screens */
-      }
-      .container, .admin-contact, #result {
-        padding: 1.5rem;
-        border-radius: 12px; /* Slightly less rounded on small screens */
-      }
-      h1 {
-        font-size: 1.8rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-      input[type="text"], button, .admin-contact .whatsapp-button, .admin-contact .instagram-button {
-        font-size: 1rem;
-        padding: 0.8rem;
-      }
-      .status {
-        font-size: 0.85rem;
-        padding: 0.3rem 0.8rem;
-      }
-      .admin-contact h3 {
-        font-size: 1.3rem;
-      }
-      .admin-contact .button-group {
-        flex-direction: column; /* Stack buttons vertically on small screens */
-        gap: 0.8rem;
-      }
-      .admin-contact .whatsapp-button,
-      .admin-contact .instagram-button {
-        max-width: 100%; /* Allow buttons to take full width on small screens */
-      }
-    }
-  </style>
+        .map-embed iframe {
+            width: 100%;
+            height: 300px; /* Tinggi iframe peta */
+            border: 0;
+            display: block; /* Menghilangkan spasi ekstra di bawah iframe */
+        }
+
+        .map-link {
+            display: inline-block;
+            background-color: #4285F4; /* Google Blue */
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .map-link:hover {
+            background-color: #357AE8;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(66, 133, 244, 0.3);
+        }
+        /* ================================================= */
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .search-container, #result, .admin-contact, .location-contact {
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            .search-container h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+            .search-input {
+                padding: 0.8rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+            .search-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+            #result h2 {
+                font-size: 1.5rem;
+            }
+            #result p {
+                font-size: 0.95rem;
+            }
+            .status-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            .admin-contact h3, .location-contact h3 {
+                font-size: 1.3rem;
+            }
+            .contact-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .contact-button, .map-link {
+                width: 100%;
+            }
+            .map-embed iframe {
+                height: 250px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
-    <h1>Pelacakan Status Service</h1>
-    <p>Masukkan nomor antrian service Anda:</p>
-    <input type="text" id="kode" placeholder="Contoh: SVC001" />
-    <button onclick="cekStatus()">Cek Status</button>
-  </div>
-
-  <div id="result"></div>
-
-  <div class="admin-contact">
-    <h3>Hubungi Admin</h3>
-    <div class="button-group">
-        <a href="https://wa.me/6288228977367" target="_blank" class="whatsapp-button">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
-            Chat via WhatsApp
-        </a>
-        <a href="https://www.instagram.com/kemal_computer?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="instagram-button">
-            <i class="fab fa-instagram"></i>
-            Follow Kemal_Computer
-        </a>
+    <div class="search-container">
+        <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
+        <h1>Lacak Status Service Anda</h1>
+        <input type="text" id="serviceCode" class="search-input" placeholder="Masukkan kode service Anda (misal: SVC/20250601/103045)" />
+        <button class="search-button" onclick="checkStatus()">Cek Status</button>
     </div>
-  </div>
 
-  <script type="module">
-    // =====================================================================================================================================================================
-    // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-    // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
-    // =====================================================================================================================================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-      authDomain: "website-track-service.firebaseapp.com",
-      databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "website-track-service",
-      storageBucket: "website-track-service.firebasestorage.app",
-      messagingSenderId: "87573564376",
-      appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-      measurementId: "G-64T8XNWK5F"
-    };
-    // =====================================================================================================================================================================
+    <div id="result">
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        </div>
 
-    // Initialize Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+    <div class="admin-contact">
+        <h3>Butuh Bantuan? Hubungi Kami!</h3>
+        <div class="contact-buttons">
+            <a href="https://wa.me/6288228977367" target="_blank" class="contact-button whatsapp-button">
+                <i class="fab fa-whatsapp"></i> WhatsApp Admin
+            </a>
+            <a href="https://www.instagram.com/kemal_computer" target="_blank" class="contact-button instagram-button">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+    </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    <div class="location-contact">
+        <h3>Lokasi Kemal Computer</h3>
+        <p>Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia</p>
+        <div class="map-embed">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250503043818!2d110.37059737482315!3d-7.772594692244408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5848e028882b%3A0xc3b8a1c9a6a82772!2sKemal%20Computer!5e0!3m2!1sen!2sid!4v1717140000000!5m2!1sen!2sid"
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        <p><a href="https://maps.google.com/?cid=8752713075951597851" target="_blank" class="map-link">Lihat di Google Maps</a></p>
+    </div>
+    <script type="module">
+        // =====================================================================================================================================================================
+        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
+        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
+        // =====================================================================================================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", // GANTI DENGAN API KEY ANDA
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.appspot.com",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+        };
+        // =====================================================================================================================================================================
 
-    /**
-     * Function to check the service status based on the input code.
-     */
-    window.cekStatus = async function () {
-      const kode = document.getElementById("kode").value.trim().toUpperCase();
-      const resultDiv = document.getElementById("result");
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-      // Clear previous result and set loading state
-      resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-spinner fa-spin"></i> Mencari data...</span>`;
-      resultDiv.style.textAlign = 'center'; // Center the loading message
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-      // Validate if the input code is empty
-      if (!kode) {
-        resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-exclamation-triangle"></i> Silakan masukkan nomor antrian.</span>`;
-        return;
-      }
+        window.checkStatus = async () => {
+            const serviceCode = document.getElementById("serviceCode").value.trim();
+            const resultDiv = document.getElementById("result");
+            const loadingSpinner = document.getElementById("loadingSpinner");
 
-      // Validate the format of the input code using regex
-      // This regex ensures the format is like SVC001 (3 letters, then 3 or more digits)
-      if (!/^[A-Z]{3}\d{3,}$/i.test(kode)) {
-        resultDiv.innerHTML = `<span class="status status-warning"><i class="fas fa-exclamation-circle"></i> Format kode tidak valid. Gunakan format seperti SVC001.</span>`;
-        return;
-      }
+            resultDiv.style.display = 'block'; // Tampilkan area hasil
+            resultDiv.innerHTML = ''; // Bersihkan hasil sebelumnya
+            loadingSpinner.style.display = 'block'; // Tampilkan spinner
 
-      try {
-        // Fetch data from Firebase Realtime Database
-        const snap = await get(ref(db, "antrian/" + kode));
+            if (!serviceCode) {
+                loadingSpinner.style.display = 'none';
+                resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Mohon masukkan kode service Anda.</strong></p>';
+                return;
+            }
 
-        // Check if data exists for the given code
-        if (snap.exists()) {
-          const data = snap.val();
-          const status = (data.status || "").toLowerCase();
-          let statusClass = "status-menunggu"; // Default to red (menunggu)
-          let statusImageUrl = "https://placehold.co/32x32/DC3545/FFFFFF?text=⏳"; // Default image for pending
+            try {
+                const dbRef = ref(db, `antrian/${serviceCode}`);
+                const snapshot = await get(dbRef);
 
-          // Determine the status class and image URL based on the fetched status
-          if (status.includes("selesai")) {
-            statusClass = "status-selesai"; // Green for finished
-            statusImageUrl = "https://placehold.co/32x32/28A745/FFFFFF?text=✅"; // Green checkmark
-          } else if (status.includes("proses")) {
-            statusClass = "status-proses"; // Yellow for in process
-            statusImageUrl = "https://placehold.co/32x32/FFC107/333333?text=⚙️"; // Yellow gears
-          }
+                loadingSpinner.style.display = 'none'; // Sembunyikan spinner
 
-          // Display the service details
-          resultDiv.style.textAlign = 'left'; // Align content to left for details
-          resultDiv.innerHTML = `
-            <strong>Nama:</strong> ${data.nama || "-"} <br>
-            <strong>Device:</strong> ${data.device || "-"} <br>
-            <strong>Kerusakan:</strong> ${data.kerusakan || "-"} <br>
-            <strong>Status:</strong> <span class="status ${statusClass}"><img src="${statusImageUrl}" alt="Status Icon"> ${data.status || "Tidak Diketahui"}</span>
-          `;
-        } else {
-          // Display message if data is not found
-          resultDiv.style.textAlign = 'center'; // Center the error message
-          resultDiv.innerHTML = `<span class="status status-error"><i class="fas fa-times-circle"></i> Data tidak ditemukan untuk nomor antrian ini.</span>`;
-        }
-      } catch (error) {
-        // Handle any errors during data fetching
-        console.error("Firebase Error:", error);
-        resultDiv.style.textAlign = 'center'; // Center the error message
-        resultDiv.innerHTML = `<span class="status status-error"><i class="fas fa-exclamation-circle"></i> Terjadi kesalahan saat mengambil data. Silakan coba lagi.</span>`;
-      }
-    }
-  </script>
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    let statusBadgeClass = '';
+                    switch (data.status) {
+                        case 'Menunggu':
+                            statusBadgeClass = 'status-waiting';
+                            break;
+                        case 'Proses':
+                            statusBadgeClass = 'status-process';
+                            break;
+                        case 'Selesai':
+                            statusBadgeClass = 'status-finished';
+                            break;
+                        default:
+                            statusBadgeClass = '';
+                    }
+
+                    resultDiv.innerHTML = `
+                        <h2>Status Service</h2>
+                        <p><strong>Kode Service:</strong> ${serviceCode}</p>
+                        <p><strong>Nama Pelanggan:</strong> ${data.nama}</p>
+                        <p><strong>Jenis Device:</strong> ${data.device}</p>
+                        <p><strong>Deskripsi Kerusakan:</strong> ${data.kerusakan}</p>
+                        <p style="text-align:center;"><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${data.status}</span></p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Kode service tidak ditemukan. Mohon cek kembali kode Anda.</strong></p>';
+                }
+            } catch (error) {
+                loadingSpinner.style.display = 'none';
+                console.error("Error fetching data:", error);
+                resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Terjadi kesalahan saat mencari status. Silakan coba lagi.</strong></p>';
+            }
+        };
+    </script>
 </body>
 </html>

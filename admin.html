@@ -3,163 +3,303 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah Service Baru - Kemal Computer</title>
+    <title>Dashboard Admin - Kemal Computer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Global Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F0F4F8 0%, #D9E2EC 100%); /* Gradien abu-abu biru */
+            background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%);
             display: flex;
-            flex-direction: column; /* Mengatur item secara vertikal */
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 2rem;
+            padding: 2rem 1rem;
             box-sizing: border-box;
             color: #343A40;
         }
 
-        /* Form Container */
-        .form-container {
+        /* Dashboard Container */
+        .dashboard-container {
             background: white;
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 550px; /* Lebih lebar untuk form */
+            max-width: 1200px;
             width: 100%;
             box-sizing: border-box;
             transition: transform 0.3s ease-in-out;
+            margin-bottom: 2rem;
         }
 
-        .form-container:hover {
+        .dashboard-container:hover {
             transform: translateY(-5px);
         }
 
-        /* Logo Styling */
-        .logo {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: block; /* Agar logo di tengah */
-            margin-left: auto;
-            margin-right: auto;
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem; /* Tambahkan gap agar tombol tidak terlalu mepet */
         }
 
-        .form-container h1 {
+        header h1 {
             color: #2C3E50;
-            margin-bottom: 2.2rem;
-            font-weight: 700;
+            font-weight: 800;
+            margin: 0;
             font-size: 2.2rem;
-            text-align: center;
+            flex-grow: 1;
         }
 
-        /* Input Group */
-        .input-group {
-            margin-bottom: 1.8rem;
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 0.8rem;
-            color: #495057;
-            font-weight: 600;
+        .header-buttons button, .add-service-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
             font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+            white-space: nowrap; /* Mencegah teks tombol patah baris */
         }
 
-        .input-group input[type="text"],
-        .input-group input[type="tel"], /* Untuk Nomor HP */
-        .input-group textarea,
-        .input-group select {
-            width: 100%;
-            padding: 1rem;
+        .header-buttons button:hover, .add-service-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .logout-button {
+            background-color: #dc3545 !important;
+        }
+        .logout-button:hover {
+            background-color: #c82333 !important;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 0.9rem;
             font-size: 1rem;
             border-radius: 10px;
             border: 1px solid #D1D8E0;
             box-sizing: border-box;
-            background-color: #F8F9FA;
-            color: #343A40;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .input-group input:focus,
-        .input-group textarea:focus,
-        .input-group select:focus {
+        .search-input:focus {
             border-color: #6AAFE6;
             outline: none;
             box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
-            background-color: white;
         }
 
-        .input-group textarea {
-            min-height: 100px;
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: #F8F9FA;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            table-layout: fixed; /* KUNCI: Membuat lebar kolom lebih terkontrol */
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #E9ECEF;
+            font-size: 0.95rem;
+            color: #343A40;
+            word-wrap: break-word; /* KUNCI: Memaksa teks panjang untuk wrap */
+            overflow: hidden; /* Sembunyikan jika overflow setelah wrap */
+            text-overflow: ellipsis; /* Tampilkan ... jika terpotong */
+            vertical-align: top; /* KUNCI: Menjaga konten di atas */
+        }
+
+        th {
+            background-color: #E0F2F7;
+            font-weight: 700;
+            color: #2C3E50;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        /* Penyesuaian lebar kolom spesifik */
+        th:nth-child(1), td:nth-child(1) { width: 15%; min-width: 120px; } /* Kode Service */
+        th:nth-child(2), td:nth-child(2) { width: 15%; min-width: 120px; } /* Nama Pelanggan */
+        th:nth-child(3), td:nth-child(3) { width: 12%; min-width: 100px; } /* Jenis Device */
+        th:nth-child(4), td:nth-child(4) { width: 25%; min-width: 180px; } /* Deskripsi Kerusakan */
+        th:nth-child(5), td:nth-child(5) { width: 13%; min-width: 100px; } /* Nomor HP */
+        th:nth-child(6), td:nth-child(6) { width: 10%; min-width: 80px; } /* Status */
+        th:nth-child(7), td:nth-child(7) { width: 10%; min-width: 120px; } /* Aksi */
+
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #F1F5F8;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            white-space: nowrap; /* Agar badge tidak patah baris */
+        }
+
+        .status-waiting {
+            background-color: #FFC107;
+        }
+        .status-process {
+            background-color: #007BFF;
+        }
+        .status-finished {
+            background-color: #28A745;
+        }
+        .status-picked-up {
+            background-color: #6c757d;
+        }
+
+        /* Action Buttons in Table */
+        .action-buttons {
+            white-space: nowrap; /* Mencegah tombol patah baris */
+        }
+        .action-buttons button {
+            background-color: #6C757D;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            vertical-align: middle; /* KUNCI: Menjaga tombol sejajar di tengah */
+        }
+
+        .action-buttons button:last-child {
+            margin-right: 0;
+        }
+
+        .edit-button {
+            background-color: #FFC107;
+        }
+        .edit-button:hover {
+            background-color: #e0a800;
+            transform: translateY(-1px);
+        }
+
+        .delete-button {
+            background-color: #DC3545;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .save-button {
+            background-color: #28A745;
+        }
+        .save-button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+
+        .cancel-button {
+            background-color: #6C757D;
+        }
+        .cancel-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        /* Input during edit mode */
+        .edit-mode input[type="text"],
+        .edit-mode input[type="tel"],
+        .edit-mode textarea,
+        .edit-mode select {
+            width: calc(100% - 10px); /* Menghitung padding di dalam */
+            padding: 0.5rem;
+            font-size: 0.95rem;
+            border-radius: 5px;
+            border: 1px solid #D1D8E0;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .edit-mode textarea {
+            min-height: 80px;
             resize: vertical;
         }
 
-        /* Submit Button */
-        .submit-button {
-            background-color: #28A745; /* Hijau untuk submit */
-            color: white;
-            border: none;
-            padding: 1.2rem 2.5rem;
-            font-size: 1.15rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(40,167,69,0.2);
-            width: 100%;
-            margin-top: 1rem;
-        }
 
-        .submit-button:hover {
-            background-color: #218838;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(40,167,69,0.3);
-        }
-        .submit-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(40,167,69,0.2);
-        }
-
-        /* Back Button */
-        .back-button {
-            background-color: #6C757D; /* Abu-abu */
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 1rem;
-            text-decoration: none; /* Untuk link */
-            display: block; /* Agar memenuhi lebar */
+        /* Add New Service Button (di bawah tabel) */
+        .add-service-section {
             text-align: center;
-        }
-        .back-button:hover {
-            background-color: #5a6268;
+            margin-top: 2rem;
         }
 
-        /* Modal Styles */
+        .add-service-button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            background-color: #20c997;
+            box-shadow: 0 5px 15px rgba(32,201,151,0.2);
+            text-decoration: none; /* Untuk link */
+            display: inline-block; /* Agar bisa menerapkan padding & shadow */
+        }
+        .add-service-button:hover {
+            background-color: #1aa079;
+            box-shadow: 0 8px 20px rgba(32,201,151,0.3);
+        }
+
+
+        /* Modal Styles (dari admin.html, pastikan konsisten) */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
+            display: none;
+            position: fixed;
+            z-index: 1000;
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
@@ -208,7 +348,7 @@
             cursor: pointer;
             font-size: 1rem;
             transition: background-color 0.3s ease;
-            box-shadow: none; /* Hilangkan shadow tambahan untuk tombol modal */
+            box-shadow: none;
             transform: none;
         }
 
@@ -218,251 +358,110 @@
             box-shadow: none;
         }
 
-        /* Loading Spinner */
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-top: 4px solid #fff; /* Warna spinner */
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 10px;
-            display: none; /* Sembunyikan secara default */
+        /* Responsive Adjustments */
+        @media (max-width: 992px) { /* Tambah breakpoint untuk tablet */
+            th, td {
+                padding: 0.9rem;
+                font-size: 0.9rem;
+            }
+            th:nth-child(1), td:nth-child(1) { width: 18%; min-width: 110px; }
+            th:nth-child(2), td:nth-child(2) { width: 18%; min-width: 110px; }
+            th:nth-child(3), td:nth-child(3) { width: 12%; min-width: 90px; }
+            th:nth-child(4), td:nth-child(4) { width: 20%; min-width: 160px; }
+            th:nth-child(5), td:nth-child(5) { width: 12%; min-width: 90px; }
+            th:nth-child(6), td:nth-child(6) { width: 10%; min-width: 70px; }
+            th:nth-child(7), td:nth-child(7) { width: 10%; min-width: 110px; }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
         @media (max-width: 768px) {
-            body {
+            .dashboard-container {
+                padding: 1.5rem;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            .header-buttons {
+                width: 100%;
+                justify-content: space-between;
+                gap: 0.5rem; /* Kurangi gap */
+            }
+            .header-buttons button, .add-service-button {
+                flex-grow: 1;
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            .search-bar {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .search-input {
+                width: 100%;
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 0.7rem;
+                font-size: 0.8rem;
+            }
+            th:nth-child(1), td:nth-child(1) { width: 18%; min-width: 90px; }
+            th:nth-child(2), td:nth-child(2) { width: 18%; min-width: 90px; }
+            th:nth-child(3), td:nth-child(3) { width: 12%; min-width: 70px; }
+            th:nth-child(4), td:nth-child(4) { width: 20%; min-width: 120px; }
+            th:nth-child(5), td:nth-child(5) { width: 12%; min-width: 70px; }
+            th:nth-child(6), td:nth-child(6) { width: 10%; min-width: 60px; }
+            th:nth-child(7), td:nth-child(7) { width: 10%; min-width: 90px; }
+            .status-badge {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            .action-buttons button {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+                margin-right: 0.3rem;
+            }
+            .edit-mode input[type="text"],
+            .edit-mode input[type="tel"],
+            .edit-mode textarea,
+            .edit-mode select {
+                padding: 0.4rem;
+                font-size: 0.85rem;
+            }
+            .edit-mode textarea {
+                min-height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-container {
                 padding: 1rem;
             }
-            .form-container {
-                padding: 2rem;
-                border-radius: 12px;
+            th, td {
+                font-size: 0.7rem;
+                padding: 0.5rem;
             }
-            .form-container h1 {
-                font-size: 1.8rem;
-                margin-bottom: 1.5rem;
+            th:nth-child(1), td:nth-child(1) { width: 18%; min-width: 70px; }
+            th:nth-child(2), td:nth-child(2) { width: 18%; min-width: 70px; }
+            th:nth-child(3), td:nth-child(3) { width: 12%; min-width: 50px; }
+            th:nth-child(4), td:nth-child(4) { width: 20%; min-width: 100px; }
+            th:nth-child(5), td:nth-child(5) { width: 12%; min-width: 50px; }
+            th:nth-child(6), td:nth-child(6) { width: 10%; min-width: 45px; }
+            th:nth-child(7), td:nth-child(7) { width: 10%; min-width: 70px; }
+            .action-buttons button {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.6rem;
+                margin-right: 0.2rem;
             }
-            .input-group label {
-                font-size: 0.9rem;
-                margin-bottom: 0.5rem;
-            }
-            .input-group input,
-            .input-group textarea,
-            .input-group select {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-                border-radius: 8px;
-            }
-            .submit-button, .back-button {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-                border-radius: 8px;
+            .edit-mode textarea {
+                min-height: 40px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
-        <h1>Tambah Service Baru</h1>
-        <form id="addServiceForm">
-            <div class="input-group">
-                <label for="namaPelanggan">Nama Pelanggan:</label>
-                <input type="text" id="namaPelanggan" required />
-            </div>
-            <div class="input-group">
-                <label for="jenisDevice">Jenis Device:</label>
-                <input type="text" id="jenisDevice" required />
-            </div>
-            <div class="input-group">
-                <label for="deskripsiKerusakan">Deskripsi Kerusakan:</label>
-                <textarea id="deskripsiKerusakan" rows="4" required></textarea>
-            </div>
-            <div class="input-group">
-                <label for="nomorHp">Nomor HP (misal: 62812...):</label>
-                <input type="tel" id="nomorHp" placeholder="Format: 628xxxxxxxxxx" required pattern="^62[0-9]{8,13}$" title="Nomor HP harus diawali 62 dan terdiri dari 8-13 digit angka setelahnya.">
-            </div>
-            <div class="input-group">
-                <label for="status">Status:</label>
-                <select id="status" required>
-                    <option value="Menunggu">Menunggu</option>
-                    <option value="Proses">Proses</option>
-                    <option value="Selesai">Selesai</option>
-                    <option value="Diambil">Diambil</option> </select>
-            </div>
-            <button type="submit" class="submit-button">
-                Tambah Service <i class="fas fa-plus"></i> <span id="submitSpinner" class="loading-spinner"></span>
-            </button>
-        </form>
-        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</a>
-    </div>
-
-    <div id="customModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <p id="modalMessage"></p>
-            <div class="modal-buttons">
-                <button id="modalConfirmBtn">Oke</button>
-                <button id="modalCancelBtn">Batal</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        // =====================================================================================================================================================================
-        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
-        // =====================================================================================================================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", 
-            authDomain: "website-track-service.firebaseapp.com",
-            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "website-track-service",
-            storageBucket: "website-track-service.appspot.com",
-            messagingSenderId: "87573564376",
-            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
-        };
-        // =====================================================================================================================================================================
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const auth = getAuth(app);
-
-        // Pastikan admin login sebelum bisa mengakses halaman ini
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // PENTING: GANTI DENGAN EMAIL ADMIN ANDA YANG SEBENARNYA!
-                if (user.email === "dayatkemal16@gmail.com") {
-                    console.log("Admin logged in:", user.email);
-                } else {
-                    alert("Anda tidak memiliki akses admin.");
-                    auth.signOut().then(() => {
-                        window.location.href = "login.html";
-                    }).catch((error) => {
-                        console.error("Error signing out non-admin:", error);
-                        window.location.href = "login.html";
-                    });
-                }
-            } else {
-                window.location.href = "login.html"; // Redirect ke halaman login jika belum login
-            }
-        });
-
-        // Fungsi untuk menampilkan modal kustom
-        function showModal(message, type = 'info', confirmAction = null, cancelAction = null) {
-            const modal = document.getElementById('customModal');
-            const modalMessage = document.getElementById('modalMessage');
-            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-            const modalCancelBtn = document.getElementById('modalCancelBtn');
-            const modalCloseBtn = document.querySelector('.modal-content .close-button');
-
-            modalMessage.innerHTML = message;
-
-            modalConfirmBtn.onclick = () => {
-                if (confirmAction) confirmAction();
-                modal.style.display = 'none';
-            };
-
-            modalCancelBtn.onclick = () => {
-                if (cancelAction) cancelAction();
-                modal.style.display = 'none';
-            };
-
-            modalCloseBtn.onclick = () => {
-                modal.style.display = 'none';
-            };
-
-            if (type === 'confirm') {
-                modalConfirmBtn.style.display = 'inline-block';
-                modalCancelBtn.style.display = 'inline-block';
-                modalConfirmBtn.textContent = 'Ya';
-                modalCancelBtn.textContent = 'Tidak';
-            } else { // 'info'
-                modalConfirmBtn.style.display = 'inline-block';
-                modalCancelBtn.style.display = 'none';
-                modalConfirmBtn.textContent = 'Oke';
-            }
-            modal.style.display = 'flex';
-        }
-
-        // Event listener untuk form submission
-        document.getElementById('addServiceForm').addEventListener('submit', addService);
-
-        async function addService(event) {
-            event.preventDefault();
-
-            const nama = document.getElementById('namaPelanggan').value.trim();
-            const device = document.getElementById('jenisDevice').value.trim();
-            const kerusakan = document.getElementById('deskripsiKerusakan').value.trim();
-            const nomorHp = document.getElementById('nomorHp').value.trim(); // Ambil nomor HP
-            const status = document.getElementById('status').value;
-
-            const submitButton = document.querySelector('.submit-button');
-            const submitSpinner = document.getElementById('submitSpinner');
-
-            submitButton.disabled = true; // Disable tombol
-            submitSpinner.style.display = 'inline-block'; // Tampilkan spinner
-
-            if (!nama || !device || !kerusakan || !nomorHp || !status) {
-                showModal('Semua kolom wajib diisi!', 'info');
-                submitButton.disabled = false;
-                submitSpinner.style.display = 'none';
-                return;
-            }
-
-            // Validasi format nomor HP: harus angka dan dimulai dengan '62'
-            if (!/^\d+$/.test(nomorHp) || !nomorHp.startsWith('62')) {
-                showModal('Nomor HP tidak valid. Gunakan format dimulai 62 (misal: 62812...) dan hanya angka.', 'info');
-                submitButton.disabled = false;
-                submitSpinner.style.display = 'none';
-                return;
-            }
-
-            // Generate service code: SVC/YYYYMMDD/HHMMSS
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const serviceCode = `SVC/${year}${month}${day}/${hours}${minutes}${seconds}`;
-
-            try {
-                await set(ref(db, `antrian/${serviceCode}`), {
-                    nama: nama,
-                    device: device,
-                    kerusakan: kerusakan,
-                    nomorHp: nomorHp, // Simpan nomor HP
-                    status: status,
-                    tanggalMasuk: now.toISOString() // Opsional: Untuk pencatatan waktu masuk
-                });
-
-                showModal(`Service berhasil ditambahkan! Kode service: <strong>${serviceCode}</strong>`, 'info', () => {
-                    document.getElementById('addServiceForm').reset();
-                    submitButton.disabled = false;
-                    submitSpinner.style.display = 'none';
-                });
-
-            } catch (error) {
-                console.error("Error adding service:", error);
-                showModal("Gagal menambahkan service. Silakan coba lagi.", 'info');
-                submitButton.disabled = false;
-                submitSpinner.style.display = 'none';
-            }
-        }
-    </script>
-</body>
+    </body>
 </html>

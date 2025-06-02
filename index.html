@@ -6,8 +6,13 @@
     <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         /* Specific styles for index.html */
+        body {
+            font-family: 'Poppins', sans-serif; /* Menggunakan Poppins sebagai font dasar */
+        }
+
         .header-public {
             text-align: center;
             margin-bottom: 40px;
@@ -18,14 +23,17 @@
             border-radius: 8px; /* Optional: subtle rounding */
         }
         .header-public h1 {
-            color: var(--primary-color); /* Using CSS variable from style.css */
+            color: var(--primary-color);
             font-size: 2.8em;
             margin-bottom: 10px;
         }
-        .header-public p {
+        .header-public p.tagline { /* Menambahkan class tagline untuk target styling */
             color: var(--text-color-light);
-            font-size: 1.1em;
+            font-family: 'Playfair Display', serif; /* Font menarik untuk tagline */
+            font-size: 1.3em; /* Sedikit lebih besar */
             margin-bottom: 5px;
+            font-weight: 600; /* Lebih tebal */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sedikit bayangan */
         }
 
         .section-title {
@@ -36,7 +44,7 @@
             font-size: 2em;
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 10px;
-            display: inline-block; /* To make border-bottom fit content */
+            display: inline-block;
         }
 
         .search-form {
@@ -54,7 +62,7 @@
             color: var(--text-color);
         }
         .search-form input[type="text"] {
-            width: calc(100% - 24px); /* Adjust for padding and border */
+            width: calc(100% - 24px);
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-sm);
@@ -145,7 +153,7 @@
         }
         footer .contact-info-footer i {
             margin-right: 8px;
-            color: var(--primary-color); /* Use primary color for icons */
+            color: var(--primary-color);
             font-size: 1.2em;
         }
         footer .admin-link {
@@ -161,39 +169,114 @@
             text-decoration: underline;
         }
 
-        /* WhatsApp Button specific styles */
-        .whatsapp-button {
+        /* WhatsApp Button (TRIGGER) specific styles - make it smaller */
+        .whatsapp-button-trigger {
+            background-color: var(--primary-color); /* Menggunakan warna primary tema */
+            color: white;
+            padding: 8px 15px; /* Lebih kecil */
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9em; /* Font lebih kecil */
+            text-decoration: none;
+            margin-top: 20px; /* Jarak dari tagline */
+            cursor: pointer;
+            transition: var(--transition-ease);
+            box-shadow: var(--shadow-sm);
             display: inline-flex;
             align-items: center;
-            justify-content: center; /* Center content horizontally */
+            gap: 8px;
+        }
+        .whatsapp-button-trigger:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        .whatsapp-button-trigger i {
+            font-size: 1.1em;
+        }
+
+        /* Modal for WhatsApp contact */
+        .modal-whatsapp {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-whatsapp-content {
+            background-color: var(--container-bg);
+            margin: auto;
+            padding: 30px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            position: relative;
+            max-width: 400px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-whatsapp-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .modal-whatsapp-content p {
+            margin-bottom: 25px;
+            font-size: 1em;
+            color: var(--text-color);
+        }
+
+        .modal-whatsapp-content .close-button-whatsapp {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-whatsapp-content .close-button-whatsapp:hover,
+        .modal-whatsapp-content .close-button-whatsapp:focus {
+            color: var(--danger-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-whatsapp-content .whatsapp-link-button {
+            display: inline-flex;
+            align-items: center;
             gap: 10px;
             background-color: #25D366; /* WhatsApp Green */
             color: white;
-            padding: 12px 30px; /* Increased horizontal padding for better look */
+            padding: 12px 25px;
             border: none;
             border-radius: var(--border-radius-sm);
             font-size: 1.1em;
             text-decoration: none;
-            margin-top: 30px;
-            cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: var(--shadow-sm);
-            /* Ensure it sits well */
-            line-height: 1; /* Reset line-height to make it tight */
-            height: auto; /* Allow height to adjust */
         }
-        .whatsapp-button:hover {
-            background-color: #1DA851; /* Darker green on hover */
-            transform: translateY(-2px); /* Slight lift effect */
+        .modal-whatsapp-content .whatsapp-link-button:hover {
+            background-color: #1DA851;
+            transform: translateY(-2px);
         }
-        .whatsapp-button i {
+        .modal-whatsapp-content .whatsapp-link-button i {
             font-size: 1.3em;
         }
 
         /* Background Service Section */
         .service-info-section {
-            background: url('./images/bg.jpg') no-repeat center center / cover; /* Background image */
-            color: white; /* Text color on background */
+            background: url('./images/bg.jpg') no-repeat center center / cover;
+            color: white;
             padding: 50px 20px;
             margin-top: 50px;
             border-radius: var(--border-radius-lg);
@@ -209,7 +292,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+            background-color: rgba(0, 0, 0, 0.4);
             border-radius: var(--border-radius-lg);
             z-index: 1;
         }
@@ -236,15 +319,18 @@
             .header-public h1 {
                 font-size: 2.2em;
             }
+            .header-public p.tagline {
+                font-size: 1.1em;
+            }
             .search-form {
                 padding: 20px;
             }
             .map-section iframe {
                 height: 300px;
             }
-            .whatsapp-button {
-                padding: 10px 20px;
-                font-size: 1em;
+            .whatsapp-button-trigger {
+                padding: 7px 12px;
+                font-size: 0.85em;
             }
             .service-info-section {
                 padding: 30px 15px;
@@ -264,7 +350,7 @@
             .header-public h1 {
                 font-size: 1.8em;
             }
-            .header-public p {
+            .header-public p.tagline {
                 font-size: 1em;
             }
             .section-title {
@@ -272,6 +358,9 @@
             }
             footer .contact-info-footer div {
                 font-size: 0.95em;
+            }
+            .modal-whatsapp-content {
+                max-width: 90%;
             }
         }
     </style>
@@ -281,10 +370,10 @@
         <header class="header-public">
             <img src="./images/logo.png" alt="Logo Kemal Computer">
             <h1>Kemal Computer Service</h1>
-            <p>Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-            <a href="https://wa.me/6288228977367" target="_blank" class="whatsapp-button">
+            <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+            <button class="whatsapp-button-trigger" id="openWhatsappModal">
                 <i class="fab fa-whatsapp"></i> Hubungi Admin
-            </a>
+            </button>
         </header>
 
         <section class="service-info-section">
@@ -312,11 +401,10 @@
         <h2 class="section-title">Lokasi Kami</h2>
         <section class="map-section">
             <p class="address">
-                Gg. Serai No 127B, Tempel, Nologaten, Caturtunggal,  <br>
-                Kec. Depok, Kab. Sleman, Yogyakarta, 55281
+                Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.284758525049!2d110.37021751477759!3d-7.771239094038166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57a1518b010f%3A0x6b4c3b6d4f6c4f0!2sUniversitas%20Gadjah%20Mada!5e0!3m2!1sid!2sid!4v1678901234567!5m2!1sid!2sid"
+                src="https://maps.google.com/?cid=8752713075951597851"
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </section>
@@ -326,7 +414,21 @@
                 <div><i class="fas fa-phone"></i> Nomor Admin: +62 882-2897-7367</div>
                 <div><i class="fab fa-instagram"></i> Instagram: @Kemal_Computer</div>
             </div>
+            <div class="admin-link">
+                <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
+            </div>
         </footer>
+    </div>
+
+    <div id="whatsappModal" class="modal-whatsapp">
+        <div class="modal-whatsapp-content">
+            <span class="close-button-whatsapp">&times;</span>
+            <h3>Hubungi Admin Kami</h3>
+            <p>Silakan pilih cara Anda ingin menghubungi kami via WhatsApp:</p>
+            <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-link-button">
+                <i class="fab fa-whatsapp"></i> Chat WhatsApp
+            </a>
+        </div>
     </div>
 
     <script type="module">
@@ -347,6 +449,28 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+
+        // Get the modal elements
+        const whatsappModal = document.getElementById('whatsappModal');
+        const openWhatsappModalBtn = document.getElementById('openWhatsappModal');
+        const closeWhatsappModalBtn = document.getElementsByClassName('close-button-whatsapp')[0];
+
+        // When the user clicks the button, open the modal
+        openWhatsappModalBtn.onclick = function() {
+            whatsappModal.style.display = 'flex'; // Use flex to center
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeWhatsappModalBtn.onclick = function() {
+            whatsappModal.style.display = 'none';
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == whatsappModal) {
+                whatsappModal.style.display = 'none';
+            }
+        }
 
         document.getElementById('checkStatusForm').addEventListener('submit', async (e) => {
             e.preventDefault();

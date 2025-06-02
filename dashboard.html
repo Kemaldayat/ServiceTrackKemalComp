@@ -472,9 +472,7 @@
                 } else {
                     // User is logged in but not the designated admin
                     signOut(auth).then(() => {
-                        // Redirect without alert message upon entering,
-                        // as the login page itself should handle unauthorized access.
-                        window.location.href = 'login.html';
+                        window.location.href = 'login.html'; // Redirect non-admin to login page without alert
                     }).catch((error) => {
                         console.error("Error signing out non-admin user:", error);
                         window.location.href = 'login.html'; // Fallback redirect
@@ -489,13 +487,11 @@
         window.logoutAdmin = async () => {
             try {
                 await signOut(auth);
-                // Use custom modal for logout success, not alert
-                showModal("Anda telah logout.", "info", () => {
-                    window.location.href = 'login.html';
-                });
+                alert("Anda telah logout."); // Menggunakan alert() seperti permintaan
+                window.location.href = 'login.html';
             } catch (error) {
                 console.error("Error logging out:", error);
-                showModal("Gagal logout. Silakan coba lagi.", "info");
+                alert("Gagal logout. Silakan coba lagi."); // Menggunakan alert() seperti permintaan
             }
         };
 
@@ -546,13 +542,14 @@
                 filterTable(); // Apply filter after loading data
             }, (error) => {
                 console.error("Error loading services:", error);
-                showModal("Gagal memuat data service. Silakan refresh halaman.", "info");
+                // Menggunakan alert() untuk error loading data
+                alert("Gagal memuat data service. Silakan refresh halaman.");
             });
         };
 
         window.refreshData = () => {
             loadServices();
-            showModal("Data diperbarui.", "info");
+            alert("Data diperbarui."); // Menggunakan alert() seperti permintaan
         };
 
         window.filterTable = () => {
@@ -588,8 +585,8 @@
                 const status = rows[i].cells[5].textContent.toLowerCase();
                 const keterangan = rows[i].cells[6].textContent.toLowerCase();
 
-                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) || 
-                    kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) || 
+                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) ||
+                    kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) ||
                     keterangan.includes(filter)) {
                     rows[i].style.display = ""; // Show row
                     found = true;

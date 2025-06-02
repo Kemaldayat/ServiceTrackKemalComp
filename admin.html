@@ -3,43 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Layanan Baru - Kemal Computer</title>
+    <title>Login Admin - Kemal Computer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css"> </head>
-<body>
-    <div class="container add-service-container">
-        <header>
-            <h1>Tambah Layanan Baru</h1>
-            <button class="back-button" onclick="window.location.href='dashboard.html'"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
-        </header>
+    <link rel="stylesheet" href="css/style.css"> <style>
+        /* Specific styles for login page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f7f6;
+        }
 
-        <form id="addServiceForm">
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .login-form div {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .login-form input {
+            width: calc(100% - 22px); /* Adjust for padding and border */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            .login-container h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login Admin</h1>
+        <form id="loginForm" class="login-form">
             <div>
-                <label for="inputNama">Nama Pelanggan:</label>
-                <input type="text" id="inputNama" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
             </div>
             <div>
-                <label for="inputDevice">Jenis Device (misal: Laptop Asus, HP Samsung A50):</label>
-                <input type="text" id="inputDevice" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
             </div>
-            <div>
-                <label for="inputKerusakan">Deskripsi Kerusakan:</label>
-                <textarea id="inputKerusakan" rows="3" required></textarea>
-            </div>
-            <div>
-                <label for="inputNomorHp">Nomor HP (format 62xxxxxxxxxx):</label>
-                <input type="tel" id="inputNomorHp" placeholder="Contoh: 6281234567890" required>
-            </div>
-            <div>
-                <label for="inputStatus">Status:</label>
-                <select id="inputStatus" required>
-                    <option value="Menunggu">Menunggu</option>
-                    <option value="Proses">Proses</option>
-                    <option value="Selesai">Selesai</option>
-                    <option value="Diambil">Diambil</option>
-                </select>
-            </div>
-            <button type="submit" onclick="addService()">Tambahkan Service</button>
+            <button type="submit">Login</button>
         </form>
     </div>
 
@@ -55,81 +108,54 @@
             databaseURL: "YOUR_DATABASE_URL"
         };
 
-        // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // Auth state listener for admin check
+        // Check if user is already logged in (and is admin)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (user.email !== "dayatkemal16@gmail.com") {
-                    alert("Anda tidak memiliki izin akses ke halaman ini.");
-                    window.location.href = 'index.html';
+                if (user.email === "dayatkemal16@gmail.com") { // ADMIN EMAIL CHECK
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard if already logged in as admin
+                } else {
+                    // Logged in but not admin, perhaps redirect to index or logout
+                    alert("Anda tidak memiliki izin akses admin. Silakan logout.");
+                    auth.signOut(); // Force logout if not admin
                 }
-            } else {
-                alert("Anda belum login atau sesi telah berakhir.");
-                window.location.href = 'index.html';
             }
+            // else: user not logged in, stay on login page
         });
 
-        // Function to generate a unique service code
-        function generateServiceCode() {
-            // Using timestamp + random string for uniqueness
-            return 'KC-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6).toUpperCase();
-        }
-
-        window.addService = async () => {
-            const nama = document.getElementById('inputNama').value.trim();
-            const device = document.getElementById('inputDevice').value.trim(); // Hanya satu field 'device'
-            const kerusakan = document.getElementById('inputKerusakan').value.trim();
-            const nomorHp = document.getElementById('inputNomorHp').value.trim();
-            const status = document.getElementById('inputStatus').value;
-
-            if (!nama || !device || !kerusakan || !nomorHp || !status) {
-                alert('Semua kolom wajib diisi!');
-                return;
-            }
-
-            if (!/^\d+$/.test(nomorHp) || !nomorHp.startsWith('62')) {
-                alert('Nomor HP tidak valid. Gunakan format dimulai 62 (misal: 62812...) dan hanya angka.');
-                return;
-            }
-
-            const serviceCode = generateServiceCode();
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
             try {
-                await set(ref(db, `antrian/${serviceCode}`), {
-                    nama: nama,
-                    device: device, // Hanya properti 'device' yang disimpan
-                    kerusakan: kerusakan,
-                    nomorHp: nomorHp,
-                    status: status,
-                    timestamp: new Date().toISOString() // Simpan timestamp saat dibuat
-                });
-                alert('Layanan baru berhasil ditambahkan dengan kode: ' + serviceCode);
-                // Bersihkan formulir
-                document.getElementById('addServiceForm').reset();
-                document.getElementById('inputStatus').value = 'Menunggu'; // Reset status ke default
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // Redirect ke dashboard setelah berhasil menambah
-                window.location.href = 'dashboard.html';
-
+                if (user.email === "dayatkemal16@gmail.com") { // ADMIN EMAIL CHECK
+                    alert("Login berhasil! Selamat datang, Admin.");
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert("Email ini tidak memiliki izin akses admin.");
+                    await auth.signOut(); // Force logout if not admin
+                }
             } catch (error) {
-                console.error("Error menambahkan layanan baru:", error);
-                alert('Gagal menambahkan layanan baru. Silakan coba lagi.');
+                console.error("Error logging in:", error);
+                let errorMessage = "Login gagal. Periksa email dan password Anda.";
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = "Password salah.";
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage = "Email tidak terdaftar.";
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = "Format email tidak valid.";
+                }
+                alert(errorMessage);
             }
-        };
-
-        // Prevent form submission from reloading page (if you used <form> element)
-        document.getElementById('addServiceForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // addService(); // It's already called by onclick, but good practice for form submission
         });
     </script>
 </body>

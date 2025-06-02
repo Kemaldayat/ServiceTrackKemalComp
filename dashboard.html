@@ -1,405 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - Kemal Computer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Global Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #E0F2F7 0%, #C8E6F0 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 2rem 1rem; /* Tambah padding horizontal */
-            box-sizing: border-box;
-            color: #343A40;
-        }
-
-        /* Dashboard Container */
-        .dashboard-container {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 1200px; /* Lebar maksimum lebih besar untuk tabel */
-            width: 100%;
-            box-sizing: border-box;
-            transition: transform 0.3s ease-in-out;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-container:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Header Section */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap; /* Agar responsif */
-        }
-
-        header h1 {
-            color: #2C3E50;
-            font-weight: 800;
-            margin: 0;
-            font-size: 2.2rem;
-            flex-grow: 1; /* Agar judul mengambil ruang */
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 1rem; /* Jarak antar tombol di header */
-            flex-wrap: wrap;
-            justify-content: flex-end; /* Posisikan tombol ke kanan */
-        }
-
-        .header-buttons button, .add-service-button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            font-weight: 600;
-        }
-
-        .header-buttons button:hover, .add-service-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .logout-button {
-            background-color: #dc3545 !important; /* Override untuk tombol logout */
-        }
-        .logout-button:hover {
-            background-color: #c82333 !important;
-        }
-
-        /* Search Bar */
-        .search-bar {
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .search-input {
-            flex-grow: 1;
-            padding: 0.9rem;
-            font-size: 1rem;
-            border-radius: 10px;
-            border: 1px solid #D1D8E0;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .search-input:focus {
-            border-color: #6AAFE6;
-            outline: none;
-            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
-        }
-
-        /* Table Styles */
-        .table-responsive {
-            overflow-x: auto; /* Membuat tabel bisa discroll secara horizontal di layar kecil */
-            margin-top: 1rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background-color: #F8F9FA;
-            border-radius: 10px;
-            overflow: hidden; /* Penting untuk border-radius */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #E9ECEF;
-            font-size: 0.95rem;
-            color: #343A40;
-        }
-
-        th {
-            background-color: #E0F2F7;
-            font-weight: 700;
-            color: #2C3E50;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr:hover {
-            background-color: #F1F5F8;
-        }
-
-        /* Status Badges - Duplicated for consistency */
-        .status-badge {
-            display: inline-block;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            font-size: 0.85rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .status-waiting {
-            background-color: #FFC107; /* Kuning */
-        }
-        .status-process {
-            background-color: #007BFF; /* Biru */
-        }
-        .status-finished {
-            background-color: #28A745; /* Hijau */
-        }
-        /* BARU: Style untuk status Diambil */
-        .status-picked-up {
-            background-color: #6c757d; /* Abu-abu tua */
-        }
-
-        /* Action Buttons in Table */
-        .action-buttons button {
-            background-color: #6C757D; /* Abu-abu default */
-            color: white;
-            border: none;
-            padding: 0.6rem 1rem;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            font-weight: 500;
-            margin-right: 0.5rem;
-        }
-
-        .action-buttons button:last-child {
-            margin-right: 0;
-        }
-
-        .edit-button {
-            background-color: #FFC107; /* Kuning untuk edit */
-        }
-        .edit-button:hover {
-            background-color: #e0a800;
-            transform: translateY(-1px);
-        }
-
-        .delete-button {
-            background-color: #DC3545; /* Merah untuk delete */
-        }
-        .delete-button:hover {
-            background-color: #c82333;
-            transform: translateY(-1px);
-        }
-
-        .save-button {
-            background-color: #28A745; /* Hijau untuk save */
-        }
-        .save-button:hover {
-            background-color: #218838;
-            transform: translateY(-1px);
-        }
-
-        .cancel-button {
-            background-color: #6C757D; /* Abu-abu untuk cancel */
-        }
-        .cancel-button:hover {
-            background-color: #5a6268;
-            transform: translateY(-1px);
-        }
-
-        /* Input during edit mode */
-        .edit-mode input[type="text"],
-        .edit-mode input[type="tel"],
-        .edit-mode textarea,
-        .edit-mode select {
-            width: 100%;
-            padding: 0.5rem;
-            font-size: 0.95rem;
-            border-radius: 5px;
-            border: 1px solid #D1D8E0;
-            box-sizing: border-box;
-            background-color: white;
-        }
-        .edit-mode textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-
-        /* Add New Service Button (di bawah tabel) */
-        .add-service-section {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .add-service-button {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            background-color: #20c997; /* Teal atau warna lain untuk "tambah" */
-            box-shadow: 0 5px 15px rgba(32,201,151,0.2);
-        }
-        .add-service-button:hover {
-            background-color: #1aa079;
-            box-shadow: 0 8px 20px rgba(32,201,151,0.3);
-        }
-
-
-        /* Modal Styles (dari admin.html, pastikan konsisten) */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            position: relative;
-        }
-
-        .modal-content p {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            color: #343A40;
-        }
-
-        .close-button {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .modal-buttons button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-            box-shadow: none; /* Hilangkan shadow tambahan untuk tombol modal */
-            transform: none;
-        }
-
-        .modal-buttons button:hover {
-            background-color: #0056b3;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 1.5rem;
-            }
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            header h1 {
-                font-size: 1.8rem;
-            }
-            .header-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
-            .header-buttons button, .add-service-button {
-                flex-grow: 1; /* Agar tombol mengisi lebar */
-            }
-            .search-bar {
-                flex-direction: column;
-            }
-            .search-input {
-                width: 100%;
-            }
-            th, td {
-                padding: 0.8rem;
-                font-size: 0.85rem;
-            }
-            .status-badge {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.75rem;
-            }
-            .action-buttons button {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-                margin-right: 0.3rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            th, td {
-                font-size: 0.75rem;
-            }
-            .action-buttons button {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.7rem;
-            }
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css"> </head>
 <body>
-    <div class="dashboard-container">
+    <div class="container">
         <header>
-            <h1>Data Antrian Service</h1>
+            <h1>Dashboard Admin - Kemal Computer</h1>
             <div class="header-buttons">
-                <button onclick="refreshData()">Refresh Data <i class="fas fa-sync-alt"></i></button>
-                <button class="logout-button" onclick="logoutAdmin()">Logout <i class="fas fa-sign-out-alt"></i></button>
+                <button class="refresh-button" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Perbarui Data</button>
+                <button class="logout-button" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
 
-        <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="Cari berdasarkan kode, nama, device, atau status..." onkeyup="filterTable()" />
-        </div>
+        <section class="controls">
+            <input type="text" id="searchInput" placeholder="Cari Kode, Nama, Device, Kerusakan, atau HP..." onkeyup="filterTable()">
+        </section>
 
         <div class="table-responsive">
             <table id="serviceTable">
@@ -407,8 +26,7 @@
                     <tr>
                         <th>Kode Service</th>
                         <th>Nama Pelanggan</th>
-                        <th>Jenis Device</th>
-                        <th>Deskripsi Kerusakan</th>
+                        <th>Jenis Device</th> <th>Deskripsi Kerusakan</th>
                         <th>Nomor HP</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -419,38 +37,31 @@
             </table>
         </div>
 
-        <div class="add-service-section">
-            <button class="add-service-button" onclick="window.location.href='admin.html'">Tambah Service Baru <i class="fas fa-plus"></i></button>
-        </div>
+        <button class="add-new-button" onclick="window.location.href='admin.html'"><i class="fas fa-plus"></i> Tambah Service Baru</button>
     </div>
 
     <div id="customModal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button" onclick="closeModal()">&times;</span>
             <p id="modalMessage"></p>
-            <div class="modal-buttons">
-                <button id="modalConfirmBtn">Oke</button>
-                <button id="modalCancelBtn">Batal</button>
-            </div>
+            <div class="modal-buttons" id="modalButtons">
+                </div>
         </div>
     </div>
 
     <script type="module">
-        // =====================================================================================================================================================================
-        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
-        // =====================================================================================================================================================================
+        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
         const firebaseConfig = {
-            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", 
-            authDomain: "website-track-service.firebaseapp.com",
-            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "website-track-service",
-            storageBucket: "website-track-service.appspot.com",
-            messagingSenderId: "87573564376",
-            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            databaseURL: "YOUR_DATABASE_URL"
         };
-        // =====================================================================================================================================================================
 
+        // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
@@ -459,99 +70,58 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        let servicesData = {}; // Menyimpan data services untuk filtering
+        let servicesData = {};
+        let editingRowId = null; // To keep track of the currently edited row
 
-        // Pastikan admin login sebelum bisa mengakses halaman ini
+        // Auth state listener for admin check
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // PENTING: GANTI DENGAN EMAIL ADMIN ANDA YANG SEBENARNYA!
+                // Check if the authenticated user is the admin
                 if (user.email === "dayatkemal16@gmail.com") {
-                    console.log("Admin logged in:", user.email);
-                    loadServices(); // Muat data setelah admin terautentikasi
+                    loadServices(); // Load data if admin
                 } else {
-                    // User bukan admin, log out dan redirect
-                    signOut(auth).then(() => {
-                        alert("Anda tidak memiliki akses admin.");
-                        window.location.href = "login.html";
-                    }).catch((error) => {
-                        console.error("Error signing out non-admin:", error);
-                        alert("Terjadi kesalahan saat logout. Silakan coba lagi.");
-                        window.location.href = "login.html";
-                    });
+                    alert("Anda tidak memiliki izin akses ke halaman ini.");
+                    window.location.href = 'index.html'; // Redirect non-admin
                 }
             } else {
-                // User tidak login, redirect ke halaman login
-                window.location.href = "login.html";
+                // User is signed out
+                alert("Anda belum login atau sesi telah berakhir.");
+                window.location.href = 'index.html'; // Redirect to login page
             }
         });
 
-        // Fungsi untuk menampilkan modal kustom
-        function showModal(message, type = 'info', confirmAction = null, cancelAction = null) {
-            const modal = document.getElementById('customModal');
-            const modalMessage = document.getElementById('modalMessage');
-            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-            const modalCancelBtn = document.getElementById('modalCancelBtn');
-            const modalCloseBtn = document.querySelector('.modal-content .close-button');
-
-            modalMessage.innerHTML = message;
-
-            modalConfirmBtn.onclick = () => {
-                if (confirmAction) confirmAction();
-                modal.style.display = 'none';
-            };
-
-            modalCancelBtn.onclick = () => {
-                if (cancelAction) cancelAction();
-                modal.style.display = 'none';
-            };
-
-            modalCloseBtn.onclick = () => {
-                modal.style.display = 'none';
-            };
-
-            if (type === 'confirm') {
-                modalConfirmBtn.style.display = 'inline-block';
-                modalCancelBtn.style.display = 'inline-block';
-                modalConfirmBtn.textContent = 'Ya';
-                modalCancelBtn.textContent = 'Tidak';
-            } else { // 'info'
-                modalConfirmBtn.style.display = 'inline-block';
-                modalCancelBtn.style.display = 'none';
-                modalConfirmBtn.textContent = 'Oke';
+        window.logoutAdmin = async () => {
+            try {
+                await signOut(auth);
+                alert("Anda telah logout.");
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Error logging out:", error);
+                alert("Gagal logout. Silakan coba lagi.");
             }
-            modal.style.display = 'flex';
-        }
+        };
 
-
-        // Fungsi untuk memuat dan menampilkan data service dari Firebase
-        function loadServices() {
+        window.loadServices = () => {
             const servicesRef = ref(db, 'antrian');
             onValue(servicesRef, (snapshot) => {
                 const tableBody = document.getElementById('serviceTable').getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ''; // Kosongkan tabel
-                servicesData = {}; // Reset data
+                tableBody.innerHTML = ''; // Clear table before loading
+
+                servicesData = {}; // Clear previous data
+
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
                         const serviceCode = childSnapshot.key;
                         const service = childSnapshot.val();
-                        servicesData[serviceCode] = service; // Simpan data untuk filtering
+                        servicesData[serviceCode] = service; // Store for quick access/editing
 
                         let statusBadgeClass = '';
                         switch (service.status) {
-                            case 'Menunggu':
-                                statusBadgeClass = 'status-waiting';
-                                break;
-                            case 'Proses':
-                                statusBadgeClass = 'status-process';
-                                break;
-                            case 'Selesai':
-                                statusBadgeClass = 'status-finished';
-                                break;
-                            case 'Diambil': // BARU: Menambahkan case untuk status Diambil
-                                statusBadgeClass = 'status-picked-up';
-                                break;
-                            default:
-                                statusBadgeClass = '';
+                            case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
+                            case 'Proses': statusBadgeClass = 'status-process'; break;
+                            case 'Selesai': statusBadgeClass = 'status-finished'; break;
+                            case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
+                            default: statusBadgeClass = '';
                         }
 
                         const row = tableBody.insertRow();
@@ -559,7 +129,7 @@
                         row.innerHTML = `
                             <td>${serviceCode}</td>
                             <td data-field="nama">${service.nama}</td>
-                            <td data-field="device">${service.device}</td>
+                            <td data-field="device">${service.device || '-'}</td>
                             <td data-field="kerusakan">${service.kerusakan}</td>
                             <td data-field="nomorHp">${service.nomorHp || '-'}</td>
                             <td data-field="status"><span class="status-badge ${statusBadgeClass}">${service.status}</span></td>
@@ -571,16 +141,24 @@
                     });
                 } else {
                     const row = tableBody.insertRow();
-                    row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>'; // colspan 7 karena ada 7 kolom sekarang
+                    row.className = 'no-data-row';
+                    row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
                 }
-                filterTable(); // Terapkan filter jika ada saat data dimuat
+                filterTable(); // Apply filter after loading/refreshing data
             }, (error) => {
                 console.error("Error loading services:", error);
                 showModal("Gagal memuat data service. Silakan refresh.", "info");
             });
-        }
+        };
 
-        // Fungsi Filter Tabel
+        window.refreshData = () => {
+            // Simply re-trigger loadServices, as onValue listener is already active
+            // and will update the table automatically on any change.
+            // But if you want to force a refresh if no changes occurred, you can re-call:
+            loadServices();
+            showModal("Data diperbarui.", "info");
+        };
+
         window.filterTable = () => {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase();
@@ -588,10 +166,25 @@
             const rows = tableBody.getElementsByTagName('tr');
 
             let found = false;
+            let hasActualData = false;
+
+            // First pass to determine if there's any actual data beyond the "no data" message
             for (let i = 0; i < rows.length; i++) {
+                if (!rows[i].classList.contains('no-data-row')) {
+                    hasActualData = true;
+                    break;
+                }
+            }
+
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].classList.contains('no-data-row')) {
+                    rows[i].style.display = 'none'; // Hide existing "no data" message
+                    continue;
+                }
+
                 const serviceCode = rows[i].cells[0].textContent.toLowerCase();
                 const nama = rows[i].cells[1].textContent.toLowerCase();
-                const device = rows[i].cells[2].textContent.toLowerCase();
+                const device = rows[i].cells[2].textContent.toLowerCase(); // Only 'device'
                 const kerusakan = rows[i].cells[3].textContent.toLowerCase();
                 const nomorHp = rows[i].cells[4].textContent.toLowerCase();
                 const status = rows[i].cells[5].textContent.toLowerCase();
@@ -604,28 +197,27 @@
                 }
             }
 
-            const noDataRow = tableBody.querySelector('.no-data-row');
-            if (noDataRow) {
-                noDataRow.remove();
+            // Remove any previous "no data" or "not found" rows
+            const existingNoDataRow = tableBody.querySelector('.no-data-row');
+            if (existingNoDataRow) {
+                existingNoDataRow.remove();
             }
-            if (!found && filter !== '') {
+
+            if (!found && hasActualData) { // If nothing found after filtering
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
                 row.innerHTML = '<td colspan="7" style="text-align:center; color:#DC3545;">Data tidak ditemukan.</td>';
-            } else if (!found && Object.keys(servicesData).length === 0) {
-                 const row = tableBody.insertRow();
-                 row.className = 'no-data-row';
-                 row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
+            } else if (!hasActualData && filter === '') { // If no data at all and no filter applied
+                const row = tableBody.insertRow();
+                row.className = 'no-data-row';
+                row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
             }
         };
 
 
-        // Fungsi Edit Row
-        let editingRowId = null;
-
         window.editRow = (serviceCode) => {
-            if (editingRowId) {
-                cancelEdit(editingRowId);
+            if (editingRowId && editingRowId !== serviceCode) {
+                cancelEdit(editingRowId); // Cancel previous edit if any
             }
 
             editingRowId = serviceCode;
@@ -645,14 +237,12 @@
             row.setAttribute('data-original-nomorHp', originalData.nomorHp);
             row.setAttribute('data-original-status', originalData.status);
 
-
             row.querySelector('[data-field="nama"]').innerHTML = `<input type="text" value="${originalData.nama}">`;
             row.querySelector('[data-field="device"]').innerHTML = `<input type="text" value="${originalData.device}">`;
             row.querySelector('[data-field="kerusakan"]').innerHTML = `<textarea>${originalData.kerusakan}</textarea>`;
             row.querySelector('[data-field="nomorHp"]').innerHTML = `<input type="tel" value="${originalData.nomorHp}">`;
 
             const statusSelect = document.createElement('select');
-            // BARU: Menambahkan opsi "Diambil" ke dropdown
             ['Menunggu', 'Proses', 'Selesai', 'Diambil'].forEach(statusOpt => {
                 const option = document.createElement('option');
                 option.value = statusOpt;
@@ -671,7 +261,6 @@
             `;
         };
 
-        // Fungsi Save Edit
         window.saveEdit = async (serviceCode) => {
             const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
             const updatedNama = row.querySelector('[data-field="nama"] input').value.trim();
@@ -690,14 +279,17 @@
                 return;
             }
 
-
             try {
+                // Retrieve original timestamp from servicesData
+                const originalTimestamp = servicesData[serviceCode]?.timestamp || new Date().toISOString();
+
                 await set(ref(db, `antrian/${serviceCode}`), {
                     nama: updatedNama,
                     device: updatedDevice,
                     kerusakan: updatedKerusakan,
                     nomorHp: updatedNomorHp,
-                    status: updatedStatus
+                    status: updatedStatus,
+                    timestamp: originalTimestamp // Preserve original timestamp
                 });
                 showModal("Data berhasil diperbarui!", "info");
                 editingRowId = null;
@@ -707,7 +299,6 @@
             }
         };
 
-        // Fungsi Cancel Edit
         window.cancelEdit = (serviceCode) => {
             const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
             row.classList.remove('edit-mode');
@@ -716,14 +307,14 @@
             row.querySelector('[data-field="device"]').innerHTML = row.getAttribute('data-original-device');
             row.querySelector('[data-field="kerusakan"]').innerHTML = row.getAttribute('data-original-kerusakan');
             row.querySelector('[data-field="nomorHp"]').innerHTML = row.getAttribute('data-original-nomorHp');
-            
+
             const originalStatus = row.getAttribute('data-original-status');
             let statusBadgeClass = '';
             switch (originalStatus) {
                 case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
                 case 'Proses': statusBadgeClass = 'status-process'; break;
                 case 'Selesai': statusBadgeClass = 'status-finished'; break;
-                case 'Diambil': statusBadgeClass = 'status-picked-up'; break; // BARU: Case untuk status Diambil
+                case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
                 default: statusBadgeClass = '';
             }
             row.querySelector('[data-field="status"]').innerHTML = `<span class="status-badge ${statusBadgeClass}">${originalStatus}</span>`;
@@ -735,39 +326,66 @@
             editingRowId = null;
         };
 
-
-        // Fungsi Delete Service
         window.deleteService = (serviceCode) => {
             showModal(
-                `Apakah Anda yakin ingin menghapus service dengan kode <strong>${serviceCode}</strong>?`,
-                'confirm',
-                async () => {
-                    try {
-                        await remove(ref(db, `antrian/${serviceCode}`));
-                        showModal("Service berhasil dihapus!", "info");
-                    } catch (error) {
-                        console.error("Error deleting service:", error);
-                        showModal("Gagal menghapus service. Silakan coba lagi.", "info");
-                    }
-                }
+                `Apakah Anda yakin ingin menghapus layanan dengan kode ${serviceCode}?`,
+                "confirm",
+                () => confirmDelete(serviceCode)
             );
         };
 
-        // Fungsi Refresh Data
-        window.refreshData = () => {
-            loadServices();
-            document.getElementById('searchInput').value = '';
-            showModal("Data berhasil diperbarui!", "info");
+        const confirmDelete = async (serviceCode) => {
+            closeModal(); // Close the confirmation modal
+            try {
+                await remove(ref(db, `antrian/${serviceCode}`));
+                showModal("Layanan berhasil dihapus!", "info");
+            } catch (error) {
+                console.error("Error deleting service:", error);
+                showModal("Gagal menghapus layanan. Silakan coba lagi.", "info");
+            }
         };
 
-        // Fungsi Logout
-        window.logoutAdmin = async function () {
-            try {
-                await signOut(auth);
-                window.location.href = "login.html";
-            } catch (error) {
-                console.error("Error logging out:", error);
-                alert("Gagal logout. Silakan coba lagi.");
+        // Custom Modal Functions
+        const customModal = document.getElementById('customModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalButtons = document.getElementById('modalButtons');
+
+        window.showModal = (message, type, callback) => {
+            modalMessage.textContent = message;
+            modalButtons.innerHTML = ''; // Clear previous buttons
+
+            if (type === "info") {
+                const okButton = document.createElement('button');
+                okButton.textContent = 'OK';
+                okButton.className = 'modal-button primary-button';
+                okButton.onclick = closeModal;
+                modalButtons.appendChild(okButton);
+            } else if (type === "confirm") {
+                const confirmButton = document.createElement('button');
+                confirmButton.textContent = 'Ya';
+                confirmButton.className = 'modal-button danger-button';
+                confirmButton.onclick = () => {
+                    if (callback) callback();
+                };
+                modalButtons.appendChild(confirmButton);
+
+                const cancelButton = document.createElement('button');
+                cancelButton.textContent = 'Tidak';
+                cancelButton.className = 'modal-button secondary-button';
+                cancelButton.onclick = closeModal;
+                modalButtons.appendChild(cancelButton);
+            }
+            customModal.style.display = 'block';
+        };
+
+        window.closeModal = () => {
+            customModal.style.display = 'none';
+        };
+
+        // Close modal if user clicks outside of it
+        window.onclick = (event) => {
+            if (event.target == customModal) {
+                closeModal();
             }
         };
     </script>

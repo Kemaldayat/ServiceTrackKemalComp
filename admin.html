@@ -82,7 +82,6 @@
             cursor: not-allowed; /* Kursor tidak diizinkan */
         }
 
-
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
@@ -212,10 +211,10 @@
 <body>
     <div class="form-container">
         <h2>Tambah Data Service Baru</h2>
-        <form class="service-form">
-            <div class="form-group">
+        <form class="service-form" id="serviceForm"> <div class="form-group">
                 <label for="kodeService">Kode Service:</label>
-                <input type="text" id="kodeService" readonly> </div>
+                <input type="text" id="kodeService" readonly>
+            </div>
             <div class="form-group">
                 <label for="namaPelanggan">Nama Pelanggan:</label>
                 <input type="text" id="namaPelanggan" placeholder="Masukkan nama lengkap pelanggan" required>
@@ -253,28 +252,99 @@
         </form>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
     <script>
+        // === KONFIGURASI FIREBASE ANDA ===
+        // GANTI DENGAN KONFIGURASI PROYEK FIREBASE ANDA SENDIRI!
+        // Anda bisa menemukannya di Firebase Console -> Project settings -> General -> Your apps -> Firebase SDK snippet
+        const firebaseConfig = {
+        apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+        authDomain: "website-track-service.firebaseapp.com",
+        databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "website-track-service",
+        storageBucket: "website-track-service.firebasestorage.app",
+        messagingSenderId: "87573564376",
+        appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+        measurementId: "G-64T8XNWK5F"
+        };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(); // Dapatkan referensi ke Realtime Database
+        // === AKHIR KONFIGURASI FIREBASE ===
+
         // Fungsi untuk menghasilkan Kode Service Otomatis
         function generateServiceCode() {
             const now = new Date();
             const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            // Untuk memastikan unik, tambahkan milidetik atau random number jika banyak entri dalam 1 detik
             const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
 
-            // Format: KC-YYYYMMDD-HHMMSS-MMM (Kemal Computer - TahunBulanTanggal - JamMenitDetik - Milidetik)
             const serviceCode = `KC-${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}`;
-            
-            // Masukkan kode ke input
             document.getElementById('kodeService').value = serviceCode;
         }
 
-        // Panggil fungsi saat DOM sudah dimuat
-        document.addEventListener('DOMContentLoaded', generateServiceCode);
+        // Fungsi untuk menyimpan data ke Firebase
+        function saveServiceData(event) {
+            event.preventDefault(); // Mencegah form melakukan submit default (reload halaman)
+
+            const kodeService = document.getElementById('kodeService').value;
+            const namaPelanggan = document.getElementById('namaPelanggan').value;
+            const jenisDevice = document.getElementById('jenisDevice').value;
+            const deskripsiKerusakan = document.getElementById('deskripsiKerusakan').value;
+            const nomorHp = document.getElementById('nomorHp').value;
+            const status = document.getElementById('status').value;
+
+            // Validasi sederhana (opsional, karena ada 'required' di HTML)
+            if (!kodeService || !namaPelanggan || !jenisDevice || !deskripsiKerusakan || !nomorHp || !status) {
+                alert('Semua kolom harus diisi!');
+                return;
+            }
+
+            // Objek data service yang akan disimpan
+            const serviceData = {
+                kodeService: kodeService,
+                namaPelanggan: namaPelanggan,
+                jenisDevice: jenisDevice,
+                deskripsiKerusakan: deskripsiKerusakan,
+                nomorHp: nomorHp,
+                status: status,
+                timestamp: firebase.database.ServerValue.TIMESTAMP // Tambahkan timestamp server
+            };
+
+            // Kirim data ke Firebase Realtime Database
+            // 'services/' adalah path (atau node) di database Anda
+            // .set() akan menimpa data jika kunci (kodeService) sudah ada
+            // .push() akan membuat kunci unik otomatis (lebih umum untuk list baru)
+            database.ref('services/' + kodeService).set(serviceData)
+                .then(() => {
+                    alert('Data service berhasil disimpan ke Firebase!');
+                    // Reset form setelah berhasil menyimpan
+                    document.getElementById('serviceForm').reset();
+                    // Generate kode service baru untuk entri selanjutnya
+                    generateServiceCode();
+                })
+                .catch((error) => {
+                    console.error("Error menyimpan data: ", error);
+                    alert('Gagal menyimpan data ke Firebase. Silakan cek konsol untuk detailnya.');
+                });
+        }
+
+        // Event listener saat DOM sudah dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            generateServiceCode(); // Generate kode service saat halaman pertama kali dimuat
+
+            // Tambahkan event listener untuk submit form
+            const serviceForm = document.getElementById('serviceForm');
+            if (serviceForm) {
+                serviceForm.addEventListener('submit', saveServiceData);
+            }
+        });
     </script>
 </body>
 </html>

@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - Kemal Computer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css"> </head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <body>
     <div class="container">
         <header>
-            <h1>Dashboard Admin - Kemal Computer</h1>
+            <h1>Dashboard Admin</h1>
             <div class="header-buttons">
-                <button class="refresh-button" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Perbarui Data</button>
+                <button class="refresh-button" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Perbarui</button>
                 <button class="logout-button" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
 
         <section class="controls">
-            <input type="text" id="searchInput" placeholder="Cari Kode, Nama, Device, Kerusakan, atau HP..." onkeyup="filterTable()">
+            <input type="text" id="searchInput" placeholder="Cari Kode, Nama, Device, Kerusakan, HP, atau Keterangan..." onkeyup="filterTable()">
         </section>
 
         <div class="table-responsive">
@@ -26,10 +27,11 @@
                     <tr>
                         <th>Kode Service</th>
                         <th>Nama Pelanggan</th>
-                        <th>Jenis Device</th>
-                        <th>Deskripsi Kerusakan</th>
+                        <th>Device</th>
+                        <th>Kerusakan</th>
                         <th>Nomor HP</th>
                         <th>Status</th>
+                        <th>Keterangan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -51,20 +53,18 @@
     </div>
 
     <script type="module">
-        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
-const firebaseConfig = {
-  apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-  authDomain: "website-track-service.firebaseapp.com",
-  databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "website-track-service",
-  storageBucket: "website-track-service.firebasestorage.app",
-  messagingSenderId: "87573564376",
-  appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-  measurementId: "G-64T8XNWK5F"
-};
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.firebasestorage.app",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+            measurementId: "G-64T8XNWK5F"
         };
 
-        // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
@@ -79,7 +79,7 @@ const firebaseConfig = {
         // Auth state listener for admin check
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (user.email === "dayatkemal16@gmail.com") { // ADMIN EMAIL CHECK
+                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
                     loadServices();
                 } else {
                     alert("Anda tidak memiliki izin akses ke halaman ini.");
@@ -134,6 +134,7 @@ const firebaseConfig = {
                             <td data-field="kerusakan">${service.kerusakan}</td>
                             <td data-field="nomorHp">${service.nomorHp || '-'}</td>
                             <td data-field="status"><span class="status-badge ${statusBadgeClass}">${service.status}</span></td>
+                            <td data-field="keterangan">${service.keterangan || '-'}</td>
                             <td class="action-buttons">
                                 <button class="edit-button" onclick="editRow('${serviceCode}')">Edit</button>
                                 <button class="delete-button" onclick="deleteService('${serviceCode}')">Hapus</button>
@@ -143,7 +144,7 @@ const firebaseConfig = {
                 } else {
                     const row = tableBody.insertRow();
                     row.className = 'no-data-row';
-                    row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
+                    row.innerHTML = '<td colspan="8" style="text-align:center;">Tidak ada data service.</td>';
                 }
                 filterTable();
             }, (error) => {
@@ -167,15 +168,15 @@ const firebaseConfig = {
             let hasActualData = false;
 
             for (let i = 0; i < rows.length; i++) {
-                if (!rows[i].classList.contains('no-data-row')) {
+                if (!rows[i].classList.contains('no-data-row') && !rows[i].classList.contains('edit-mode')) {
                     hasActualData = true;
                     break;
                 }
             }
 
             for (let i = 0; i < rows.length; i++) {
-                if (rows[i].classList.contains('no-data-row')) {
-                    rows[i].style.display = 'none';
+                if (rows[i].classList.contains('no-data-row') || rows[i].classList.contains('edit-mode')) {
+                    rows[i].style.display = 'none'; // Hide info rows or editing row during filter
                     continue;
                 }
 
@@ -185,8 +186,10 @@ const firebaseConfig = {
                 const kerusakan = rows[i].cells[3].textContent.toLowerCase();
                 const nomorHp = rows[i].cells[4].textContent.toLowerCase();
                 const status = rows[i].cells[5].textContent.toLowerCase();
+                const keterangan = rows[i].cells[6].textContent.toLowerCase();
 
-                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) || kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter)) {
+
+                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) || kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) || keterangan.includes(filter)) {
                     rows[i].style.display = "";
                     found = true;
                 } else {
@@ -199,21 +202,21 @@ const firebaseConfig = {
                 existingNoDataRow.remove();
             }
 
-            if (!found && hasActualData) {
+            if (!found && hasActualData && filter !== '') { // Only show "not found" if there's data but nothing matches filter
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
-                row.innerHTML = '<td colspan="7" style="text-align:center; color:#DC3545;">Data tidak ditemukan.</td>';
-            } else if (!hasActualData && filter === '') {
+                row.innerHTML = '<td colspan="8" style="text-align:center; color:var(--danger-color);">Data tidak ditemukan.</td>';
+            } else if (!hasActualData && filter === '') { // Show "no data" if table is genuinely empty
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
-                row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
+                row.innerHTML = '<td colspan="8" style="text-align:center;">Tidak ada data service.</td>';
             }
         };
 
 
         window.editRow = (serviceCode) => {
             if (editingRowId && editingRowId !== serviceCode) {
-                cancelEdit(editingRowId);
+                cancelEdit(editingRowId); // Cancel previous edit if any
             }
 
             editingRowId = serviceCode;
@@ -225,18 +228,22 @@ const firebaseConfig = {
                 device: row.querySelector('[data-field="device"]').textContent,
                 kerusakan: row.querySelector('[data-field="kerusakan"]').textContent,
                 nomorHp: row.querySelector('[data-field="nomorHp"]').textContent,
-                status: row.querySelector('[data-field="status"]').textContent
+                status: row.querySelector('[data-field="status"]').textContent.trim(), // Trim status text
+                keterangan: row.querySelector('[data-field="keterangan"]').textContent
             };
             row.setAttribute('data-original-nama', originalData.nama);
             row.setAttribute('data-original-device', originalData.device);
             row.setAttribute('data-original-kerusakan', originalData.kerusakan);
             row.setAttribute('data-original-nomorHp', originalData.nomorHp);
             row.setAttribute('data-original-status', originalData.status);
+            row.setAttribute('data-original-keterangan', originalData.keterangan);
+
 
             row.querySelector('[data-field="nama"]').innerHTML = `<input type="text" value="${originalData.nama}">`;
             row.querySelector('[data-field="device"]').innerHTML = `<input type="text" value="${originalData.device}">`;
             row.querySelector('[data-field="kerusakan"]').innerHTML = `<textarea>${originalData.kerusakan}</textarea>`;
             row.querySelector('[data-field="nomorHp"]').innerHTML = `<input type="tel" value="${originalData.nomorHp}">`;
+            row.querySelector('[data-field="keterangan"]').innerHTML = `<textarea>${originalData.keterangan}</textarea>`;
 
             const statusSelect = document.createElement('select');
             ['Menunggu', 'Proses', 'Selesai', 'Diambil'].forEach(statusOpt => {
@@ -264,9 +271,11 @@ const firebaseConfig = {
             const updatedKerusakan = row.querySelector('[data-field="kerusakan"] textarea').value.trim();
             const updatedNomorHp = row.querySelector('[data-field="nomorHp"] input').value.trim();
             const updatedStatus = row.querySelector('[data-field="status"] select').value;
+            const updatedKeterangan = row.querySelector('[data-field="keterangan"] textarea').value.trim();
+
 
             if (!updatedNama || !updatedDevice || !updatedKerusakan || !updatedNomorHp || !updatedStatus) {
-                showModal('Semua kolom wajib diisi!', 'info');
+                showModal('Nama, Device, Keluhan, Nomor HP, dan Status wajib diisi!', 'info');
                 return;
             }
 
@@ -276,6 +285,7 @@ const firebaseConfig = {
             }
 
             try {
+                // Keep original timestamp if it exists, otherwise use current
                 const originalTimestamp = servicesData[serviceCode]?.timestamp || new Date().toISOString();
 
                 await set(ref(db, `antrian/${serviceCode}`), {
@@ -284,10 +294,13 @@ const firebaseConfig = {
                     kerusakan: updatedKerusakan,
                     nomorHp: updatedNomorHp,
                     status: updatedStatus,
+                    keterangan: updatedKeterangan, // Save Keterangan
                     timestamp: originalTimestamp
                 });
                 showModal("Data berhasil diperbarui!", "info");
                 editingRowId = null;
+                // Reload data to ensure display is updated correctly after save
+                loadServices();
             } catch (error) {
                 console.error("Error updating service:", error);
                 showModal("Gagal memperbarui data. Silakan coba lagi.", "info");
@@ -302,6 +315,8 @@ const firebaseConfig = {
             row.querySelector('[data-field="device"]').innerHTML = row.getAttribute('data-original-device');
             row.querySelector('[data-field="kerusakan"]').innerHTML = row.getAttribute('data-original-kerusakan');
             row.querySelector('[data-field="nomorHp"]').innerHTML = row.getAttribute('data-original-nomorHp');
+            row.querySelector('[data-field="keterangan"]').innerHTML = row.getAttribute('data-original-keterangan');
+
 
             const originalStatus = row.getAttribute('data-original-status');
             let statusBadgeClass = '';
@@ -340,6 +355,7 @@ const firebaseConfig = {
             }
         };
 
+        // Custom Modal Functions
         const customModal = document.getElementById('customModal');
         const modalMessage = document.getElementById('modalMessage');
         const modalButtons = document.getElementById('modalButtons');
@@ -360,6 +376,7 @@ const firebaseConfig = {
                 confirmButton.className = 'modal-button danger-button';
                 confirmButton.onclick = () => {
                     if (callback) callback();
+                    closeModal(); // Close modal after confirming
                 };
                 modalButtons.appendChild(confirmButton);
 

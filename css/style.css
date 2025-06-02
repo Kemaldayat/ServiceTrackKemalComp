@@ -1,19 +1,59 @@
+/* Variables for consistent styling */
+:root {
+    --primary-color: #4CAF50;      /* Green for primary actions/branding (more inviting) */
+    --primary-hover: #45a049;
+    --accent-color: #FFC107;       /* Yellow for highlights/badges (waiting) */
+    --accent-dark: #cc9900;
+    --text-color: #333333;         /* Dark grey for readability */
+    --text-color-light: #666666;   /* Lighter grey for secondary text */
+    --bg-color: #f0f8f8;           /* Light, calming background */
+    --container-bg: #ffffff;
+    --border-color: #dddddd;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
+    --border-radius-sm: 5px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --transition-ease: all 0.3s ease;
+
+    /* Status Colors */
+    --status-waiting-bg: #FFC107;  /* Yellow */
+    --status-waiting-text: #333;
+    --status-process-bg: #2196F3;  /* Blue */
+    --status-process-text: white;
+    --status-finished-bg: #4CAF50; /* Green */
+    --status-finished-text: white;
+    --status-picked-up-bg: #9C27B0; /* Purple */
+    --status-picked-up-text: white;
+
+    /* Button Colors */
+    --info-button: #2196F3;        /* Blue for info/secondary */
+    --info-hover: #1976D2;
+    --danger-color: #F44336;       /* Red for delete/warning */
+    --danger-hover: #d32f2f;
+    --success-color: #4CAF50;      /* Green for add/submit */
+    --success-hover: #45a049;
+    --secondary-button: #9E9E9E;   /* Grey for cancel/back */
+    --secondary-hover: #757575;
+}
+
 /* General Styling */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
-    background-color: #f4f7f6;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 .container {
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    padding: 30px;
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
 /* Header */
@@ -23,215 +63,231 @@ header {
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
 }
 
 header h1 {
     margin: 0;
-    color: #007bff;
-    font-size: 2em;
+    color: var(--primary-color);
+    font-size: 2.5em;
+    font-weight: bold;
 }
 
 .header-buttons button {
-    padding: 10px 15px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
+    font-size: 1em;
+    transition: var(--transition-ease);
     margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
 }
 
 .refresh-button {
-    background-color: #6c757d;
+    background-color: var(--secondary-button);
     color: white;
 }
 
 .refresh-button:hover {
-    background-color: #5a6268;
+    background-color: var(--secondary-hover);
 }
 
 .logout-button {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
     color: white;
 }
 
 .logout-button:hover {
-    background-color: #c82333;
+    background-color: var(--danger-hover);
 }
 
 /* Controls (Search Bar) */
 .controls {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     display: flex;
     justify-content: center;
 }
 
 #searchInput {
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
     padding: 12px 20px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    font-size: 1em;
+    border: 1px solid var(--border-color);
+    border-radius: 25px; /* Pill shape */
+    font-size: 1.05em;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    background-color: var(--light-bg); /* Slightly different background for search input */
 }
+#searchInput::placeholder {
+    color: var(--text-color-light);
+}
+
 
 /* Table Styling */
 .table-responsive {
-    overflow-x: auto;
+    overflow-x: auto; /* Enable horizontal scroll on small screens */
     margin-bottom: 30px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden; /* Ensures border-radius applies to corners */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 table thead th {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
-    padding: 12px 15px;
+    padding: 15px 20px;
     text-align: left;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.9em;
+    font-size: 0.95em;
+    white-space: nowrap; /* Prevent wrapping of header text */
 }
 
 table tbody td {
-    padding: 10px 15px;
-    border-bottom: 1px solid #eee;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
+    color: var(--text-color);
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
+    background-color: #fdfdfd; /* Lighter shade for even rows */
 }
 
 table tbody tr:hover {
-    background-color: #e2e6ea;
+    background-color: #f5f5f5; /* Subtle hover effect */
     cursor: pointer;
 }
 
 /* Status Badges */
 .status-badge {
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
     font-weight: bold;
     color: white;
     text-align: center;
     display: inline-block;
-    min-width: 70px;
+    min-width: 80px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.status-waiting { background-color: #ffc107; color: #333; } /* Yellow */
-.status-process { background-color: #17a2b8; } /* Teal */
-.status-finished { background-color: #28a745; } /* Green */
-.status-picked-up { background-color: #6f42c1; } /* Purple */
+.status-waiting { background-color: var(--status-waiting-bg); color: var(--status-waiting-text); }
+.status-process { background-color: var(--status-process-bg); color: var(--status-process-text); }
+.status-finished { background-color: var(--status-finished-bg); color: var(--status-finished-text); }
+.status-picked-up { background-color: var(--status-picked-up-bg); color: var(--status-picked-up-text); }
 
-/* Action Buttons */
+/* Action Buttons within table */
 .action-buttons button {
-    padding: 6px 10px;
+    padding: 8px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: 0.8em;
-    transition: background-color 0.2s ease;
+    transition: var(--transition-ease);
     margin-right: 5px;
+    white-space: nowrap; /* Prevent buttons from wrapping */
 }
 
 .edit-button {
-    background-color: #007bff;
+    background-color: var(--info-button);
     color: white;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--info-hover);
 }
 
 .delete-button {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
     color: white;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: var(--danger-hover);
 }
 
 .save-button {
-    background-color: #28a745;
+    background-color: var(--success-color);
     color: white;
 }
 .save-button:hover {
-    background-color: #218838;
+    background-color: var(--success-hover);
 }
 
 .cancel-button {
-    background-color: #6c757d;
+    background-color: var(--secondary-button);
     color: white;
 }
 .cancel-button:hover {
-    background-color: #5a6268;
+    background-color: var(--secondary-hover);
 }
 
 /* Edit Mode Styling */
 tr.edit-mode td {
-    background-color: #eaf6ff;
-    padding: 8px 15px; /* Slightly less padding to accommodate inputs */
+    background-color: #e6f7ff; /* Lighter blue background for editing row */
+    padding: 10px 15px; /* Slightly less padding to accommodate inputs */
 }
 
 tr.edit-mode input[type="text"],
 tr.edit-mode input[type="tel"],
 tr.edit-mode textarea,
 tr.edit-mode select {
-    width: calc(100% - 10px); /* Adjust width to fit padding */
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: calc(100% - 16px); /* Adjust width to fit padding and border */
+    padding: 8px;
+    border: 1px solid var(--primary-color); /* Highlight border when editing */
+    border-radius: var(--border-radius-sm);
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    font-size: 0.95em;
 }
 
 tr.edit-mode textarea {
     resize: vertical; /* Allow vertical resizing */
     min-height: 40px;
+    max-height: 100px; /* Limit max height */
 }
 
 /* Add New Service Button */
 .add-new-button {
     display: block;
     width: fit-content;
-    margin: 20px auto 0;
-    padding: 12px 25px;
-    background-color: #28a745;
+    margin: 30px auto 0;
+    padding: 15px 30px;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
+    border-radius: var(--border-radius-md);
+    font-size: 1.15em;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: var(--transition-ease);
+    box-shadow: var(--shadow-md);
 }
 
 .add-new-button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
 }
 
 .add-new-button i {
-    margin-right: 8px;
+    margin-right: 10px;
 }
 
 /* No Data Row */
 .no-data-row td {
     text-align: center;
     font-style: italic;
-    color: #666;
-    padding: 20px;
+    color: var(--text-color-light);
+    padding: 25px;
+    font-size: 1.1em;
 }
 
 /* Admin.html form specific styling */
@@ -242,73 +298,81 @@ tr.edit-mode textarea {
 .add-service-container header {
     flex-direction: column;
     align-items: flex-start;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .add-service-container header h1 {
-    font-size: 2.2em;
+    font-size: 2.5em;
     margin-bottom: 15px;
 }
 
 .back-button {
-    background-color: #6c757d;
+    background-color: var(--secondary-button);
     color: white;
-    padding: 8px 15px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .back-button:hover {
-    background-color: #5a6268;
+    background-color: var(--secondary-hover);
 }
 
 #addServiceForm div {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 }
 
 #addServiceForm label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: var(--text-color);
+    font-size: 1.05em;
 }
 
 #addServiceForm input[type="text"],
 #addServiceForm input[type="tel"],
 #addServiceForm textarea,
 #addServiceForm select {
-    width: calc(100% - 22px); /* Adjust for padding and border */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: calc(100% - 24px);
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
     font-size: 1em;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    background-color: var(--light-bg);
 }
 
 #addServiceForm textarea {
     resize: vertical;
     min-height: 80px;
+    max-height: 200px;
 }
 
 #addServiceForm button[type="submit"] {
     width: 100%;
-    padding: 12px 20px;
-    background-color: #007bff;
+    padding: 15px 25px;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 1.1em;
+    border-radius: var(--border-radius-sm);
+    font-size: 1.2em;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+    transition: var(--transition-ease);
+    margin-top: 25px;
+    box-shadow: var(--shadow-sm);
 }
 
 #addServiceForm button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
 }
 
 
@@ -322,120 +386,139 @@ tr.edit-mode textarea {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.5); /* Darker overlay */
     display: flex;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(3px); /* Optional: blur background */
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--container-bg);
     margin: auto;
-    padding: 25px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 450px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
     position: relative;
     text-align: center;
+    animation: fadeIn 0.3s ease-out; /* Simple fade in animation */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .close-button {
-    color: #aaa;
+    color: var(--text-color-light);
     position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
+    transition: var(--transition-ease);
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    color: var(--danger-color);
 }
 
 #modalMessage {
-    margin-bottom: 20px;
-    font-size: 1.1em;
-    color: #444;
+    margin-bottom: 25px;
+    font-size: 1.15em;
+    color: var(--text-color);
 }
 
 .modal-buttons button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: 0.9em;
-    margin: 0 5px;
-    transition: background-color 0.2s ease;
+    font-size: 1em;
+    margin: 0 8px;
+    transition: var(--transition-ease);
 }
 
 .modal-button.primary-button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
 }
 .modal-button.primary-button:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover);
 }
 
 .modal-button.danger-button {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
     color: white;
 }
 .modal-button.danger-button:hover {
-    background-color: #c82333;
+    background-color: var(--danger-hover);
 }
 
 .modal-button.secondary-button {
-    background-color: #6c757d;
+    background-color: var(--secondary-button);
     color: white;
 }
 .modal-button.secondary-button:hover {
-    background-color: #5a6268;
+    background-color: var(--secondary-hover);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments (General) */
 @media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+    }
     header {
         flex-direction: column;
         align-items: flex-start;
+        text-align: left;
+    }
+    header h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
     }
     .header-buttons {
         margin-top: 15px;
         width: 100%;
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 10px;
     }
     .header-buttons button {
-        margin: 0 5px;
+        margin: 0;
         flex-grow: 1;
-    }
-    .container {
-        padding: 15px;
+        font-size: 0.9em;
+        padding: 8px 12px;
     }
     table thead th, table tbody td {
-        padding: 8px 10px;
+        padding: 10px 15px;
         font-size: 0.85em;
     }
     .add-new-button {
-        padding: 10px 20px;
-        font-size: 1em;
+        padding: 12px 25px;
+        font-size: 1.05em;
     }
     .add-service-container header h1 {
-        font-size: 1.8em;
+        font-size: 2em;
     }
     #addServiceForm input, #addServiceForm textarea, #addServiceForm select {
         width: calc(100% - 20px);
+    }
+    .modal-content {
+        padding: 20px;
     }
 }
 
 @media (max-width: 480px) {
     header h1 {
-        font-size: 1.5em;
+        font-size: 1.8em;
         text-align: center;
         width: 100%;
     }
@@ -447,5 +530,32 @@ tr.edit-mode textarea {
     }
     #searchInput {
         padding: 10px 15px;
+        font-size: 0.95em;
+    }
+    table thead th, table tbody td {
+        font-size: 0.8em;
+        padding: 8px 10px;
+    }
+    .action-buttons button {
+        padding: 6px 8px;
+        font-size: 0.75em;
+    }
+    .add-new-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    .back-button {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+    #addServiceForm label {
+        font-size: 0.95em;
+    }
+    #addServiceForm input, #addServiceForm textarea, #addServiceForm select {
+        padding: 10px;
+    }
+    #addServiceForm button[type="submit"] {
+        font-size: 1.1em;
+        padding: 12px 20px;
     }
 }

@@ -14,6 +14,7 @@
             align-items: center;
             min-height: 100vh;
             background-color: var(--bg-color); /* Using CSS variable */
+            font-family: 'Poppins', sans-serif; /* Pastikan font Poppins juga di login page */
         }
 
         .login-container {
@@ -51,6 +52,12 @@
             border-radius: var(--border-radius-sm);
             font-size: 1em;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s ease;
+        }
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
         }
 
         .login-form button {
@@ -68,6 +75,15 @@
 
         .login-form button:hover {
             background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Error message styles (optional, if you want a more refined error display later) */
+        #errorMessage {
+            color: var(--danger-color);
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: bold;
         }
 
         /* Responsive for login */
@@ -95,7 +111,7 @@
                 <input type="password" id="password" required>
             </div>
             <button type="submit">Login</button>
-        </form>
+            <div id="errorMessage" style="display: none;"></div> </form>
     </div>
 
     <script type="module">
@@ -112,30 +128,49 @@
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+
+        const adminEmail = "dayatkemal16@gmail.com"; // <--- GANTI DENGAN EMAIL ADMIN YANG VALID DI FIREBASE ANDA
+
+        const errorMessageDiv = document.getElementById('errorMessage');
+
+        function displayError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.style.display = 'none';
+        }
 
         // Check if user is already logged in (and is admin)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // Redirect if already logged in AND is the designated admin
-                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
+                if (user.email === adminEmail) {
+                    // console.log("User already logged in as admin, redirecting to dashboard.");
                     window.location.href = 'dashboard.html';
                 } else {
                     // Logged in but not the specific admin.
-                    // This might happen if someone else logs in on the same browser.
-                    // Force logout or redirect to a non-admin page (e.g., index.html).
-                    alert("Akun ini tidak memiliki izin akses admin. Melakukan logout.");
-                    signOut(auth); // Log out the non-admin user
+                    // Force logout and show message.
+                    signOut(auth).then(() => {
+                        alert("Akun ini tidak memiliki izin akses admin. Silakan login dengan akun yang benar.");
+                        // console.log("Logged out non-admin user.");
+                    }).catch((error) => {
+                        console.error("Error signing out non-admin user:", error);
+                    });
                 }
             }
-            // If no user, stay on login page
         });
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            hideError(); // Clear any previous errors
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -143,10 +178,12 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
+                if (user.email === adminEmail) { // <--- GANTI DENGAN EMAIL ADMIN YANG VALID DI FIREBASE ANDA
                     alert("Login berhasil! Selamat datang, Admin.");
                     window.location.href = 'dashboard.html';
                 } else {
+                    // This case should ideally not be reached if onAuthStateChanged works correctly,
+                    // but as a fallback, explicitly sign out if somehow a non-admin gets through.
                     alert("Email ini tidak memiliki izin akses admin.");
                     await signOut(auth); // Force logout if not the specific admin
                 }
@@ -161,8 +198,11 @@
                     errorMessage = "Format email tidak valid.";
                 } else if (error.code === 'auth/user-disabled') {
                     errorMessage = "Akun Anda telah dinonaktifkan.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = "Terlalu banyak percobaan login gagal. Coba lagi nanti atau reset password Anda.";
                 }
-                alert(errorMessage);
+                displayError(errorMessage); // Display error below the form
+                // alert(errorMessage); // If you prefer alert for ALL errors
             }
         });
     </script>

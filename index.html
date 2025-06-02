@@ -1,481 +1,209 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lacak Status Service - Kemal Computer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Global Styles */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Status Layanan - Kemal Computer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css"> <style>
+        /* Specific styles for customer status page */
         body {
-            font-family: 'Inter', sans-serif;
-            /* === PERUBAHAN UTAMA UNTUK BACKGROUND GAMBAR === */
-            background-image: url('images/background_service.jpg'); /* Ganti dengan path gambar Anda */
-            background-size: cover; /* Untuk mengisi seluruh layar */
-            background-repeat: no-repeat; /* Untuk mencegah pengulangan gambar */
-            background-position: center center; /* Posisikan gambar di tengah */
-            background-attachment: fixed; /* Agar gambar tidak ikut scroll */
-            /* ============================================== */
             display: flex;
-            flex-direction: column; /* Mengatur item secara vertikal */
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Adjust alignment to avoid hiding content */
             min-height: 100vh;
-            margin: 0;
-            padding: 2rem; /* Tambah padding keseluruhan */
-            box-sizing: border-box;
-            color: #343A40;
+            background-color: #f4f7f6;
         }
 
-        /* Container Utama (Search Box) */
-        .search-container {
-            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar background terlihat */
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-            transition: transform 0.3s ease-in-out;
-            margin-bottom: 2rem; /* Jarak antara search-container dan elemen di bawahnya */
-        }
-
-        .search-container:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Logo Styling */
-        .logo {
-            max-width: 120px;
-            height: auto;
-            margin-bottom: 1.5rem;
+        .customer-container {
+            background-color: #fff;
+            padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .search-container h1 {
-            color: #2C3E50;
-            margin-bottom: 1.8rem;
-            font-weight: 700;
-            font-size: 2.2rem;
-        }
-
-        /* Input Field & Button */
-        .search-input {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            border: 1px solid #D1D8E0;
-            box-sizing: border-box;
-            margin-bottom: 1.5rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 50px; /* Add some top margin */
         }
 
-        .search-input:focus {
-            border-color: #6AAFE6;
-            outline: none;
-            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
+        .customer-container h1 {
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2.2em;
         }
 
-        .search-button {
-            background: #007BFF;
+        .search-form div {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .search-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .search-form input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .search-form button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #28a745; /* Green for search */
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 10px;
+            border-radius: 5px;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
-            width: 100%; /* Tombol memenuhi lebar */
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
 
-        .search-button:hover {
-            background: #0056b3;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,123,255,0.3);
-        }
-        .search-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,123,255,0.2);
+        .search-form button:hover {
+            background-color: #218838;
         }
 
-        /* Result Area */
-        #result {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 500px;
-            width: 100%;
-            text-align: left; /* Teks hasil rata kiri */
-            box-sizing: border-box;
-            margin-top: 2rem; /* Jarak dari search-container */
-            min-height: 100px; /* Agar tidak collapse saat kosong */
-            display: none; /* Hide by default, show on result */
-            position: relative; /* Untuk loading spinner */
-        }
-
-        #result h2 {
-            color: #2C3E50;
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        #result p {
-            margin-bottom: 0.8rem;
-            line-height: 1.6;
-            color: #495057;
-            font-size: 1rem;
-        }
-
-        #result p strong {
-            color: #2C3E50;
-            font-weight: 600;
-        }
-
-        /* Status Badges */
-        .status-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .status-waiting {
-            background-color: #FFC107; /* Kuning */
-        }
-        .status-process {
-            background-color: #007BFF; /* Biru */
-        }
-        .status-finished {
-            background-color: #28A745; /* Hijau */
-        }
-        /* BARU: Style untuk status Diambil */
-        .status-picked-up {
-            background-color: #6c757d; /* Abu-abu tua */
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-top: 4px solid #007BFF;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            display: none; /* Hidden by default */
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Admin Contact Section */
-        .admin-contact {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            margin-top: 2rem;
-            box-sizing: border-box;
-        }
-
-        .admin-contact h3 {
-            color: #2C3E50;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem; /* Jarak antar tombol */
-        }
-
-        .contact-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.5rem;
+        #resultContainer {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
             border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            background-color: #f9f9f9;
+            text-align: left;
+            min-height: 100px; /* Ensure visibility even when empty */
         }
 
-        .contact-button i {
-            margin-right: 0.8rem;
-            font-size: 1.2rem;
+        #resultContainer p {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        #resultContainer strong {
+            color: #007bff;
         }
 
-        .whatsapp-button {
-            background-color: #25D366; /* WhatsApp Green */
-        }
-        .whatsapp-button:hover {
-            background-color: #1DA851;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 12px rgba(37, 211, 102, 0.3);
+        #resultContainer .status-badge {
+            margin-left: 10px;
         }
 
-        .instagram-button {
-            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); /* Instagram Gradient */
-        }
-        .instagram-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 12px rgba(220, 39, 67, 0.3);
-        }
-
-        /* === PERUBAHAN UTAMA UNTUK LOKASI & MAPS === */
-        .location-contact {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 500px;
-            width: 100%;
+        .result-not-found {
+            color: #dc3545;
+            font-weight: bold;
             text-align: center;
-            margin-top: 2rem;
-            box-sizing: border-box;
+        }
+        
+        .login-link {
+            margin-top: 20px;
         }
 
-        .location-contact h3 {
-            color: #2C3E50;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .location-contact p {
-            margin-bottom: 1.5rem;
-            color: #495057;
-            line-height: 1.6;
-        }
-
-        .map-embed {
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            overflow: hidden; /* Penting untuk radius iframe */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .map-embed iframe {
-            width: 100%;
-            height: 300px; /* Tinggi iframe peta */
-            border: 0;
-            display: block; /* Menghilangkan spasi ekstra di bawah iframe */
-        }
-
-        .map-link {
-            display: inline-block;
-            background-color: #4285F4; /* Google Blue */
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+        .login-link a {
+            color: #007bff;
             text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
         }
 
-        .map-link:hover {
-            background-color: #357AE8;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 12px rgba(66, 133, 244, 0.3);
-        }
-        /* ================================================= */
-
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+        @media (max-width: 600px) {
+            .customer-container {
+                margin: 20px;
+                padding: 30px 20px;
             }
-            .search-container, #result, .admin-contact, .location-contact {
-                padding: 1.5rem;
-                border-radius: 12px;
-                margin-top: 1rem;
-                margin-bottom: 1rem;
-            }
-            .search-container h1 {
-                font-size: 1.8rem;
-                margin-bottom: 1rem;
-            }
-            .search-input {
-                padding: 0.8rem;
-                font-size: 1rem;
-                border-radius: 8px;
-            }
-            .search-button {
-                padding: 0.8rem 1.5rem;
-                font-size: 1rem;
-                border-radius: 8px;
-            }
-            #result h2 {
-                font-size: 1.5rem;
-            }
-            #result p {
-                font-size: 0.95rem;
-            }
-            .status-badge {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
-            .admin-contact h3, .location-contact h3 {
-                font-size: 1.3rem;
-            }
-            .contact-buttons {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .contact-button, .map-link {
-                width: 100%;
-            }
-            .map-embed iframe {
-                height: 250px;
+            .customer-container h1 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="search-container">
-        <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
-        <h1>Lacak Status Service Anda</h1>
-        <input type="text" id="serviceCode" class="search-input" placeholder="Masukkan kode service Anda (misal: SVC/20250601/103045)" />
-        <button class="search-button" onclick="checkStatus()">Cek Status</button>
-    </div>
+    <div class="customer-container">
+        <h1>Cek Status Layanan Anda</h1>
+        <form id="checkStatusForm" class="search-form">
+            <div>
+                <label for="serviceCode">Masukkan Kode Service:</label>
+                <input type="text" id="serviceCode" placeholder="Contoh: KC-xxxxxxxxxxxx" required>
+            </div>
+            <button type="submit"><i class="fas fa-search"></i> Cek Status</button>
+        </form>
 
-    <div id="result">
-        <div class="loading-spinner" id="loadingSpinner"></div>
+        <div id="resultContainer">
+            <p>Masukkan kode service untuk melihat status layanan Anda.</p>
         </div>
 
-    <div class="admin-contact">
-        <h3>Butuh Bantuan? Hubungi Kami!</h3>
-        <div class="contact-buttons">
-            <a href="https://wa.me/6288228977367" target="_blank" class="contact-button whatsapp-button">
-                <i class="fab fa-whatsapp"></i> WhatsApp Admin
-            </a>
-            <a href="https://www.instagram.com/kemal_computer" target="_blank" class="contact-button instagram-button">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
+        <div class="login-link">
+            <p>Anda Admin? <a href="login.html">Login di sini</a></p>
         </div>
     </div>
 
-    <div class="location-contact">
-        <h3>Lokasi Kami</h3>
-        <h4>KEMAL COMPUTER</h4>
-        <p>Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia</p>
-        <div class="map-embed">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.078440733575!2d110.40728487500001!3d-7.778841792244093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a599602553b47%3A0xe1c7e997a0604f2!2sKemal%20Computer!5e0!3m2!1sen!2sid!4v1717282838426!5m2!1sen!2sid"
-                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-        <p><a href="https://maps.app.goo.gl/EypQDC93wpKQn7xQ7" target="_blank" class="map-link">Lihat di Google Maps</a></p>
-    </div>
     <script type="module">
-        // =====================================================================================================================================================================
-        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
-        // =====================================================================================================================================================================
+        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
         const firebaseConfig = {
-            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", 
-            authDomain: "website-track-service.firebaseapp.com",
-            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "website-track-service",
-            storageBucket: "website-track-service.appspot.com",
-            messagingSenderId: "87573564376",
-            appId: "1:87573564376:web:c93c07f0506d00535a00ad"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSaging_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            databaseURL: "YOUR_DATABASE_URL"
         };
-        // =====================================================================================================================================================================
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        window.checkStatus = async () => {
-            const serviceCode = document.getElementById("serviceCode").value.trim();
-            const resultDiv = document.getElementById("result");
-            const loadingSpinner = document.getElementById("loadingSpinner");
-
-            resultDiv.style.display = 'block'; // Tampilkan area hasil
-            resultDiv.innerHTML = ''; // Bersihkan hasil sebelumnya
-            loadingSpinner.style.display = 'block'; // Tampilkan spinner
+        document.getElementById('checkStatusForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const serviceCode = document.getElementById('serviceCode').value.trim();
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = ''; // Clear previous results
 
             if (!serviceCode) {
-                loadingSpinner.style.display = 'none';
-                resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Mohon masukkan kode service Anda.</strong></p>';
+                resultContainer.innerHTML = '<p class="result-not-found">Mohon masukkan kode service.</p>';
                 return;
             }
 
             try {
-                const dbRef = ref(db, `antrian/${serviceCode}`);
-                const snapshot = await get(dbRef);
-
-                loadingSpinner.style.display = 'none'; // Sembunyikan spinner
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, `antrian/${serviceCode}`));
 
                 if (snapshot.exists()) {
-                    const data = snapshot.val();
+                    const service = snapshot.val();
                     let statusBadgeClass = '';
-                    switch (data.status) {
-                        case 'Menunggu':
-                            statusBadgeClass = 'status-waiting';
-                            break;
-                        case 'Proses':
-                            statusBadgeClass = 'status-process';
-                            break;
-                        case 'Selesai':
-                            statusBadgeClass = 'status-finished';
-                            break;
-                        case 'Diambil': // BARU: Menambahkan case untuk status Diambil
-                            statusBadgeClass = 'status-picked-up';
-                            break;
-                        default:
-                            statusBadgeClass = '';
+                    switch (service.status) {
+                        case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
+                        case 'Proses': statusBadgeClass = 'status-process'; break;
+                        case 'Selesai': statusBadgeClass = 'status-finished'; break;
+                        case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
+                        default: statusBadgeClass = '';
                     }
 
-                    resultDiv.innerHTML = `
-                        <h2>Status Service</h2>
+                    resultContainer.innerHTML = `
                         <p><strong>Kode Service:</strong> ${serviceCode}</p>
-                        <p><strong>Nama Pelanggan:</strong> ${data.nama}</p>
-                        <p><strong>Jenis Device:</strong> ${data.device}</p>
-                        <p><strong>Deskripsi Kerusakan:</strong> ${data.kerusakan}</p>
-                        <p style="text-align:center;"><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${data.status}</span></p>
+                        <p><strong>Nama Pelanggan:</strong> ${service.nama}</p>
+                        <p><strong>Jenis Device:</strong> ${service.device || '-'}</p>
+                        <p><strong>Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
+                        <p><strong>Nomor HP:</strong> ${service.nomorHp || '-'}</p>
+                        <p><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
+                        <p><strong>Tanggal Masuk:</strong> ${new Date(service.timestamp).toLocaleString('id-ID')}</p>
                     `;
                 } else {
-                    resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Kode service tidak ditemukan. Mohon cek kembali kode Anda.</strong></p>';
+                    resultContainer.innerHTML = '<p class="result-not-found">Kode service tidak ditemukan. Mohon periksa kembali.</p>';
                 }
             } catch (error) {
-                loadingSpinner.style.display = 'none';
-                console.error("Error fetching data:", error);
-                resultDiv.innerHTML = '<p style="text-align:center; color:#DC3545;"><strong>Terjadi kesalahan saat mencari status. Silakan coba lagi.</strong></p>';
+                console.error("Error checking service status:", error);
+                resultContainer.innerHTML = '<p class="result-not-found">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>';
             }
-        };
+        });
     </script>
 </body>
 </html>

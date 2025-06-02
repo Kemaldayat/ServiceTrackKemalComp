@@ -1,308 +1,170 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin - Kemal Computer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Basic Reset & Body Styles */
+        /* Specific styles for login page */
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #A7D9EB 0%, #7AC8E4 100%); /* Gradien biru yang lembut */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 2rem;
-            box-sizing: border-box;
-            color: #343A40;
+            background-color: var(--bg-color); /* Using CSS variable */
         }
 
-        /* Login Container */
         .login-container {
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 450px;
+            background-color: var(--container-bg);
+            padding: 40px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
             width: 100%;
+            max-width: 400px;
             text-align: center;
-            box-sizing: border-box;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .login-container:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Logo Styling */
-        .logo {
-            max-width: 120px;
-            height: auto;
-            margin-bottom: 1.5rem;
-            border-radius: 8px; /* Jika logo Anda berbentuk persegi */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .login-container h1 {
-            color: #2C3E50;
-            margin-bottom: 2rem;
-            font-weight: 700;
-            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.2em;
         }
 
-        /* Input Group */
-        .input-group {
-            margin-bottom: 1.5rem;
-            text-align: left; /* Rata kiri untuk label dan input */
-            position: relative; /* Untuk ikon mata password */
+        .login-form div {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
-        .input-group label {
+        .login-form label {
             display: block;
-            margin-bottom: 0.6rem;
-            color: #495057;
-            font-weight: 600;
-            font-size: 0.95rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
         }
 
-        .input-group input[type="email"],
-        .input-group input[type="password"] {
+        .login-form input {
+            width: calc(100% - 24px); /* Adjust for padding and border */
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .login-form button {
             width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border-radius: 10px;
-            border: 1px solid #D1D8E0;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: #F8F9FA;
-            color: #343A40;
-        }
-
-        .input-group input[type="email"]:focus,
-        .input-group input[type="password"]:focus {
-            border-color: #6AAFE6;
-            outline: none;
-            box-shadow: 0 0 0 0.3rem rgba(0,123,255,.2);
-            background-color: white;
-        }
-
-        /* Password Toggle Icon */
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 60%; /* Sesuaikan posisi vertikal agar sejajar dengan input */
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #6C757D;
-            font-size: 1.1rem;
-        }
-        .password-toggle:hover {
-            color: #343A40;
-        }
-
-
-        /* Login Button */
-        .login-button {
-            background-color: #007BFF;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 1.2rem 2.5rem;
-            font-size: 1.15rem;
-            margin-top: 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--border-radius-sm);
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(0,123,255,0.2);
-            width: 100%; /* Tombol memenuhi lebar container */
+            transition: var(--transition-ease);
+            margin-top: 10px;
         }
 
-        .login-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+        .login-form button:hover {
+            background-color: var(--primary-hover);
         }
 
-        .login-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,123,255,0.2);
-        }
-
-        /* Error Message */
-        #errorMessage {
-            color: #DC3545;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-top: 4px solid #007BFF;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 10px;
-            display: none; /* Sembunyikan secara default */
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
+        /* Responsive for login */
+        @media (max-width: 480px) {
             .login-container {
-                padding: 2rem;
-                border-radius: 12px;
+                margin: 20px;
+                padding: 30px 20px;
             }
             .login-container h1 {
-                font-size: 1.8rem;
-                margin-bottom: 1.5rem;
-            }
-            .input-group input {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-                border-radius: 8px;
-            }
-            .login-button {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-                border-radius: 8px;
-            }
-            .password-toggle {
-                right: 10px;
-                font-size: 1rem;
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <img src="images/Kemal Computer (1).png" alt="Logo Kemal Computer" class="logo">
-        <h1>Admin Login</h1>
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Masukkan email admin Anda" required>
-        </div>
-        <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Masukkan password Anda" required>
-            <span class="password-toggle" onclick="togglePasswordVisibility()">
-                <i id="passwordIcon" class="fas fa-eye"></i>
-            </span>
-        </div>
-        <button class="login-button" onclick="loginAdmin()">
-            Login <span id="loginSpinner" class="loading-spinner"></span>
-        </button>
-        <p id="errorMessage"></p>
+        <h1>Login Admin</h1>
+        <form id="loginForm" class="login-form">
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
     </div>
 
     <script type="module">
-        // =====================================================================================================================================================================
-        // PENTING: GANTI DENGAN KONFIGURASI FIREBASE ANDA YANG SEBENARNYA!
-        // Anda bisa menemukannya di Firebase Console > Project settings > Your apps > Firebase SDK snippet > Config
-        // =====================================================================================================================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-  authDomain: "website-track-service.firebaseapp.com",
-  databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "website-track-service",
-  storageBucket: "website-track-service.firebasestorage.app",
-  messagingSenderId: "87573564376",
-  appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-  measurementId: "G-64T8XNWK5F"
-};
+        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.firebasestorage.app",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+            measurementId: "G-64T8XNWK5F"
         };
-        // =====================================================================================================================================================================
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Fungsi untuk menampilkan/menyembunyikan password
-        window.togglePasswordVisibility = () => {
-            const passwordInput = document.getElementById('password');
-            const passwordIcon = document.getElementById('passwordIcon');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.classList.remove('fa-eye');
-                passwordIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.classList.remove('fa-eye-slash');
-                passwordIcon.classList.add('fa-eye');
+        // Check if user is already logged in (and is admin)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Redirect if already logged in AND is the designated admin
+                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Logged in but not the specific admin.
+                    // This might happen if someone else logs in on the same browser.
+                    // Force logout or redirect to a non-admin page (e.g., index.html).
+                    alert("Akun ini tidak memiliki izin akses admin. Melakukan logout.");
+                    signOut(auth); // Log out the non-admin user
+                }
             }
-        };
+            // If no user, stay on login page
+        });
 
-        // Fungsi untuk login admin
-        window.loginAdmin = async () => {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorMessage = document.getElementById('errorMessage');
-            const loginButton = document.querySelector('.login-button');
-            const loginSpinner = document.getElementById('loginSpinner');
-
-            errorMessage.textContent = ''; // Bersihkan pesan error sebelumnya
-            loginButton.disabled = true; // Disable tombol login
-            loginSpinner.style.display = 'inline-block'; // Tampilkan spinner
-
-            if (!email || !password) {
-                errorMessage.textContent = 'Email dan password tidak boleh kosong.';
-                loginButton.disabled = false;
-                loginSpinner.style.display = 'none';
-                return;
-            }
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // Verifikasi apakah email yang login adalah email admin yang diizinkan
-                // PENTING: GANTI DENGAN EMAIL ADMIN ANDA YANG SEBENARNYA!
-                if (user.email === "dayatkemal16@gmail.com") {
-                    console.log("Admin logged in successfully!");
-                    window.location.href = "dashboard.html"; // Arahkan ke dashboard admin
+                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
+                    alert("Login berhasil! Selamat datang, Admin.");
+                    window.location.href = 'dashboard.html';
                 } else {
-                    // Jika bukan email admin yang diizinkan, logout dan tampilkan pesan error
-                    await auth.signOut();
-                    errorMessage.textContent = 'Akses ditolak: Anda bukan admin yang terdaftar.';
-                    loginButton.disabled = false;
-                    loginSpinner.style.display = 'none';
+                    alert("Email ini tidak memiliki izin akses admin.");
+                    await signOut(auth); // Force logout if not the specific admin
                 }
             } catch (error) {
-                console.error("Login Error:", error.code, error.message);
-                loginButton.disabled = false;
-                loginSpinner.style.display = 'none';
-                switch (error.code) {
-                    case 'auth/invalid-email':
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                        errorMessage.textContent = 'Email atau password salah.';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage.textContent = 'Terlalu banyak percobaan login. Silakan coba lagi nanti.';
-                        break;
-                    default:
-                        errorMessage.textContent = 'Terjadi kesalahan login. Silakan coba lagi.';
-                        break;
+                console.error("Error logging in:", error);
+                let errorMessage = "Login gagal. Periksa email dan password Anda.";
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = "Password salah.";
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage = "Email tidak terdaftar.";
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = "Format email tidak valid.";
+                } else if (error.code === 'auth/user-disabled') {
+                    errorMessage = "Akun Anda telah dinonaktifkan.";
                 }
+                alert(errorMessage);
             }
-        };
+        });
     </script>
 </body>
 </html>

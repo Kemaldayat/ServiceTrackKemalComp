@@ -40,10 +40,18 @@
             font-family: 'Playfair Display', serif; /* Font menarik untuk tagline */
             font-size: 1.2em; /* Sedikit lebih besar */
             margin-top: 5px; /* Jarak dari h1 */
-            margin-bottom: 10px; /* Jarak dari tombol */
+            margin-bottom: 10px; /* Jarak dari tombol (dihilangkan jika tombol pindah) */
             font-weight: 600; /* Lebih tebal */
             text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sedikit bayangan */
         }
+
+        /* --- Perubahan di sini: Hapus style untuk tombol WhatsApp di header --- */
+        /*
+        .whatsapp-button-direct {
+            display: none; // Sembunyikan jika tidak ada di header
+        }
+        */
+        /* --- Akhir perubahan --- */
 
         .section-title {
             text-align: center;
@@ -149,14 +157,16 @@
         }
         footer .contact-info-footer {
             display: flex;
+            flex-direction: column; /* Mengatur item ke bawah */
             justify-content: center;
-            gap: 25px;
+            gap: 10px; /* Jarak antar item */
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
         footer .contact-info-footer div {
             display: flex;
             align-items: center;
+            justify-content: center; /* Pusatkan item info kontak */
             font-size: 1em;
             color: var(--text-color-light);
         }
@@ -165,6 +175,8 @@
             color: var(--primary-color);
             font-size: 1.2em;
         }
+        /* --- Perubahan di sini: Hilangkan style untuk admin-link jika sudah tidak ada --- */
+        /*
         footer .admin-link {
             margin-top: 15px;
         }
@@ -177,6 +189,8 @@
         footer .admin-link a:hover {
             text-decoration: underline;
         }
+        */
+        /* --- Akhir perubahan --- */
 
         /* WhatsApp Button (Direct Link) specific styles - make it small */
         .whatsapp-button-direct {
@@ -187,7 +201,7 @@
             border-radius: var(--border-radius-sm);
             font-size: 0.9em; /* Font lebih kecil */
             text-decoration: none;
-            margin-top: 10px; /* Jarak dari tagline */
+            margin-top: 20px; /* Jarak dari info kontak */
             cursor: pointer;
             transition: var(--transition-ease);
             box-shadow: var(--shadow-sm);
@@ -306,10 +320,7 @@
             <div class="header-content">
                 <h1>Kemal Computer Service</h1>
                 <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-                <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-button-direct">
-                    <i class="fab fa-whatsapp"></i> Hubungi Admin
-                </a>
-            </div>
+                </div>
         </header>
 
         <section class="service-info-section">
@@ -340,7 +351,7 @@
                 Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.256860081699!2d110.3920953!3d-7.7712396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5840d04c5521%3A0xcb0c16922e3e5732!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.208119842526!2d110.370356714777!3d-7.771977794406256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a58390772bb45%3A0x60012e1329d0f418!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1678888888888!5m2!1sid!2sid"
                 width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </section>
@@ -349,11 +360,11 @@
             <div class="contact-info-footer">
                 <div><i class="fas fa-phone"></i> Nomor Admin: +62 882-2897-7367</div>
                 <div><i class="fab fa-instagram"></i> Instagram: @Kemal_Computer</div>
+                <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-button-direct">
+                    <i class="fab fa-whatsapp"></i> Hubungi Admin
+                </a>
             </div>
-            <div class="admin-link">
-                <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
-            </div>
-        </footer>
+            </footer>
     </div>
 
     <script type="module">

@@ -362,18 +362,22 @@
         const serviceForm = document.getElementById('serviceForm');
         const kodeServiceInput = document.getElementById('kodeService');
 
-        // Fungsi untuk menghasilkan Kode Service Otomatis
+ // Fungsi untuk menghasilkan Kode Service Otomatis
         function generateServiceCode() {
             const now = new Date();
-            const year = now.getFullYear();
+            const year = String(now.getFullYear()).padStart(4, '0'); // Pastikan 4 digit
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+
             const serviceCode = `KC-${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}`;
             kodeServiceInput.value = serviceCode;
+            console.log('DEBUG: Kode Service berhasil digenerate dan di set ke input:', serviceCode);
+        }
+
         }
 
         // Fungsi untuk menangani Login
@@ -419,31 +423,42 @@
         function saveServiceData(event) {
             event.preventDefault(); // Mencegah form melakukan submit default (reload halaman)
 
-            // Pastikan ada user yang login sebelum menyimpan
             const currentUser = auth.currentUser;
             if (!currentUser) {
                 alert('Anda harus login untuk menyimpan data.');
+                console.error('DEBUG: Save attempt failed: No user logged in.');
                 return;
             }
 
-            // Validasi email berdasarkan aturan Firebase
             if (currentUser.email !== 'dayatkemal16@gmail.com') {
                 alert('Anda tidak memiliki izin untuk menyimpan data.');
+                console.error('DEBUG: Save attempt failed: User email not authorized:', currentUser.email);
                 return;
             }
 
-            const kodeService = kodeServiceInput.value;
+            const kodeService = kodeServiceInput.value; // Ambil nilai dari input Kode Service
             const namaPelanggan = document.getElementById('namaPelanggan').value;
             const jenisDevice = document.getElementById('jenisDevice').value;
             const deskripsiKerusakan = document.getElementById('deskripsiKerusakan').value;
             const nomorHp = document.getElementById('nomorHp').value;
             const status = document.getElementById('status').value;
 
+            // --- DEBUG LOGS ---
+            console.log('DEBUG: Nilai kodeService saat saveServiceData dipanggil:', kodeService);
+            console.log('DEBUG: Nama Pelanggan:', namaPelanggan);
+            console.log('DEBUG: Jenis Device:', jenisDevice);
+            console.log('DEBUG: Deskripsi Kerusakan:', deskripsiKerusakan);
+            console.log('DEBUG: Nomor HP:', nomorHp);
+            console.log('DEBUG: Status:', status);
+            // --- END DEBUG LOGS ---
+
             if (!kodeService || !namaPelanggan || !jenisDevice || !deskripsiKerusakan || !nomorHp || !status) {
                 alert('Semua kolom harus diisi!');
+                console.error('DEBUG: Salah satu kolom wajib kosong. Kode Service:', kodeService);
                 return;
             }
 
+            // Objek data service yang akan disimpan
             const serviceData = {
                 kodeService: kodeService,
                 namaPelanggan: namaPelanggan,
@@ -454,15 +469,17 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
+            console.log('DEBUG: Objek serviceData yang akan disimpan:', serviceData);
+
             // Kirim data ke Firebase Realtime Database ke node 'antrian'
             database.ref('antrian/' + kodeService).set(serviceData)
                 .then(() => {
                     alert('Data service berhasil disimpan ke Firebase!');
-                    serviceForm.reset(); // Reset form
-                    generateServiceCode(); // Generate kode baru
+                    serviceForm.reset(); // Reset form setelah berhasil menyimpan
+                    generateServiceCode(); // Generate kode service baru untuk entri selanjutnya
                 })
                 .catch((error) => {
-                    console.error("Error menyimpan data: ", error);
+                    console.error("DEBUG: Error menyimpan data ke Firebase: ", error);
                     alert('Gagal menyimpan data ke Firebase. Silakan cek konsol untuk detailnya.');
                 });
         }

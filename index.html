@@ -13,45 +13,45 @@
             font-family: 'Poppins', sans-serif; /* Menggunakan Poppins sebagai font dasar */
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
         .header-public {
-            display: flex; /* Menggunakan flexbox untuk penataan menyamping */
-            align-items: center; /* Pusatkan secara vertikal */
-            justify-content: center; /* Pusatkan secara horizontal */
-            gap: 20px; /* Jarak antara logo dan teks */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Logo di kiri */
+            gap: 20px;
             margin-bottom: 40px;
-            text-align: left; /* Teks di dalam header akan rata kiri */
-            flex-wrap: wrap; /* Izinkan wrapping pada layar kecil */
+            text-align: left; /* Teks rata kiri */
+            flex-wrap: wrap;
         }
         .header-public .header-content {
             text-align: left; /* Konten teks rata kiri */
         }
         .header-public img {
-            max-width: 120px; /* Ukuran logo lebih kecil */
-            margin-bottom: 0; /* Hapus margin bawah jika ada */
-            border-radius: 8px; /* Optional: subtle rounding */
+            max-width: 120px;
+            margin-bottom: 0;
+            border-radius: 8px;
         }
         .header-public h1 {
             color: var(--primary-color);
-            font-size: 2.5em; /* Ukuran h1 disesuaikan */
-            margin: 0; /* Hapus margin default */
+            font-size: 2.5em;
+            margin: 0;
         }
-        .header-public p.tagline { /* Menambahkan class tagline untuk target styling */
+        .header-public p.tagline {
             color: var(--text-color-light);
-            font-family: 'Playfair Display', serif; /* Font menarik untuk tagline */
-            font-size: 1.2em; /* Sedikit lebih besar */
-            margin-top: 5px; /* Jarak dari h1 */
-            margin-bottom: 10px; /* Jarak dari tombol (dihilangkan jika tombol pindah) */
-            font-weight: 600; /* Lebih tebal */
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sedikit bayangan */
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            margin-top: 5px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-
-        /* --- Perubahan di sini: Hapus style untuk tombol WhatsApp di header --- */
-        /*
-        .whatsapp-button-direct {
-            display: none; // Sembunyikan jika tidak ada di header
-        }
-        */
-        /* --- Akhir perubahan --- */
 
         .section-title {
             text-align: center;
@@ -159,14 +159,13 @@
             display: flex;
             flex-direction: column; /* Mengatur item ke bawah */
             justify-content: center;
+            align-items: center; /* Pusatkan item info kontak */
             gap: 10px; /* Jarak antar item */
             margin-bottom: 20px;
-            flex-wrap: wrap;
         }
         footer .contact-info-footer div {
             display: flex;
             align-items: center;
-            justify-content: center; /* Pusatkan item info kontak */
             font-size: 1em;
             color: var(--text-color-light);
         }
@@ -175,46 +174,31 @@
             color: var(--primary-color);
             font-size: 1.2em;
         }
-        /* --- Perubahan di sini: Hilangkan style untuk admin-link jika sudah tidak ada --- */
-        /*
-        footer .admin-link {
-            margin-top: 15px;
-        }
-        footer .admin-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em;
-        }
-        footer .admin-link a:hover {
-            text-decoration: underline;
-        }
-        */
-        /* --- Akhir perubahan --- */
 
-        /* WhatsApp Button (Direct Link) specific styles - make it small */
+        /* WhatsApp Button (Direct Link) specific styles - make it small and precise */
         .whatsapp-button-direct {
             background-color: #25D366; /* WhatsApp Green */
             color: white;
-            padding: 8px 15px; /* Lebih kecil */
+            padding: 6px 12px; /* Lebih kecil lagi */
             border: none;
             border-radius: var(--border-radius-sm);
-            font-size: 0.9em; /* Font lebih kecil */
+            font-size: 0.8em; /* Font lebih kecil */
             text-decoration: none;
-            margin-top: 20px; /* Jarak dari info kontak */
+            margin-top: 15px; /* Jarak dari info kontak */
             cursor: pointer;
             transition: var(--transition-ease);
             box-shadow: var(--shadow-sm);
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            width: fit-content; /* Sesuaikan lebar dengan konten */
         }
         .whatsapp-button-direct:hover {
             background-color: #1DA851;
             transform: translateY(-2px);
         }
         .whatsapp-button-direct i {
-            font-size: 1.1em;
+            font-size: 1em; /* Ikon juga disesuaikan */
         }
 
         /* Background Service Section */
@@ -262,10 +246,11 @@
         @media (max-width: 768px) {
             .header-public {
                 flex-direction: column; /* Kembali ke layout kolom di layar kecil */
-                text-align: center; /* Pusatkan teks di layar kecil */
+                align-items: center; /* Pusatkan logo dan teks */
+                text-align: center; /* Pusatkan teks */
             }
             .header-public .header-content {
-                text-align: center;
+                text-align: center; /* Pusatkan teks */
             }
             .header-public h1 {
                 font-size: 2.2em;
@@ -280,8 +265,8 @@
                 height: 300px;
             }
             .whatsapp-button-direct {
-                padding: 7px 12px;
-                font-size: 0.85em;
+                padding: 6px 10px; /* Lebih kecil di mobile */
+                font-size: 0.75em;
             }
             .service-info-section {
                 padding: 30px 15px;
@@ -293,7 +278,6 @@
                 font-size: 1.1em;
             }
             footer .contact-info-footer {
-                flex-direction: column;
                 gap: 10px;
             }
         }
@@ -320,7 +304,7 @@
             <div class="header-content">
                 <h1>Kemal Computer Service</h1>
                 <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-                </div>
+            </div>
         </header>
 
         <section class="service-info-section">
@@ -351,7 +335,7 @@
                 Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.208119842526!2d110.370356714777!3d-7.771977794406256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a58390772bb45%3A0x60012e1329d0f418!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1678888888888!5m2!1sid!2sid"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.28424269191!2d110.39572637498717!3d-7.75619179227289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59a9e3240f6f%3A0xe9f7b0b2e3e5c942!2sKemal%20Computer!5e0!3m2!1sen!2sid!4v1701509653198!5m2!1sen!2sid"
                 width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </section>
@@ -364,7 +348,7 @@
                     <i class="fab fa-whatsapp"></i> Hubungi Admin
                 </a>
             </div>
-            </footer>
+        </footer>
     </div>
 
     <script type="module">

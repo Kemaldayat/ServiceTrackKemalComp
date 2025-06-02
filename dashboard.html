@@ -77,8 +77,8 @@
         #searchInput:focus {
             outline: none;
             border-color: var(--primary-color);
-            /* Menggunakan var(--primary-color) dengan opacity */
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+            /* Menggunakan rgba untuk kompatibilitas yang lebih luas */
+            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.2); /* Menggunakan warna primary-color dengan opacity */
         }
 
         .table-responsive {

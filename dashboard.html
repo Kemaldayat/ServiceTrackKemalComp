@@ -487,11 +487,14 @@
         window.logoutAdmin = async () => {
             try {
                 await signOut(auth);
-                alert("Anda telah logout."); // Menggunakan alert() seperti permintaan
-                window.location.href = 'login.html';
+                // Menggunakan custom modal untuk logout success
+                showModal("Anda telah logout.", "info", () => {
+                    window.location.href = 'login.html';
+                });
             } catch (error) {
                 console.error("Error logging out:", error);
-                alert("Gagal logout. Silakan coba lagi."); // Menggunakan alert() seperti permintaan
+                // Menggunakan custom modal untuk error logout
+                showModal("Gagal logout. Silakan coba lagi.", "info");
             }
         };
 
@@ -542,14 +545,15 @@
                 filterTable(); // Apply filter after loading data
             }, (error) => {
                 console.error("Error loading services:", error);
-                // Menggunakan alert() untuk error loading data
-                alert("Gagal memuat data service. Silakan refresh halaman.");
+                // Menggunakan custom modal untuk error loading data
+                showModal("Gagal memuat data service. Silakan refresh halaman.", "info");
             });
         };
 
         window.refreshData = () => {
             loadServices();
-            alert("Data diperbarui."); // Menggunakan alert() seperti permintaan
+            // Menggunakan custom modal untuk notifikasi refresh
+            showModal("Data diperbarui.", "info");
         };
 
         window.filterTable = () => {

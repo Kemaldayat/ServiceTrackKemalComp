@@ -27,24 +27,6 @@
             font-size: 1.1em;
             margin-bottom: 5px;
         }
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .contact-info div {
-            display: flex;
-            align-items: center;
-            font-size: 1.1em;
-            color: var(--text-color);
-        }
-        .contact-info i {
-            margin-right: 10px;
-            color: var(--accent-color);
-            font-size: 1.3em;
-        }
 
         .section-title {
             text-align: center;
@@ -126,6 +108,12 @@
             margin-top: 50px;
             margin-bottom: 40px;
         }
+        .map-section p.address {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
         .map-section iframe {
             width: 100%;
             max-width: 800px;
@@ -135,30 +123,53 @@
             box-shadow: var(--shadow-md);
         }
 
-        .admin-link {
+        footer {
             text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
+            margin-top: 50px;
+            padding-top: 30px;
             border-top: 1px solid var(--border-color);
+            color: var(--text-color);
         }
-        .admin-link a {
+        footer .contact-info-footer {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        footer .contact-info-footer div {
+            display: flex;
+            align-items: center;
+            font-size: 1em;
+            color: var(--text-color-light);
+        }
+        footer .contact-info-footer i {
+            margin-right: 8px;
+            color: var(--primary-color); /* Use primary color for icons */
+            font-size: 1.2em;
+        }
+        footer .admin-link {
+            margin-top: 15px;
+        }
+        footer .admin-link a {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em;
         }
-        .admin-link a:hover {
+        footer .admin-link a:hover {
             text-decoration: underline;
         }
 
         /* WhatsApp Button specific styles */
         .whatsapp-button {
-            display: inline-flex; /* Use inline-flex for proper icon alignment */
-            align-items: center; /* Vertically align icon and text */
-            gap: 10px; /* Space between icon and text */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
+            gap: 10px;
             background-color: #25D366; /* WhatsApp Green */
             color: white;
-            padding: 12px 25px;
+            padding: 12px 30px; /* Increased horizontal padding for better look */
             border: none;
             border-radius: var(--border-radius-sm);
             font-size: 1.1em;
@@ -167,6 +178,9 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
             box-shadow: var(--shadow-sm);
+            /* Ensure it sits well */
+            line-height: 1; /* Reset line-height to make it tight */
+            height: auto; /* Allow height to adjust */
         }
         .whatsapp-button:hover {
             background-color: #1DA851; /* Darker green on hover */
@@ -178,17 +192,16 @@
 
         /* Background Service Section */
         .service-info-section {
-            background: url('./images/Bg.jpg') no-repeat center center / cover; /* Background image */
+            background: url('./images/bg.jpg') no-repeat center center / cover; /* Background image */
             color: white; /* Text color on background */
             padding: 50px 20px;
             margin-top: 50px;
             border-radius: var(--border-radius-lg);
             text-align: center;
             box-shadow: var(--shadow-md);
-            position: relative; /* For overlay */
+            position: relative;
             overflow: hidden;
         }
-        /* Optional: Add a subtle overlay to make text more readable on busy backgrounds */
         .service-info-section::before {
             content: '';
             position: absolute;
@@ -202,12 +215,12 @@
         }
         .service-info-section > * {
             position: relative;
-            z-index: 2; /* Ensure content is above overlay */
+            z-index: 2;
         }
         .service-info-section h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
-            color: white; /* Ensure title is white */
+            color: white;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         .service-info-section p {
@@ -222,10 +235,6 @@
         @media (max-width: 768px) {
             .header-public h1 {
                 font-size: 2.2em;
-            }
-            .contact-info {
-                flex-direction: column;
-                gap: 15px;
             }
             .search-form {
                 padding: 20px;
@@ -246,16 +255,23 @@
             .service-info-section p {
                 font-size: 1.1em;
             }
+            footer .contact-info-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
         @media (max-width: 480px) {
             .header-public h1 {
                 font-size: 1.8em;
             }
-            .header-public p, .contact-info div {
+            .header-public p {
                 font-size: 1em;
             }
             .section-title {
                 font-size: 1.8em;
+            }
+            footer .contact-info-footer div {
+                font-size: 0.95em;
             }
         }
     </style>
@@ -266,10 +282,6 @@
             <img src="./images/logo.png" alt="Logo Kemal Computer">
             <h1>Kemal Computer Service</h1>
             <p>Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-            <div class="contact-info">
-                <div><i class="fas fa-phone"></i> Nomor Admin: +62 882-2897-7367</div>
-                <div><i class="fab fa-instagram"></i> Instagram: @Kemal_Computer</div>
-            </div>
             <a href="https://wa.me/6288228977367" target="_blank" class="whatsapp-button">
                 <i class="fab fa-whatsapp"></i> Hubungi Admin
             </a>
@@ -299,14 +311,24 @@
 
         <h2 class="section-title">Lokasi Kami</h2>
         <section class="map-section">
+            <p class="address">
+                Jl. Contoh Alamat Kemal Computer No. 123,<br>
+                Kec. Depok, Kab. Sleman, Yogyakarta, 55281
+            </p>
             <iframe
-                src="https://maps.app.goo.gl/MRPgPuMSN6N2UA1e8"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.284758525049!2d110.37021751477759!3d-7.771239094038166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57a1518b010f%3A0x6b4c3b6d4f6c4f0!2sUniversitas%20Gadjah%20Mada!5e0!3m2!1sid!2sid!4v1678901234567!5m2!1sid!2sid"
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </section>
 
-        <footer class="admin-link">
-            <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
+        <footer>
+            <div class="contact-info-footer">
+                <div><i class="fas fa-phone"></i> Nomor Admin: +62 882-2897-7367</div>
+                <div><i class="fab fa-instagram"></i> Instagram: @Kemal_Computer</div>
+            </div>
+            <div class="admin-link">
+                <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
+            </div>
         </footer>
     </div>
 

@@ -22,88 +22,47 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* --- START REVISI HEADER --- */
-        /* CSS untuk Opsi 2 */
+        /* --- START REVISI HEADER (CSS) --- */
+        /* CSS untuk Opsi 5 */
         .header-public {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); /* Efek gradien */
-            color: white;
-            padding: 30px;
-            border-radius: var(--border-radius-lg);
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-around; /* Distribusi ruang lebih merata */
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden; /* Untuk efek shape */
-        }
-
-        .header-public::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 150px;
-            height: 150px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .header-public::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
         }
 
         .header-public img {
             max-height: 100px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-content {
-            text-align: center;
+            margin-bottom: 15px;
+            border-radius: 8px;
         }
 
         .header-public h1 {
+            color: var(--primary-color);
             font-size: 3em;
-            margin: 0 0 10px 0;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0;
+            font-weight: 600;
         }
 
         .header-public p.tagline {
-            font-size: 1.4em;
-            margin: 0;
+            font-size: 1.3em;
+            margin-top: 5px;
+            color: var(--text-color-light);
             font-family: 'Playfair Display', serif;
-            font-style: italic;
-            opacity: 0.9;
         }
 
-        /* Responsive adjustments */
+        /* Responsive adjustments for header */
         @media (max-width: 768px) {
-            .header-public {
-                flex-direction: column;
-                text-align: center;
-                justify-content: center;
-                gap: 20px;
-            }
-            .header-content {
-                text-align: center;
+            .header-public img {
+                max-height: 80px;
             }
             .header-public h1 {
                 font-size: 2.5em;
             }
-            .header-public img {
-                max-height: 80px;
+            .header-public p.tagline {
+                font-size: 1.1em;
             }
         }
-        /* --- END REVISI HEADER --- */
+        /* --- END REVISI HEADER (CSS) --- */
 
         .section-title {
             text-align: center;
@@ -334,10 +293,8 @@
     <div class="container">
         <header class="header-public">
             <img src="./images/logo.png" alt="Logo Kemal Computer">
-            <div class="header-content">
-                <h1>Kemal Computer Service</h1>
-                <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-            </div>
+            <h1>Kemal Computer Service</h1>
+            <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
         </header>
 
         <section class="service-info-section">

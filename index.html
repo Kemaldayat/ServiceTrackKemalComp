@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         /* Specific styles for index.html */
         body {
@@ -22,47 +21,53 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* --- START REVISI HEADER (CSS) --- */
-        /* CSS untuk Opsi 5 */
+        /* --- START HEADER OPSI 4: Clean & Centered --- */
         .header-public {
-            text-align: center;
-            padding: 40px 20px;
-            margin-bottom: 30px;
+            background-color: transparent; /* Latar belakang transparan */
+            padding: 30px 20px;
+            margin-bottom: 40px;
+            text-align: center; /* Rata tengah */
         }
 
         .header-public img {
-            max-height: 100px;
+            max-height: 90px;
             margin-bottom: 15px;
-            border-radius: 8px;
+            border-radius: 50%; /* Bentuk lingkaran untuk logo */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-public h1 {
-            color: var(--primary-color);
-            font-size: 3em;
+            font-size: 2.8em;
             margin: 0;
-            font-weight: 600;
+            color: var(--primary-color);
+            font-weight: 700;
+            letter-spacing: -1px; /* Sedikit spasi antar huruf */
         }
 
         .header-public p.tagline {
-            font-size: 1.3em;
-            margin-top: 5px;
+            font-size: 1.2em;
+            margin-top: 8px;
             color: var(--text-color-light);
             font-family: 'Playfair Display', serif;
+            font-style: italic;
         }
 
-        /* Responsive adjustments for header */
+        /* Responsive adjustments for header Opsi 4 */
         @media (max-width: 768px) {
+            .header-public {
+                padding: 25px 15px;
+            }
             .header-public img {
-                max-height: 80px;
+                max-height: 70px;
             }
             .header-public h1 {
-                font-size: 2.5em;
+                font-size: 2.2em;
             }
             .header-public p.tagline {
-                font-size: 1.1em;
+                font-size: 1em;
             }
         }
-        /* --- END REVISI HEADER (CSS) --- */
+        /* --- END HEADER OPSI 4 --- */
 
         .section-title {
             text-align: center;
@@ -138,6 +143,23 @@
             font-size: 1.1em;
             padding: 15px 0;
         }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+            margin-left: 5px;
+        }
+
+        .status-waiting { background-color: var(--warning-color); } /* Kuning/Oranye */
+        .status-process { background-color: var(--info-color); } /* Biru */
+        .status-finished { background-color: var(--success-color); } /* Hijau */
+        .status-picked-up { background-color: var(--secondary-color); } /* Abu-abu/Gelap */
+
 
         .map-section {
             text-align: center;
@@ -255,7 +277,6 @@
 
         /* Responsive adjustments for index.html */
         @media (max-width: 768px) {
-            /* Header-public styles are moved/overridden above for clarity */
             .search-form {
                 padding: 20px;
             }
@@ -310,7 +331,7 @@
         <form id="checkStatusForm" class="search-form">
             <div>
                 <label for="serviceCode">Masukkan Kode Service:</label>
-                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMMM-HHMMSS-RANDOM" required>
+                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required>
             </div>
             <button type="submit"><i class="fas fa-search"></i> Cek Status</button>
         </form>

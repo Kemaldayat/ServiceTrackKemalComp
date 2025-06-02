@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah/Edit Service - Kemal Computer</title>
+    <title>Admin - Kemal Computer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.png" type="image/png">
     <style>
         /* Global Styles */
         body {
@@ -31,6 +32,7 @@
             width: 100%;
             box-sizing: border-box;
             transition: transform 0.3s ease-in-out;
+            text-align: center; /* Untuk center teks di login form */
         }
 
         .form-container:hover {
@@ -48,6 +50,7 @@
         /* Form Groups (Label + Input/Select/Textarea) */
         .form-group {
             margin-bottom: 1.5rem;
+            text-align: left; /* Kembalikan text-align untuk form group */
         }
 
         .form-group label {
@@ -60,6 +63,8 @@
 
         .form-group input[type="text"],
         .form-group input[type="tel"],
+        .form-group input[type="email"], /* Untuk email login */
+        .form-group input[type="password"], /* Untuk password login */
         .form-group textarea,
         .form-group select {
             width: 100%;
@@ -151,6 +156,40 @@
             box-shadow: 0 8px 20px rgba(108,117,125,0.2);
         }
 
+        .btn-danger { /* Untuk tombol logout */
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 5px 15px rgba(220,53,69,0.2);
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220,53,69,0.3);
+        }
+
+        /* User Info (Logged In) */
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.8rem 1.2rem;
+            background-color: #e2f0fb;
+            border-radius: 10px;
+            border: 1px solid #cce5ff;
+            font-size: 0.95rem;
+            color: #004085;
+            font-weight: 600;
+        }
+
+        .user-info .btn-logout {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            width: auto; /* Override full width */
+            margin-left: 1rem;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             body {
@@ -182,6 +221,14 @@
                 padding: 0.8rem 1rem;
                 font-size: 0.9rem;
             }
+            .user-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-info .btn-logout {
+                margin-top: 0.5rem;
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 480px) {
@@ -210,69 +257,110 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Tambah Data Service Baru</h2>
-        <form class="service-form" id="serviceForm"> <div class="form-group">
-                <label for="kodeService">Kode Service:</label>
-                <input type="text" id="kodeService" readonly>
+        <div id="loginSection">
+            <h2>Admin Login</h2>
+            <div class="form-group">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" placeholder="Masukkan email Anda" required>
             </div>
             <div class="form-group">
-                <label for="namaPelanggan">Nama Pelanggan:</label>
-                <input type="text" id="namaPelanggan" placeholder="Masukkan nama lengkap pelanggan" required>
-            </div>
-            <div class="form-group">
-                <label for="jenisDevice">Jenis Device:</label>
-                <input type="text" id="jenisDevice" placeholder="Contoh: Laptop Asus, HP Samsung" required>
-            </div>
-            <div class="form-group">
-                <label for="deskripsiKerusakan">Deskripsi Kerusakan:</label>
-                <textarea id="deskripsiKerusakan" placeholder="Jelaskan detail kerusakan, misal: Layar pecah, tidak bisa menyala" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="nomorHp">Nomor HP:</label>
-                <input type="tel" id="nomorHp" placeholder="Format: 628xxxxxxxxxx (tanpa +)" required>
-            </div>
-            <div class="form-group">
-                <label for="status">Status:</label>
-                <select id="status" required>
-                    <option value="">Pilih Status</option>
-                    <option value="menunggu">Menunggu</option>
-                    <option value="proses">Proses</option>
-                    <option value="selesai">Selesai</option>
-                    <option value="diambil">Diambil</option>
-                </select>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" placeholder="Masukkan password Anda" required>
             </div>
             <div class="button-group">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Simpan Data Service
+                <button type="button" class="btn btn-primary" id="loginButton">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
                 <a href="dashboard.html" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
                 </a>
             </div>
-        </form>
+        </div>
+
+        <div id="serviceFormSection" style="display: none;">
+            <div class="user-info">
+                <span id="loggedInUserEmail"></span>
+                <button type="button" class="btn btn-danger btn-logout" id="logoutButton">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            <h2>Tambah Data Service Baru</h2>
+            <form class="service-form" id="serviceForm">
+                <div class="form-group">
+                    <label for="kodeService">Kode Service:</label>
+                    <input type="text" id="kodeService" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="namaPelanggan">Nama Pelanggan:</label>
+                    <input type="text" id="namaPelanggan" placeholder="Masukkan nama lengkap pelanggan" required>
+                </div>
+                <div class="form-group">
+                    <label for="jenisDevice">Jenis Device:</label>
+                    <input type="text" id="jenisDevice" placeholder="Contoh: Laptop Asus, HP Samsung" required>
+                </div>
+                <div class="form-group">
+                    <label for="deskripsiKerusakan">Deskripsi Kerusakan:</label>
+                    <textarea id="deskripsiKerusakan" placeholder="Jelaskan detail kerusakan, misal: Layar pecah, tidak bisa menyala" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="nomorHp">Nomor HP:</label>
+                    <input type="tel" id="nomorHp" placeholder="Format: 628xxxxxxxxxx (tanpa +)" required>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" required>
+                        <option value="">Pilih Status</option>
+                        <option value="menunggu">Menunggu</option>
+                        <option value="proses">Proses</option>
+                        <option value="selesai">Selesai</option>
+                        <option value="diambil">Diambil</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data Service
+                    </button>
+                    <a href="dashboard.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+
     <script>
         // === KONFIGURASI FIREBASE ANDA ===
-        // GANTI DENGAN KONFIGURASI PROYEK FIREBASE ANDA SENDIRI!
-        // Anda bisa menemukannya di Firebase Console -> Project settings -> General -> Your apps -> Firebase SDK snippet
         const firebaseConfig = {
-        apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-        authDomain: "website-track-service.firebaseapp.com",
-        databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "website-track-service",
-        storageBucket: "website-track-service.firebasestorage.app",
-        messagingSenderId: "87573564376",
-        appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-        measurementId: "G-64T8XNWK5F"
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.firebasestorage.app",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+            measurementId: "G-64T8XNWK5F"
         };
 
         // Inisialisasi Firebase
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(); // Dapatkan referensi ke Firebase Auth
         const database = firebase.database(); // Dapatkan referensi ke Realtime Database
         // === AKHIR KONFIGURASI FIREBASE ===
+
+        // Referensi elemen UI
+        const loginSection = document.getElementById('loginSection');
+        const serviceFormSection = document.getElementById('serviceFormSection');
+        const loginEmailInput = document.getElementById('loginEmail');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const loginButton = document.getElementById('loginButton');
+        const logoutButton = document.getElementById('logoutButton');
+        const loggedInUserEmailSpan = document.getElementById('loggedInUserEmail');
+        const serviceForm = document.getElementById('serviceForm');
+        const kodeServiceInput = document.getElementById('kodeService');
 
         // Fungsi untuk menghasilkan Kode Service Otomatis
         function generateServiceCode() {
@@ -284,29 +372,78 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-
             const serviceCode = `KC-${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}`;
-            document.getElementById('kodeService').value = serviceCode;
+            kodeServiceInput.value = serviceCode;
+        }
+
+        // Fungsi untuk menangani Login
+        function handleLogin() {
+            const email = loginEmailInput.value;
+            const password = loginPasswordInput.value;
+
+            if (!email || !password) {
+                alert('Email dan Password harus diisi!');
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Berhasil Login
+                    const user = userCredential.user;
+                    console.log('User logged in:', user.email);
+                    // UI akan diperbarui oleh onAuthStateChanged
+                })
+                .catch((error) => {
+                    // Error saat Login
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error("Login error:", errorCode, errorMessage);
+                    alert(`Login gagal: ${errorMessage}`);
+                });
+        }
+
+        // Fungsi untuk menangani Logout
+        function handleLogout() {
+            auth.signOut()
+                .then(() => {
+                    console.log('User logged out');
+                    // UI akan diperbarui oleh onAuthStateChanged
+                })
+                .catch((error) => {
+                    console.error("Logout error:", error);
+                    alert('Gagal logout. Silakan coba lagi.');
+                });
         }
 
         // Fungsi untuk menyimpan data ke Firebase
         function saveServiceData(event) {
             event.preventDefault(); // Mencegah form melakukan submit default (reload halaman)
 
-            const kodeService = document.getElementById('kodeService').value;
+            // Pastikan ada user yang login sebelum menyimpan
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                alert('Anda harus login untuk menyimpan data.');
+                return;
+            }
+
+            // Validasi email berdasarkan aturan Firebase
+            if (currentUser.email !== 'dayatkemal16@gmail.com') {
+                alert('Anda tidak memiliki izin untuk menyimpan data.');
+                return;
+            }
+
+            const kodeService = kodeServiceInput.value;
             const namaPelanggan = document.getElementById('namaPelanggan').value;
             const jenisDevice = document.getElementById('jenisDevice').value;
             const deskripsiKerusakan = document.getElementById('deskripsiKerusakan').value;
             const nomorHp = document.getElementById('nomorHp').value;
             const status = document.getElementById('status').value;
 
-            // Validasi sederhana (opsional, karena ada 'required' di HTML)
             if (!kodeService || !namaPelanggan || !jenisDevice || !deskripsiKerusakan || !nomorHp || !status) {
                 alert('Semua kolom harus diisi!');
                 return;
             }
 
-            // Objek data service yang akan disimpan
             const serviceData = {
                 kodeService: kodeService,
                 namaPelanggan: namaPelanggan,
@@ -314,20 +451,15 @@
                 deskripsiKerusakan: deskripsiKerusakan,
                 nomorHp: nomorHp,
                 status: status,
-                timestamp: firebase.database.ServerValue.TIMESTAMP // Tambahkan timestamp server
+                timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
-            // Kirim data ke Firebase Realtime Database
-            // 'services/' adalah path (atau node) di database Anda
-            // .set() akan menimpa data jika kunci (kodeService) sudah ada
-            // .push() akan membuat kunci unik otomatis (lebih umum untuk list baru)
-            database.ref('services/' + kodeService).set(serviceData)
+            // Kirim data ke Firebase Realtime Database ke node 'antrian'
+            database.ref('antrian/' + kodeService).set(serviceData)
                 .then(() => {
                     alert('Data service berhasil disimpan ke Firebase!');
-                    // Reset form setelah berhasil menyimpan
-                    document.getElementById('serviceForm').reset();
-                    // Generate kode service baru untuk entri selanjutnya
-                    generateServiceCode();
+                    serviceForm.reset(); // Reset form
+                    generateServiceCode(); // Generate kode baru
                 })
                 .catch((error) => {
                     console.error("Error menyimpan data: ", error);
@@ -337,13 +469,28 @@
 
         // Event listener saat DOM sudah dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            generateServiceCode(); // Generate kode service saat halaman pertama kali dimuat
+            // Event listeners untuk tombol login dan logout
+            loginButton.addEventListener('click', handleLogin);
+            logoutButton.addEventListener('click', handleLogout);
 
-            // Tambahkan event listener untuk submit form
-            const serviceForm = document.getElementById('serviceForm');
-            if (serviceForm) {
-                serviceForm.addEventListener('submit', saveServiceData);
-            }
+            // Event listener untuk submit form service data
+            serviceForm.addEventListener('submit', saveServiceData);
+
+            // Cek status autentikasi saat halaman dimuat
+            auth.onAuthStateChanged((user) => {
+                if (user && user.email === 'dayatkemal16@gmail.com') {
+                    // User sudah login dan emailnya sesuai
+                    loginSection.style.display = 'none'; // Sembunyikan form login
+                    serviceFormSection.style.display = 'block'; // Tampilkan form service
+                    loggedInUserEmailSpan.textContent = `Logged in as: ${user.email}`;
+                    generateServiceCode(); // Generate kode service setelah user login
+                } else {
+                    // User belum login atau email tidak sesuai
+                    loginSection.style.display = 'block'; // Tampilkan form login
+                    serviceFormSection.style.display = 'none'; // Sembunyikan form service
+                    loggedInUserEmailSpan.textContent = ''; // Kosongkan info user
+                }
+            });
         });
     </script>
 </body>

@@ -61,8 +61,8 @@ body {
 /* Header */
 header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center items horizontally */
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
@@ -255,7 +255,7 @@ tr.edit-mode select {
 tr.edit-mode textarea {
     resize: vertical; /* Allow vertical resizing */
     min-height: 40px;
-    max-height: 100px; /* Limit max height */
+    max-height: 100px;
 }
 
 /* Add New Service Button */
@@ -477,13 +477,12 @@ tr.edit-mode textarea {
         padding: 20px;
     }
     header {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
+        align-items: center; /* Center header items */
     }
     header h1 {
         font-size: 2em;
         margin-bottom: 15px;
+        text-align: center;
     }
     .header-buttons {
         margin-top: 15px;
@@ -521,43 +520,14 @@ tr.edit-mode textarea {
 @media (max-width: 480px) {
     header h1 {
         font-size: 1.8em;
-        text-align: center;
-        width: 100%;
     }
-    .header-buttons {
-        flex-direction: column;
-    }
-    .header-buttons button {
-        margin-bottom: 10px;
-    }
-    #searchInput {
-        padding: 10px 15px;
-        font-size: 0.95em;
-    }
-    table thead th, table tbody td {
-        font-size: 0.8em;
-        padding: 8px 10px;
-    }
-    .action-buttons button {
-        padding: 6px 8px;
-        font-size: 0.75em;
-    }
-    .add-new-button {
-        padding: 10px 20px;
+    .header-public p {
         font-size: 1em;
     }
-    .back-button {
-        font-size: 0.9em;
-        padding: 8px 12px;
+    .section-title {
+        font-size: 1.8em;
     }
-    #addServiceForm label {
+    footer .contact-info-footer div {
         font-size: 0.95em;
-    }
-    #addServiceForm input, #addServiceForm textarea, #addServiceForm select {
-        padding: 10px;
-    }
-    #addServiceForm button[type="submit"] {
-        font-size: 1.1em;
-        padding: 12px 20px;
     }
 }

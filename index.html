@@ -6,7 +6,7 @@
     <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght%3700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         /* Specific styles for index.html */
         body {
@@ -23,76 +23,87 @@
         }
 
         /* --- START REVISI HEADER --- */
+        /* CSS untuk Opsi 2 */
         .header-public {
-            display: flex;
-            align-items: center; /* Pusatkan vertikal */
-            justify-content: center; /* Pusatkan secara horizontal pada default */
-            gap: 25px; /* Jarak antara logo dan teks, sedikit lebih lebar */
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); /* Efek gradien */
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius-lg);
             margin-bottom: 40px;
-            flex-wrap: wrap; /* Izinkan wrapping pada layar kecil */
-            text-align: left; /* Teks di dalam header akan rata kiri secara default */
-        }
-        .header-public .header-content {
-            text-align: left; /* Konten teks rata kiri */
-        }
-        .header-public img {
-            max-width: 100px; /* Ukuran logo sedikit lebih kecil agar pas */
-            min-width: 80px; /* Batas bawah agar tidak terlalu kecil */
-            height: auto;
-            margin-bottom: 0;
-            border-radius: 8px;
-        }
-        .header-public h1 {
-            color: var(--primary-color);
-            font-family: 'Poppins', sans-serif; /* Pastikan konsisten */
-            font-size: 2.8em; /* Sedikit lebih besar untuk impact */
-            margin: 0;
-            line-height: 1.2; /* Kerapatan baris */
-            white-space: nowrap; /* Hindari pemotongan "Kemal Computer Service" */
-        }
-        .header-public p.tagline {
-            color: var(--text-color-light);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3em; /* Tagline sedikit lebih besar */
-            margin-top: 5px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            white-space: nowrap; /* Hindari pemotongan tagline */
+            display: flex;
+            align-items: center;
+            justify-content: space-around; /* Distribusi ruang lebih merata */
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden; /* Untuk efek shape */
         }
 
-        /* Responsive adjustments for header-public */
+        .header-public::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .header-public::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+        }
+
+        .header-public img {
+            max-height: 100px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        .header-public h1 {
+            font-size: 3em;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-public p.tagline {
+            font-size: 1.4em;
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .header-public {
-                flex-direction: column; /* Menumpuk di layar kecil */
-                align-items: center; /* Pusatkan logo dan teks */
-                text-align: center; /* Pusatkan teks */
-                gap: 15px; /* Kurangi jarak */
+                flex-direction: column;
+                text-align: center;
+                justify-content: center;
+                gap: 20px;
             }
-            .header-public .header-content {
-                text-align: center; /* Pusatkan teks */
+            .header-content {
+                text-align: center;
             }
             .header-public h1 {
-                font-size: 2.2em; /* Ukuran disesuaikan */
-                white-space: normal; /* Izinkan wrapping lagi di mobile */
-            }
-            .header-public p.tagline {
-                font-size: 1.1em; /* Ukuran disesuaikan */
-                white-space: normal; /* Izinkan wrapping lagi di mobile */
+                font-size: 2.5em;
             }
             .header-public img {
-                max-width: 90px; /* Ukuran logo di mobile */
-            }
-        }
-        @media (max-width: 480px) {
-            .header-public h1 {
-                font-size: 1.8em;
-            }
-            .header-public p.tagline {
-                font-size: 1em;
+                max-height: 80px;
             }
         }
         /* --- END REVISI HEADER --- */
-
 
         .section-title {
             text-align: center;
@@ -342,13 +353,13 @@
         <form id="checkStatusForm" class="search-form">
             <div>
                 <label for="serviceCode">Masukkan Kode Service:</label>
-                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required>
+                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMMM-HHMMSS-RANDOM" required>
             </div>
             <button type="submit"><i class="fas fa-search"></i> Cek Status</button>
         </form>
 
         <div id="resultContainer" class="table-responsive">
-            <p style="text-align: center; color: var(--text-color-light);">Masukkan kode service untuk melihat status layanan Anda.</p>a
+            <p style="text-align: center; color: var(--text-color-light);">Masukkan kode service untuk melihat status layanan Anda.</p>
         </div>
 
         <h2 class="section-title">Lokasi Kami</h2>
@@ -356,7 +367,7 @@
             <p class="address">
                 Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1403.6293887939662!2d110.3992446777236!3d-7.777841858945979!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a598283967701%3A0x7977e22b3102f91b!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1748841900916!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250893081121!2d110.38048607421111!3d-7.758838392263435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5848e42f928f%3A0xe54d2e82500c2830!2sKemal%20Computer%20Service!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </section>
 
         <footer>

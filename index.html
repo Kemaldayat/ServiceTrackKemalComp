@@ -6,7 +6,7 @@
     <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght%3700&display=swap" rel="stylesheet">
     <style>
         /* Specific styles for index.html */
         body {
@@ -22,36 +22,77 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* --- START REVISI HEADER --- */
         .header-public {
             display: flex;
-            align-items: center;
-            justify-content: flex-start; /* Logo di kiri */
-            gap: 20px;
+            align-items: center; /* Pusatkan vertikal */
+            justify-content: center; /* Pusatkan secara horizontal pada default */
+            gap: 25px; /* Jarak antara logo dan teks, sedikit lebih lebar */
             margin-bottom: 40px;
-            text-align: left; /* Teks rata kiri */
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Izinkan wrapping pada layar kecil */
+            text-align: left; /* Teks di dalam header akan rata kiri secara default */
         }
         .header-public .header-content {
             text-align: left; /* Konten teks rata kiri */
         }
         .header-public img {
-            max-width: 120px;
+            max-width: 100px; /* Ukuran logo sedikit lebih kecil agar pas */
+            min-width: 80px; /* Batas bawah agar tidak terlalu kecil */
+            height: auto;
             margin-bottom: 0;
             border-radius: 8px;
         }
         .header-public h1 {
             color: var(--primary-color);
-            font-size: 2.5em;
+            font-family: 'Poppins', sans-serif; /* Pastikan konsisten */
+            font-size: 2.8em; /* Sedikit lebih besar untuk impact */
             margin: 0;
+            line-height: 1.2; /* Kerapatan baris */
+            white-space: nowrap; /* Hindari pemotongan "Kemal Computer Service" */
         }
         .header-public p.tagline {
             color: var(--text-color-light);
             font-family: 'Playfair Display', serif;
-            font-size: 1.2em;
+            font-size: 1.3em; /* Tagline sedikit lebih besar */
             margin-top: 5px;
             font-weight: 600;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            white-space: nowrap; /* Hindari pemotongan tagline */
         }
+
+        /* Responsive adjustments for header-public */
+        @media (max-width: 768px) {
+            .header-public {
+                flex-direction: column; /* Menumpuk di layar kecil */
+                align-items: center; /* Pusatkan logo dan teks */
+                text-align: center; /* Pusatkan teks */
+                gap: 15px; /* Kurangi jarak */
+            }
+            .header-public .header-content {
+                text-align: center; /* Pusatkan teks */
+            }
+            .header-public h1 {
+                font-size: 2.2em; /* Ukuran disesuaikan */
+                white-space: normal; /* Izinkan wrapping lagi di mobile */
+            }
+            .header-public p.tagline {
+                font-size: 1.1em; /* Ukuran disesuaikan */
+                white-space: normal; /* Izinkan wrapping lagi di mobile */
+            }
+            .header-public img {
+                max-width: 90px; /* Ukuran logo di mobile */
+            }
+        }
+        @media (max-width: 480px) {
+            .header-public h1 {
+                font-size: 1.8em;
+            }
+            .header-public p.tagline {
+                font-size: 1em;
+            }
+        }
+        /* --- END REVISI HEADER --- */
+
 
         .section-title {
             text-align: center;
@@ -157,10 +198,10 @@
         }
         footer .contact-info-footer {
             display: flex;
-            flex-direction: column; /* Mengatur item ke bawah */
+            flex-direction: column;
             justify-content: center;
-            align-items: center; /* Pusatkan item info kontak */
-            gap: 10px; /* Jarak antar item */
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
         footer .contact-info-footer div {
@@ -244,20 +285,7 @@
 
         /* Responsive adjustments for index.html */
         @media (max-width: 768px) {
-            .header-public {
-                flex-direction: column; /* Kembali ke layout kolom di layar kecil */
-                align-items: center; /* Pusatkan logo dan teks */
-                text-align: center; /* Pusatkan teks */
-            }
-            .header-public .header-content {
-                text-align: center; /* Pusatkan teks */
-            }
-            .header-public h1 {
-                font-size: 2.2em;
-            }
-            .header-public p.tagline {
-                font-size: 1.1em;
-            }
+            /* Header-public styles are moved/overridden above for clarity */
             .search-form {
                 padding: 20px;
             }
@@ -265,7 +293,7 @@
                 height: 300px;
             }
             .whatsapp-button-direct {
-                padding: 6px 10px; /* Lebih kecil di mobile */
+                padding: 5px 10px; /* Lebih kecil di mobile */
                 font-size: 0.75em;
             }
             .service-info-section {
@@ -282,12 +310,6 @@
             }
         }
         @media (max-width: 480px) {
-            .header-public h1 {
-                font-size: 1.8em;
-            }
-            .header-public p.tagline {
-                font-size: 1em;
-            }
             .section-title {
                 font-size: 1.8em;
             }
@@ -334,10 +356,7 @@
             <p class="address">
                 Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.28424269191!2d110.39572637498717!3d-7.75619179227289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59a9e3240f6f%3A0xe9f7b0b2e3e5c942!2sKemal%20Computer!5e0!3m2!1sen!2sid!4v1701509653198!5m2!1sen!2sid"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250893081121!2d110.38048607421111!3d-7.758838392263435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a582e3b2e3b2e%3A0x1234567890abcdef!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1678901234567!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </section>
 
         <footer>

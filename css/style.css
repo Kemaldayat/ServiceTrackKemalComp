@@ -1,14 +1,16 @@
 /* Variables for consistent styling */
 :root {
-    --primary-color: #4CAF50;      /* Green for primary actions/branding (more inviting) */
-    --primary-hover: #45a049;
-    --accent-color: #FFC107;       /* Yellow for highlights/badges (waiting) */
-    --accent-dark: #cc9900;
+    --primary-color: #2196F3;      /* Blue for primary actions/branding */
+    --primary-hover: #1976D2;      /* Darker blue on hover */
+    --accent-color: #03A9F4;       /* Lighter blue for highlights/borders */
+    --accent-dark: #0288D1;
+
     --text-color: #333333;         /* Dark grey for readability */
     --text-color-light: #666666;   /* Lighter grey for secondary text */
-    --bg-color: #f0f8f8;           /* Light, calming background */
+    --bg-color: #e3f2fd;           /* Very light blue background */
     --container-bg: #ffffff;
-    --border-color: #dddddd;
+    --light-bg: #f5fafd;           /* Lighter background for elements like search form */
+    --border-color: #bbdefb;       /* Light blue border */
     --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
     --border-radius-sm: 5px;
@@ -16,22 +18,22 @@
     --border-radius-lg: 12px;
     --transition-ease: all 0.3s ease;
 
-    /* Status Colors */
-    --status-waiting-bg: #FFC107;  /* Yellow */
+    /* Status Colors (adjusted for blue theme) */
+    --status-waiting-bg: #FFC107;  /* Yellow (still good for waiting) */
     --status-waiting-text: #333;
-    --status-process-bg: #2196F3;  /* Blue */
+    --status-process-bg: #4CAF50;  /* Green (for "Proses" is good contrast) */
     --status-process-text: white;
-    --status-finished-bg: #4CAF50; /* Green */
+    --status-finished-bg: #2196F3; /* Primary Blue (for "Selesai") */
     --status-finished-text: white;
-    --status-picked-up-bg: #9C27B0; /* Purple */
+    --status-picked-up-bg: #9C27B0; /* Purple (for "Diambil" is distinctive) */
     --status-picked-up-text: white;
 
     /* Button Colors */
-    --info-button: #2196F3;        /* Blue for info/secondary */
-    --info-hover: #1976D2;
+    --info-button: #03A9F4;        /* Lighter blue for info/secondary */
+    --info-hover: #0288D1;
     --danger-color: #F44336;       /* Red for delete/warning */
     --danger-hover: #d32f2f;
-    --success-color: #4CAF50;      /* Green for add/submit */
+    --success-color: #4CAF50;      /* Green for add/submit (still works well) */
     --success-hover: #45a049;
     --secondary-button: #9E9E9E;   /* Grey for cancel/back */
     --secondary-hover: #757575;

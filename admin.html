@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tambah Service - Kemal Computer</title>
+    <title>Tambah/Edit Service - Kemal Computer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -27,7 +27,7 @@
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08);
-            max-width: 500px; /* Batasi lebar maksimal form */
+            max-width: 600px;
             width: 100%;
             box-sizing: border-box;
             transition: transform 0.3s ease-in-out;
@@ -51,7 +51,7 @@
         }
 
         .form-group label {
-            display: block; /* Pastikan label berada di atas input */
+            display: block;
             font-weight: 600;
             margin-bottom: 0.6rem;
             color: #495057;
@@ -62,22 +62,30 @@
         .form-group input[type="tel"],
         .form-group textarea,
         .form-group select {
-            width: 100%; /* Lebar penuh dari parent */
+            width: 100%;
             padding: 0.9rem 1rem;
             font-size: 1rem;
             border-radius: 10px;
             border: 1px solid #D1D8E0;
-            box-sizing: border-box; /* Penting untuk menjaga padding tidak menambah lebar */
+            box-sizing: border-box;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            -webkit-appearance: none; /* Untuk konsistensi select di berbagai browser */
+            -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             background-color: #ffffff;
         }
 
+        /* Tambahkan style untuk input yang readonly/disabled */
+        .form-group input[readonly],
+        .form-group input[disabled] {
+            background-color: #e9ecef; /* Warna abu-abu agar terlihat tidak bisa diedit */
+            cursor: not-allowed; /* Kursor tidak diizinkan */
+        }
+
+
         .form-group textarea {
-            min-height: 120px; /* Tinggi minimum untuk textarea */
-            resize: vertical; /* Hanya izinkan resize vertikal */
+            min-height: 100px;
+            resize: vertical;
         }
 
         .form-group input:focus,
@@ -94,19 +102,19 @@
             background-repeat: no-repeat;
             background-position: right 1rem center;
             background-size: 0.8rem;
-            padding-right: 2.5rem; /* Beri ruang untuk ikon panah */
+            padding-right: 2.5rem;
         }
 
         /* Buttons */
         .button-group {
             display: flex;
-            flex-direction: column; /* Tumpuk tombol secara vertikal */
-            gap: 1rem; /* Jarak antar tombol */
+            flex-direction: column;
+            gap: 1rem;
             margin-top: 2rem;
         }
 
         .btn {
-            display: block; /* Pastikan tombol mengambil lebar penuh */
+            display: block;
             width: 100%;
             padding: 1rem 1.5rem;
             font-size: 1rem;
@@ -116,12 +124,12 @@
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             font-weight: 600;
             text-align: center;
-            text-decoration: none; /* Untuk link seperti 'Kembali ke Dashboard' */
-            box-sizing: border-box; /* Agar padding tidak menambah lebar */
+            text-decoration: none;
+            box-sizing: border-box;
         }
 
         .btn-primary {
-            background-color: #20c997; /* Warna hijau untuk Tambah Service */
+            background-color: #20c997;
             color: white;
             box-shadow: 0 5px 15px rgba(32,201,151,0.2);
         }
@@ -133,7 +141,7 @@
         }
 
         .btn-secondary {
-            background-color: #6c757d; /* Warna abu-abu untuk Kembali ke Dashboard */
+            background-color: #6c757d;
             color: white;
             box-shadow: 0 5px 15px rgba(108,117,125,0.15);
         }
@@ -148,11 +156,11 @@
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
-                align-items: flex-start; /* Sejajarkan ke atas di layar kecil */
+                align-items: flex-start;
             }
             .form-container {
                 padding: 1.5rem;
-                margin-top: 1rem; /* Tambahkan margin atas agar tidak terlalu mepet ke atas */
+                margin-top: 1rem;
             }
             h2 {
                 font-size: 1.6rem;
@@ -203,19 +211,31 @@
 </head>
 <body>
     <div class="form-container">
-        <h2>Tambah Service Baru</h2>
+        <h2>Tambah Data Service Baru</h2>
         <form class="service-form">
             <div class="form-group">
-                <label for="deskripsi">Deskripsi Kerusakan:</label>
-                <textarea id="deskripsi" placeholder=""></textarea>
+                <label for="kodeService">Kode Service:</label>
+                <input type="text" id="kodeService" readonly> </div>
+            <div class="form-group">
+                <label for="namaPelanggan">Nama Pelanggan:</label>
+                <input type="text" id="namaPelanggan" placeholder="Masukkan nama lengkap pelanggan" required>
             </div>
             <div class="form-group">
-                <label for="nomorHp">Nomor HP (misal: 62812...):</label>
-                <input type="tel" id="nomorHp" placeholder="Format: 628xxxxxxxxxx">
+                <label for="jenisDevice">Jenis Device:</label>
+                <input type="text" id="jenisDevice" placeholder="Contoh: Laptop Asus, HP Samsung" required>
+            </div>
+            <div class="form-group">
+                <label for="deskripsiKerusakan">Deskripsi Kerusakan:</label>
+                <textarea id="deskripsiKerusakan" placeholder="Jelaskan detail kerusakan, misal: Layar pecah, tidak bisa menyala" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="nomorHp">Nomor HP:</label>
+                <input type="tel" id="nomorHp" placeholder="Format: 628xxxxxxxxxx (tanpa +)" required>
             </div>
             <div class="form-group">
                 <label for="status">Status:</label>
-                <select id="status">
+                <select id="status" required>
+                    <option value="">Pilih Status</option>
                     <option value="menunggu">Menunggu</option>
                     <option value="proses">Proses</option>
                     <option value="selesai">Selesai</option>
@@ -224,7 +244,7 @@
             </div>
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Service +
+                    <i class="fas fa-save"></i> Simpan Data Service
                 </button>
                 <a href="dashboard.html" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
@@ -232,5 +252,29 @@
             </div>
         </form>
     </div>
+
+    <script>
+        // Fungsi untuk menghasilkan Kode Service Otomatis
+        function generateServiceCode() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            // Untuk memastikan unik, tambahkan milidetik atau random number jika banyak entri dalam 1 detik
+            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+
+            // Format: KC-YYYYMMDD-HHMMSS-MMM (Kemal Computer - TahunBulanTanggal - JamMenitDetik - Milidetik)
+            const serviceCode = `KC-${year}${month}${day}-${hours}${minutes}${seconds}-${milliseconds}`;
+            
+            // Masukkan kode ke input
+            document.getElementById('kodeService').value = serviceCode;
+        }
+
+        // Panggil fungsi saat DOM sudah dimuat
+        document.addEventListener('DOMContentLoaded', generateServiceCode);
+    </script>
 </body>
 </html>

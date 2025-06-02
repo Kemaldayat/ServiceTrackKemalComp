@@ -26,7 +26,8 @@
                     <tr>
                         <th>Kode Service</th>
                         <th>Nama Pelanggan</th>
-                        <th>Jenis Device</th> <th>Deskripsi Kerusakan</th>
+                        <th>Jenis Device</th>
+                        <th>Deskripsi Kerusakan</th>
                         <th>Nomor HP</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -71,22 +72,20 @@
         const auth = getAuth(app);
 
         let servicesData = {};
-        let editingRowId = null; // To keep track of the currently edited row
+        let editingRowId = null;
 
         // Auth state listener for admin check
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Check if the authenticated user is the admin
-                if (user.email === "dayatkemal16@gmail.com") {
-                    loadServices(); // Load data if admin
+                if (user.email === "dayatkemal16@gmail.com") { // ADMIN EMAIL CHECK
+                    loadServices();
                 } else {
                     alert("Anda tidak memiliki izin akses ke halaman ini.");
-                    window.location.href = 'index.html'; // Redirect non-admin
+                    window.location.href = 'login.html'; // Redirect non-admin to login page
                 }
             } else {
-                // User is signed out
                 alert("Anda belum login atau sesi telah berakhir.");
-                window.location.href = 'index.html'; // Redirect to login page
+                window.location.href = 'login.html'; // Redirect to login page
             }
         });
 
@@ -94,7 +93,7 @@
             try {
                 await signOut(auth);
                 alert("Anda telah logout.");
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             } catch (error) {
                 console.error("Error logging out:", error);
                 alert("Gagal logout. Silakan coba lagi.");
@@ -105,15 +104,15 @@
             const servicesRef = ref(db, 'antrian');
             onValue(servicesRef, (snapshot) => {
                 const tableBody = document.getElementById('serviceTable').getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ''; // Clear table before loading
+                tableBody.innerHTML = '';
 
-                servicesData = {}; // Clear previous data
+                servicesData = {};
 
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
                         const serviceCode = childSnapshot.key;
                         const service = childSnapshot.val();
-                        servicesData[serviceCode] = service; // Store for quick access/editing
+                        servicesData[serviceCode] = service;
 
                         let statusBadgeClass = '';
                         switch (service.status) {
@@ -144,7 +143,7 @@
                     row.className = 'no-data-row';
                     row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
                 }
-                filterTable(); // Apply filter after loading/refreshing data
+                filterTable();
             }, (error) => {
                 console.error("Error loading services:", error);
                 showModal("Gagal memuat data service. Silakan refresh.", "info");
@@ -152,9 +151,6 @@
         };
 
         window.refreshData = () => {
-            // Simply re-trigger loadServices, as onValue listener is already active
-            // and will update the table automatically on any change.
-            // But if you want to force a refresh if no changes occurred, you can re-call:
             loadServices();
             showModal("Data diperbarui.", "info");
         };
@@ -168,7 +164,6 @@
             let found = false;
             let hasActualData = false;
 
-            // First pass to determine if there's any actual data beyond the "no data" message
             for (let i = 0; i < rows.length; i++) {
                 if (!rows[i].classList.contains('no-data-row')) {
                     hasActualData = true;
@@ -178,13 +173,13 @@
 
             for (let i = 0; i < rows.length; i++) {
                 if (rows[i].classList.contains('no-data-row')) {
-                    rows[i].style.display = 'none'; // Hide existing "no data" message
+                    rows[i].style.display = 'none';
                     continue;
                 }
 
                 const serviceCode = rows[i].cells[0].textContent.toLowerCase();
                 const nama = rows[i].cells[1].textContent.toLowerCase();
-                const device = rows[i].cells[2].textContent.toLowerCase(); // Only 'device'
+                const device = rows[i].cells[2].textContent.toLowerCase();
                 const kerusakan = rows[i].cells[3].textContent.toLowerCase();
                 const nomorHp = rows[i].cells[4].textContent.toLowerCase();
                 const status = rows[i].cells[5].textContent.toLowerCase();
@@ -197,17 +192,16 @@
                 }
             }
 
-            // Remove any previous "no data" or "not found" rows
             const existingNoDataRow = tableBody.querySelector('.no-data-row');
             if (existingNoDataRow) {
                 existingNoDataRow.remove();
             }
 
-            if (!found && hasActualData) { // If nothing found after filtering
+            if (!found && hasActualData) {
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
                 row.innerHTML = '<td colspan="7" style="text-align:center; color:#DC3545;">Data tidak ditemukan.</td>';
-            } else if (!hasActualData && filter === '') { // If no data at all and no filter applied
+            } else if (!hasActualData && filter === '') {
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
                 row.innerHTML = '<td colspan="7" style="text-align:center;">Tidak ada data service.</td>';
@@ -217,7 +211,7 @@
 
         window.editRow = (serviceCode) => {
             if (editingRowId && editingRowId !== serviceCode) {
-                cancelEdit(editingRowId); // Cancel previous edit if any
+                cancelEdit(editingRowId);
             }
 
             editingRowId = serviceCode;
@@ -280,7 +274,6 @@
             }
 
             try {
-                // Retrieve original timestamp from servicesData
                 const originalTimestamp = servicesData[serviceCode]?.timestamp || new Date().toISOString();
 
                 await set(ref(db, `antrian/${serviceCode}`), {
@@ -289,7 +282,7 @@
                     kerusakan: updatedKerusakan,
                     nomorHp: updatedNomorHp,
                     status: updatedStatus,
-                    timestamp: originalTimestamp // Preserve original timestamp
+                    timestamp: originalTimestamp
                 });
                 showModal("Data berhasil diperbarui!", "info");
                 editingRowId = null;
@@ -335,7 +328,7 @@
         };
 
         const confirmDelete = async (serviceCode) => {
-            closeModal(); // Close the confirmation modal
+            closeModal();
             try {
                 await remove(ref(db, `antrian/${serviceCode}`));
                 showModal("Layanan berhasil dihapus!", "info");
@@ -345,14 +338,13 @@
             }
         };
 
-        // Custom Modal Functions
         const customModal = document.getElementById('customModal');
         const modalMessage = document.getElementById('modalMessage');
         const modalButtons = document.getElementById('modalButtons');
 
         window.showModal = (message, type, callback) => {
             modalMessage.textContent = message;
-            modalButtons.innerHTML = ''; // Clear previous buttons
+            modalButtons.innerHTML = '';
 
             if (type === "info") {
                 const okButton = document.createElement('button');
@@ -375,14 +367,13 @@
                 cancelButton.onclick = closeModal;
                 modalButtons.appendChild(cancelButton);
             }
-            customModal.style.display = 'block';
+            customModal.style.display = 'flex';
         };
 
         window.closeModal = () => {
             customModal.style.display = 'none';
         };
 
-        // Close modal if user clicks outside of it
         window.onclick = (event) => {
             if (event.target == customModal) {
                 closeModal();

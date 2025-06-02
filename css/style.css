@@ -1,16 +1,16 @@
-/* Variables for consistent styling */
+/* Variables for consistent styling (based on Kemal Computer logo colors) */
 :root {
-    --primary-color: #2196F3;      /* Blue for primary actions/branding */
-    --primary-hover: #1976D2;      /* Darker blue on hover */
-    --accent-color: #03A9F4;       /* Lighter blue for highlights/borders */
-    --accent-dark: #0288D1;
+    --primary-color: #008080;      /* Dark Teal/Tosca from logo (ikon dan teks "KEMAL") */
+    --primary-hover: #006666;      /* Slightly darker for hover */
+    --accent-color: #333333;       /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
+    --accent-dark: #1A1A1A;
 
     --text-color: #333333;         /* Dark grey for readability */
     --text-color-light: #666666;   /* Lighter grey for secondary text */
-    --bg-color: #e3f2fd;           /* Very light blue background */
+    --bg-color: #F8F8F8;           /* Very light grey for background */
     --container-bg: #ffffff;
-    --light-bg: #f5fafd;           /* Lighter background for elements like search form */
-    --border-color: #bbdefb;       /* Light blue border */
+    --light-bg: #FDFDFD;           /* Lighter background for elements like search form */
+    --border-color: #E0E0E0;       /* Light grey border */
     --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
     --border-radius-sm: 5px;
@@ -18,22 +18,22 @@
     --border-radius-lg: 12px;
     --transition-ease: all 0.3s ease;
 
-    /* Status Colors (adjusted for blue theme) */
-    --status-waiting-bg: #FFC107;  /* Yellow (still good for waiting) */
+    /* Status Colors (can be adjusted if needed, but often good to keep standard) */
+    --status-waiting-bg: #FFC107;  /* Yellow */
     --status-waiting-text: #333;
-    --status-process-bg: #4CAF50;  /* Green (for "Proses" is good contrast) */
+    --status-process-bg: #4CAF50;  /* Green */
     --status-process-text: white;
-    --status-finished-bg: #2196F3; /* Primary Blue (for "Selesai") */
+    --status-finished-bg: var(--primary-color); /* Use primary color for "Selesai" */
     --status-finished-text: white;
-    --status-picked-up-bg: #9C27B0; /* Purple (for "Diambil" is distinctive) */
+    --status-picked-up-bg: #9C27B0; /* Purple */
     --status-picked-up-text: white;
 
     /* Button Colors */
-    --info-button: #03A9F4;        /* Lighter blue for info/secondary */
-    --info-hover: #0288D1;
+    --info-button: #2196F3; /* Blue for info/secondary */
+    --info-hover: #1976D2;
     --danger-color: #F44336;       /* Red for delete/warning */
     --danger-hover: #d32f2f;
-    --success-color: #4CAF50;      /* Green for add/submit (still works well) */
+    --success-color: #4CAF50;      /* Green for add/submit */
     --success-hover: #45a049;
     --secondary-button: #9E9E9E;   /* Grey for cancel/back */
     --secondary-hover: #757575;
@@ -41,12 +41,12 @@
 
 /* General Styling */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif; /* Menggunakan Poppins */
     margin: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
 .container {
@@ -61,8 +61,8 @@ body {
 /* Header */
 header {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center items horizontally */
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
@@ -73,37 +73,6 @@ header h1 {
     color: var(--primary-color);
     font-size: 2.5em;
     font-weight: bold;
-}
-
-.header-buttons button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: 1em;
-    transition: var(--transition-ease);
-    margin-left: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px; /* Space between icon and text */
-}
-
-.refresh-button {
-    background-color: var(--secondary-button);
-    color: white;
-}
-
-.refresh-button:hover {
-    background-color: var(--secondary-hover);
-}
-
-.logout-button {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-.logout-button:hover {
-    background-color: var(--danger-hover);
 }
 
 /* Controls (Search Bar) */
@@ -118,10 +87,10 @@ header h1 {
     max-width: 700px;
     padding: 12px 20px;
     border: 1px solid var(--border-color);
-    border-radius: 25px; /* Pill shape */
+    border-radius: 25px;
     font-size: 1.05em;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-    background-color: var(--light-bg); /* Slightly different background for search input */
+    background-color: var(--light-bg);
 }
 #searchInput::placeholder {
     color: var(--text-color-light);
@@ -130,7 +99,7 @@ header h1 {
 
 /* Table Styling */
 .table-responsive {
-    overflow-x: auto; /* Enable horizontal scroll on small screens */
+    overflow-x: auto;
     margin-bottom: 30px;
 }
 
@@ -151,7 +120,7 @@ table thead th {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 0.95em;
-    white-space: nowrap; /* Prevent wrapping of header text */
+    white-space: nowrap;
 }
 
 table tbody td {
@@ -162,11 +131,11 @@ table tbody td {
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #fdfdfd; /* Lighter shade for even rows */
+    background-color: #fdfdfd;
 }
 
 table tbody tr:hover {
-    background-color: #f5f5f5; /* Subtle hover effect */
+    background-color: #f5f5f5;
     cursor: pointer;
 }
 
@@ -197,7 +166,7 @@ table tbody tr:hover {
     font-size: 0.8em;
     transition: var(--transition-ease);
     margin-right: 5px;
-    white-space: nowrap; /* Prevent buttons from wrapping */
+    white-space: nowrap;
 }
 
 .edit-button {
@@ -236,24 +205,24 @@ table tbody tr:hover {
 
 /* Edit Mode Styling */
 tr.edit-mode td {
-    background-color: #e6f7ff; /* Lighter blue background for editing row */
-    padding: 10px 15px; /* Slightly less padding to accommodate inputs */
+    background-color: #f0f8ff; /* Lighter background for editing row */
+    padding: 10px 15px;
 }
 
 tr.edit-mode input[type="text"],
 tr.edit-mode input[type="tel"],
 tr.edit-mode textarea,
 tr.edit-mode select {
-    width: calc(100% - 16px); /* Adjust width to fit padding and border */
+    width: calc(100% - 16px);
     padding: 8px;
-    border: 1px solid var(--primary-color); /* Highlight border when editing */
+    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius-sm);
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box;
     font-size: 0.95em;
 }
 
 tr.edit-mode textarea {
-    resize: vertical; /* Allow vertical resizing */
+    resize: vertical;
     min-height: 40px;
     max-height: 100px;
 }
@@ -378,7 +347,7 @@ tr.edit-mode textarea {
 }
 
 
-/* Modal Styles */
+/* General Modal Styles (used for login and other modals if any) */
 .modal {
     display: none;
     position: fixed;
@@ -388,11 +357,11 @@ tr.edit-mode textarea {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5); /* Darker overlay */
+    background-color: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(3px); /* Optional: blur background */
+    backdrop-filter: blur(3px);
 }
 
 .modal-content {
@@ -406,7 +375,7 @@ tr.edit-mode textarea {
     box-shadow: var(--shadow-md);
     position: relative;
     text-align: center;
-    animation: fadeIn 0.3s ease-out; /* Simple fade in animation */
+    animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
@@ -477,7 +446,7 @@ tr.edit-mode textarea {
         padding: 20px;
     }
     header {
-        align-items: center; /* Center header items */
+        align-items: center;
     }
     header h1 {
         font-size: 2em;
@@ -521,7 +490,7 @@ tr.edit-mode textarea {
     header h1 {
         font-size: 1.8em;
     }
-    .header-public p {
+    .header-public p.tagline {
         font-size: 1em;
     }
     .section-title {
@@ -529,5 +498,8 @@ tr.edit-mode textarea {
     }
     footer .contact-info-footer div {
         font-size: 0.95em;
+    }
+    .modal-whatsapp-content {
+        max-width: 90%;
     }
 }

@@ -6,6 +6,391 @@
     <title>Dashboard Admin - Kemal Computer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* General styles for dashboard.html */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .header-buttons button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1em;
+            transition: var(--transition-ease);
+            margin-left: 10px;
+        }
+        .header-buttons button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .header-buttons .refresh-button {
+            background-color: var(--info-color);
+        }
+        .header-buttons .refresh-button:hover {
+            background-color: var(--info-hover);
+        }
+
+        .header-buttons .logout-button {
+            background-color: var(--danger-color);
+        }
+        .header-buttons .logout-button:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s ease;
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(rgba(var(--primary-rgb), 0.2));
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        #serviceTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #serviceTable th, #serviceTable td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            white-space: nowrap; /* Prevent wrapping for better table view */
+        }
+
+        #serviceTable th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        #serviceTable tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+
+        #serviceTable tr:hover:not(.edit-mode):not(.no-data-row) {
+            background-color: var(--hover-bg);
+        }
+
+        .action-buttons button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: var(--transition-ease);
+            margin-right: 5px;
+        }
+        .action-buttons button:last-child {
+            margin-right: 0;
+        }
+
+        .edit-button {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        .edit-button:hover {
+            background-color: var(--warning-hover);
+        }
+
+        .delete-button {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .delete-button:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .save-button {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .save-button:hover {
+            background-color: var(--success-hover);
+        }
+
+        .cancel-button {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .cancel-button:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        /* Edit mode styles */
+        #serviceTable tr.edit-mode td {
+            background-color: var(--edit-bg);
+        }
+        #serviceTable tr.edit-mode input[type="text"],
+        #serviceTable tr.edit-mode input[type="tel"],
+        #serviceTable tr.edit-mode textarea,
+        #serviceTable tr.edit-mode select {
+            width: calc(100% - 10px); /* Adjust for padding */
+            padding: 5px;
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            box-sizing: border-box;
+            font-size: 0.9em;
+            resize: vertical; /* Allow textarea to be resized vertically */
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+            font-size: 0.85em;
+        }
+        .status-waiting { background-color: var(--warning-color); }
+        .status-process { background-color: var(--info-color); }
+        .status-finished { background-color: var(--success-color); }
+        .status-picked-up { background-color: var(--secondary-color); }
+
+        .add-new-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1.1em;
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0 auto;
+            transition: var(--transition-ease);
+        }
+        .add-new-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--container-bg);
+            margin: auto;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .close-button {
+            color: var(--text-color-light);
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--danger-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #modalMessage {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1em;
+            transition: var(--transition-ease);
+        }
+
+        .modal-button.primary-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .modal-button.primary-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .modal-button.danger-button {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .modal-button.danger-button:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .modal-button.secondary-button {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .modal-button.secondary-button:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        /* No data row style */
+        .no-data-row td {
+            font-style: italic;
+            color: var(--text-color-light);
+            padding: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments for dashboard */
+        @media (max-width: 992px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .header-buttons {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .header-buttons button {
+                margin-left: 5px;
+                margin-right: 0;
+                font-size: 0.9em;
+                padding: 8px 12px;
+            }
+            #serviceTable th, #serviceTable td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            .action-buttons button {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+            .add-new-button {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            #searchInput {
+                width: calc(100% - 20px); /* Adjust for smaller padding */
+                padding: 10px;
+            }
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+            }
+            #serviceTable {
+                min-width: 700px; /* Ensure table is scrollable if needed */
+            }
+            .status-badge {
+                padding: 4px 8px;
+                font-size: 0.8em;
+            }
+        }
+        @media (max-width: 480px) {
+            .header-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-buttons button {
+                margin-left: 0;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .add-new-button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -73,32 +458,44 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        const adminEmail = "dayatkemal16@gmail.com"; // <--- GANTI DENGAN EMAIL ADMIN YANG VALID DI FIREBASE ANDA
+
         let servicesData = {};
         let editingRowId = null;
 
         // Auth state listener for admin check
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (user.email === "dayatkemal16@gmail.com") { // GANTI DENGAN EMAIL ADMIN ANDA
+                if (user.email === adminEmail) {
+                    // User is authenticated and is the admin, proceed to load data
                     loadServices();
                 } else {
-                    alert("Anda tidak memiliki izin akses ke halaman ini.");
-                    window.location.href = 'login.html'; // Redirect non-admin to login page
+                    // User is logged in but not the designated admin
+                    signOut(auth).then(() => {
+                        // Redirect without alert message upon entering,
+                        // as the login page itself should handle unauthorized access.
+                        window.location.href = 'login.html';
+                    }).catch((error) => {
+                        console.error("Error signing out non-admin user:", error);
+                        window.location.href = 'login.html'; // Fallback redirect
+                    });
                 }
             } else {
-                alert("Anda belum login atau sesi telah berakhir.");
-                window.location.href = 'login.html'; // Redirect to login page
+                // No user logged in, redirect to login page
+                window.location.href = 'login.html';
             }
         });
 
         window.logoutAdmin = async () => {
             try {
                 await signOut(auth);
-                alert("Anda telah logout.");
-                window.location.href = 'login.html';
+                // Use custom modal for logout success, not alert
+                showModal("Anda telah logout.", "info", () => {
+                    window.location.href = 'login.html';
+                });
             } catch (error) {
                 console.error("Error logging out:", error);
-                alert("Gagal logout. Silakan coba lagi.");
+                showModal("Gagal logout. Silakan coba lagi.", "info");
             }
         };
 
@@ -146,10 +543,10 @@
                     row.className = 'no-data-row';
                     row.innerHTML = '<td colspan="8" style="text-align:center;">Tidak ada data service.</td>';
                 }
-                filterTable();
+                filterTable(); // Apply filter after loading data
             }, (error) => {
                 console.error("Error loading services:", error);
-                showModal("Gagal memuat data service. Silakan refresh.", "info");
+                showModal("Gagal memuat data service. Silakan refresh halaman.", "info");
             });
         };
 
@@ -167,6 +564,7 @@
             let found = false;
             let hasActualData = false;
 
+            // First, determine if there's any actual data (not just 'no-data-row' or 'edit-mode')
             for (let i = 0; i < rows.length; i++) {
                 if (!rows[i].classList.contains('no-data-row') && !rows[i].classList.contains('edit-mode')) {
                     hasActualData = true;
@@ -174,12 +572,14 @@
                 }
             }
 
+            // Iterate through rows to filter
             for (let i = 0; i < rows.length; i++) {
                 if (rows[i].classList.contains('no-data-row') || rows[i].classList.contains('edit-mode')) {
-                    rows[i].style.display = 'none'; // Hide info rows or editing row during filter
+                    rows[i].style.display = 'none'; // Always hide special rows during filtering
                     continue;
                 }
 
+                // Get cell content and check for filter match
                 const serviceCode = rows[i].cells[0].textContent.toLowerCase();
                 const nama = rows[i].cells[1].textContent.toLowerCase();
                 const device = rows[i].cells[2].textContent.toLowerCase();
@@ -188,25 +588,28 @@
                 const status = rows[i].cells[5].textContent.toLowerCase();
                 const keterangan = rows[i].cells[6].textContent.toLowerCase();
 
-
-                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) || kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) || keterangan.includes(filter)) {
-                    rows[i].style.display = "";
+                if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) || 
+                    kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) || 
+                    keterangan.includes(filter)) {
+                    rows[i].style.display = ""; // Show row
                     found = true;
                 } else {
-                    rows[i].style.display = "none";
+                    rows[i].style.display = "none"; // Hide row
                 }
             }
 
+            // Remove any existing 'no-data-row' before potentially adding a new one
             const existingNoDataRow = tableBody.querySelector('.no-data-row');
             if (existingNoDataRow) {
                 existingNoDataRow.remove();
             }
 
-            if (!found && hasActualData && filter !== '') { // Only show "not found" if there's data but nothing matches filter
+            // Logic to display "Data tidak ditemukan" or "Tidak ada data service"
+            if (!found && hasActualData && filter !== '') { // Search filter didn't find anything
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
                 row.innerHTML = '<td colspan="8" style="text-align:center; color:var(--danger-color);">Data tidak ditemukan.</td>';
-            } else if (!hasActualData && filter === '') { // Show "no data" if table is genuinely empty
+            } else if (!hasActualData && filter === '') { // No data in database AND no filter applied
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
                 row.innerHTML = '<td colspan="8" style="text-align:center;">Tidak ada data service.</td>';
@@ -228,7 +631,7 @@
                 device: row.querySelector('[data-field="device"]').textContent,
                 kerusakan: row.querySelector('[data-field="kerusakan"]').textContent,
                 nomorHp: row.querySelector('[data-field="nomorHp"]').textContent,
-                status: row.querySelector('[data-field="status"]').textContent.trim(), // Trim status text
+                status: row.querySelector('[data-field="status"]').textContent.trim(), // Trim status text to get exact value
                 keterangan: row.querySelector('[data-field="keterangan"]').textContent
             };
             row.setAttribute('data-original-nama', originalData.nama);
@@ -279,6 +682,7 @@
                 return;
             }
 
+            // Simple validation for phone number format (starts with 62, only digits)
             if (!/^\d+$/.test(updatedNomorHp) || !updatedNomorHp.startsWith('62')) {
                 showModal('Nomor HP tidak valid. Gunakan format dimulai 62 (misal: 62812...) dan hanya angka.', 'info');
                 return;
@@ -345,7 +749,7 @@
         };
 
         const confirmDelete = async (serviceCode) => {
-            closeModal();
+            closeModal(); // Close modal immediately after user confirms
             try {
                 await remove(ref(db, `antrian/${serviceCode}`));
                 showModal("Layanan berhasil dihapus!", "info");
@@ -368,15 +772,18 @@
                 const okButton = document.createElement('button');
                 okButton.textContent = 'OK';
                 okButton.className = 'modal-button primary-button';
-                okButton.onclick = closeModal;
+                okButton.onclick = () => {
+                    closeModal();
+                    if (callback) callback(); // Execute callback after closing modal
+                };
                 modalButtons.appendChild(okButton);
             } else if (type === "confirm") {
                 const confirmButton = document.createElement('button');
                 confirmButton.textContent = 'Ya';
                 confirmButton.className = 'modal-button danger-button';
                 confirmButton.onclick = () => {
-                    if (callback) callback();
-                    closeModal(); // Close modal after confirming
+                    if (callback) callback(); // Execute callback first
+                    closeModal(); // Then close modal
                 };
                 modalButtons.appendChild(confirmButton);
 
@@ -393,6 +800,7 @@
             customModal.style.display = 'none';
         };
 
+        // Close modal when clicking outside
         window.onclick = (event) => {
             if (event.target == customModal) {
                 closeModal();

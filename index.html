@@ -3,158 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Status Layanan - Kemal Computer</title>
+    <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css"> <style>
-        /* Specific styles for customer status page */
-        body {
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Specific styles for index.html */
+        .header-public {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header-public img {
+            max-width: 150px;
+            margin-bottom: 15px;
+            border-radius: 8px; /* Optional: subtle rounding */
+        }
+        .header-public h1 {
+            color: var(--primary-color); /* Using CSS variable from style.css */
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        .header-public p {
+            color: var(--text-color-light);
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .contact-info {
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Adjust alignment to avoid hiding content */
-            min-height: 100vh;
-            background-color: #f4f7f6;
+            gap: 25px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .contact-info div {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+        .contact-info i {
+            margin-right: 10px;
+            color: var(--accent-color);
+            font-size: 1.3em;
         }
 
-        .customer-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
+        .section-title {
             text-align: center;
-            margin-top: 50px; /* Add some top margin */
+            color: var(--primary-color);
+            margin-top: 40px;
+            margin-bottom: 25px;
+            font-size: 2em;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: inline-block; /* To make border-bottom fit content */
         }
 
-        .customer-container h1 {
-            color: #007bff;
-            margin-bottom: 30px;
-            font-size: 2.2em;
+        .search-form {
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            padding: 25px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
         }
-
-        .search-form div {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
         .search-form label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
-            color: #555;
+            color: var(--text-color);
         }
-
-        .search-form input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .search-form input[type="text"] {
+            width: calc(100% - 24px); /* Adjust for padding and border */
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
             font-size: 1em;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
-
         .search-form button {
             width: 100%;
             padding: 12px 20px;
-            background-color: #28a745; /* Green for search */
+            background-color: var(--success-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: var(--border-radius-sm);
             font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+            transition: var(--transition-ease);
+            margin-top: 20px;
         }
-
         .search-form button:hover {
-            background-color: #218838;
+            background-color: var(--success-hover);
         }
 
         #resultContainer {
-            margin-top: 30px;
+            margin-top: 20px;
             padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            background-color: var(--light-bg);
             text-align: left;
-            min-height: 100px; /* Ensure visibility even when empty */
+            min-height: 120px;
+            box-shadow: var(--shadow-sm);
         }
-
         #resultContainer p {
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: var(--text-color);
         }
         #resultContainer strong {
-            color: #007bff;
+            color: var(--primary-color);
         }
-
-        #resultContainer .status-badge {
-            margin-left: 10px;
-        }
-
         .result-not-found {
-            color: #dc3545;
+            color: var(--danger-color);
             font-weight: bold;
             text-align: center;
-        }
-        
-        .login-link {
-            margin-top: 20px;
+            font-size: 1.1em;
+            padding: 15px 0;
         }
 
-        .login-link a {
-            color: #007bff;
+        .map-section {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 40px;
+        }
+        .map-section iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .admin-link a {
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: bold;
+            font-size: 1.1em;
         }
-        .login-link a:hover {
+        .admin-link a:hover {
             text-decoration: underline;
         }
 
-        @media (max-width: 600px) {
-            .customer-container {
-                margin: 20px;
-                padding: 30px 20px;
+        /* Responsive adjustments for index.html */
+        @media (max-width: 768px) {
+            .header-public h1 {
+                font-size: 2.2em;
             }
-            .customer-container h1 {
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .search-form {
+                padding: 20px;
+            }
+            .map-section iframe {
+                height: 300px;
+            }
+        }
+        @media (max-width: 480px) {
+            .header-public h1 {
+                font-size: 1.8em;
+            }
+            .header-public p, .contact-info div {
+                font-size: 1em;
+            }
+            .section-title {
                 font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="customer-container">
-        <h1>Cek Status Layanan Anda</h1>
+    <div class="container">
+        <header class="header-public">
+            <img src="https://via.placeholder.com/150/007bff/FFFFFF?text=Kemal+Logo" alt="Logo Kemal Computer">
+            <h1>Kemal Computer Service</h1>
+            <p>Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+            <div class="contact-info">
+                <div><i class="fas fa-phone"></i> Nomor Admin: +62 812-3456-7890</div>
+                <div><i class="fab fa-instagram"></i> Instagram: @kemalcomputer</div>
+            </div>
+        </header>
+
+        <h2 class="section-title">Cek Status Layanan Anda</h2>
         <form id="checkStatusForm" class="search-form">
             <div>
                 <label for="serviceCode">Masukkan Kode Service:</label>
-                <input type="text" id="serviceCode" placeholder="Contoh: KC-xxxxxxxxxxxx" required>
+                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required>
             </div>
             <button type="submit"><i class="fas fa-search"></i> Cek Status</button>
         </form>
 
-        <div id="resultContainer">
-            <p>Masukkan kode service untuk melihat status layanan Anda.</p>
+        <div id="resultContainer" class="table-responsive">
+            <p style="text-align: center; color: var(--text-color-light);">Masukkan kode service untuk melihat status layanan Anda.</p>
         </div>
 
-        <div class="login-link">
-            <p>Anda Admin? <a href="login.html">Login di sini</a></p>
-        </div>
+        <h2 class="section-title">Lokasi Kami</h2>
+        <section class="map-section">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.076899175402!2d110.36888497499696!3d-7.784408492224673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5789178f9f75%3A0x6333333333333333!2sYour+Location+Here!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </section>
+
+        <footer class="admin-link">
+            <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
+        </footer>
     </div>
 
     <script type="module">
-        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
-const firebaseConfig = {
-  apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
-  authDomain: "website-track-service.firebaseapp.com",
-  databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "website-track-service",
-  storageBucket: "website-track-service.firebasestorage.app",
-  messagingSenderId: "87573564376",
-  appId: "1:87573564376:web:c93c07f0506d00535a00ad",
-  measurementId: "G-64T8XNWK5F"
-};
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
+            authDomain: "website-track-service.firebaseapp.com",
+            databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "website-track-service",
+            storageBucket: "website-track-service.firebasestorage.app",
+            messagingSenderId: "87573564376",
+            appId: "1:87573564376:web:c93c07f0506d00535a00ad",
+            measurementId: "G-64T8XNWK5F"
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -186,8 +260,15 @@ const firebaseConfig = {
                         case 'Proses': statusBadgeClass = 'status-process'; break;
                         case 'Selesai': statusBadgeClass = 'status-finished'; break;
                         case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
-                        default: statusBadgeClass = '';
+                        default: statusBadgeClass = ''; // Default or unknown status
                     }
+                    
+                    // Format the timestamp for better readability
+                    const date = new Date(service.timestamp);
+                    const formattedDate = date.toLocaleDateString('id-ID', {
+                        year: 'numeric', month: 'long', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit', second: '2-digit'
+                    });
 
                     resultContainer.innerHTML = `
                         <p><strong>Kode Service:</strong> ${serviceCode}</p>
@@ -196,7 +277,8 @@ const firebaseConfig = {
                         <p><strong>Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
                         <p><strong>Nomor HP:</strong> ${service.nomorHp || '-'}</p>
                         <p><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
-                        <p><strong>Tanggal Masuk:</strong> ${new Date(service.timestamp).toLocaleString('id-ID')}</p>
+                        ${service.keterangan ? `<p><strong>Keterangan:</strong> ${service.keterangan}</p>` : ''}
+                        <p><strong>Tanggal Masuk:</strong> ${formattedDate}</p>
                     `;
                 } else {
                     resultContainer.innerHTML = '<p class="result-not-found">Kode service tidak ditemukan. Mohon periksa kembali.</p>';

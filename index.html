@@ -14,24 +14,33 @@
         }
 
         .header-public {
-            text-align: center;
+            display: flex; /* Menggunakan flexbox untuk penataan menyamping */
+            align-items: center; /* Pusatkan secara vertikal */
+            justify-content: center; /* Pusatkan secara horizontal */
+            gap: 20px; /* Jarak antara logo dan teks */
             margin-bottom: 40px;
+            text-align: left; /* Teks di dalam header akan rata kiri */
+            flex-wrap: wrap; /* Izinkan wrapping pada layar kecil */
+        }
+        .header-public .header-content {
+            text-align: left; /* Konten teks rata kiri */
         }
         .header-public img {
-            max-width: 150px;
-            margin-bottom: 15px;
+            max-width: 120px; /* Ukuran logo lebih kecil */
+            margin-bottom: 0; /* Hapus margin bawah jika ada */
             border-radius: 8px; /* Optional: subtle rounding */
         }
         .header-public h1 {
             color: var(--primary-color);
-            font-size: 2.8em;
-            margin-bottom: 10px;
+            font-size: 2.5em; /* Ukuran h1 disesuaikan */
+            margin: 0; /* Hapus margin default */
         }
         .header-public p.tagline { /* Menambahkan class tagline untuk target styling */
             color: var(--text-color-light);
             font-family: 'Playfair Display', serif; /* Font menarik untuk tagline */
-            font-size: 1.3em; /* Sedikit lebih besar */
-            margin-bottom: 5px;
+            font-size: 1.2em; /* Sedikit lebih besar */
+            margin-top: 5px; /* Jarak dari h1 */
+            margin-bottom: 10px; /* Jarak dari tombol */
             font-weight: 600; /* Lebih tebal */
             text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sedikit bayangan */
         }
@@ -169,16 +178,16 @@
             text-decoration: underline;
         }
 
-        /* WhatsApp Button (TRIGGER) specific styles - make it smaller */
-        .whatsapp-button-trigger {
-            background-color: var(--primary-color); /* Menggunakan warna primary tema */
+        /* WhatsApp Button (Direct Link) specific styles - make it small */
+        .whatsapp-button-direct {
+            background-color: #25D366; /* WhatsApp Green */
             color: white;
             padding: 8px 15px; /* Lebih kecil */
             border: none;
             border-radius: var(--border-radius-sm);
             font-size: 0.9em; /* Font lebih kecil */
             text-decoration: none;
-            margin-top: 20px; /* Jarak dari tagline */
+            margin-top: 10px; /* Jarak dari tagline */
             cursor: pointer;
             transition: var(--transition-ease);
             box-shadow: var(--shadow-sm);
@@ -186,91 +195,12 @@
             align-items: center;
             gap: 8px;
         }
-        .whatsapp-button-trigger:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-        .whatsapp-button-trigger i {
-            font-size: 1.1em;
-        }
-
-        /* Modal for WhatsApp contact */
-        .modal-whatsapp {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-whatsapp-content {
-            background-color: var(--container-bg);
-            margin: auto;
-            padding: 30px;
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-md);
-            text-align: center;
-            position: relative;
-            max-width: 400px;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-whatsapp-content h3 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        .modal-whatsapp-content p {
-            margin-bottom: 25px;
-            font-size: 1em;
-            color: var(--text-color);
-        }
-
-        .modal-whatsapp-content .close-button-whatsapp {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .modal-whatsapp-content .close-button-whatsapp:hover,
-        .modal-whatsapp-content .close-button-whatsapp:focus {
-            color: var(--danger-color);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .modal-whatsapp-content .whatsapp-link-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background-color: #25D366; /* WhatsApp Green */
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            font-size: 1.1em;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .modal-whatsapp-content .whatsapp-link-button:hover {
+        .whatsapp-button-direct:hover {
             background-color: #1DA851;
             transform: translateY(-2px);
         }
-        .modal-whatsapp-content .whatsapp-link-button i {
-            font-size: 1.3em;
+        .whatsapp-button-direct i {
+            font-size: 1.1em;
         }
 
         /* Background Service Section */
@@ -316,6 +246,13 @@
 
         /* Responsive adjustments for index.html */
         @media (max-width: 768px) {
+            .header-public {
+                flex-direction: column; /* Kembali ke layout kolom di layar kecil */
+                text-align: center; /* Pusatkan teks di layar kecil */
+            }
+            .header-public .header-content {
+                text-align: center;
+            }
             .header-public h1 {
                 font-size: 2.2em;
             }
@@ -328,7 +265,7 @@
             .map-section iframe {
                 height: 300px;
             }
-            .whatsapp-button-trigger {
+            .whatsapp-button-direct {
                 padding: 7px 12px;
                 font-size: 0.85em;
             }
@@ -359,9 +296,6 @@
             footer .contact-info-footer div {
                 font-size: 0.95em;
             }
-            .modal-whatsapp-content {
-                max-width: 90%;
-            }
         }
     </style>
 </head>
@@ -369,11 +303,13 @@
     <div class="container">
         <header class="header-public">
             <img src="./images/logo.png" alt="Logo Kemal Computer">
-            <h1>Kemal Computer Service</h1>
-            <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
-            <button class="whatsapp-button-trigger" id="openWhatsappModal">
-                <i class="fab fa-whatsapp"></i> Hubungi Admin
-            </button>
+            <div class="header-content">
+                <h1>Kemal Computer Service</h1>
+                <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+                <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-button-direct">
+                    <i class="fab fa-whatsapp"></i> Hubungi Admin
+                </a>
+            </div>
         </header>
 
         <section class="service-info-section">
@@ -404,8 +340,8 @@
                 Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
             </p>
             <iframe
-                src="https://maps.google.com/?cid=8752713075951597851"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.256860081699!2d110.3920953!3d-7.7712396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5840d04c5521%3A0xcb0c16922e3e5732!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </section>
 
@@ -418,17 +354,6 @@
                 <p>Khusus Admin: <a href="login.html">Login Admin</a></p>
             </div>
         </footer>
-    </div>
-
-    <div id="whatsappModal" class="modal-whatsapp">
-        <div class="modal-whatsapp-content">
-            <span class="close-button-whatsapp">&times;</span>
-            <h3>Hubungi Admin Kami</h3>
-            <p>Silakan pilih cara Anda ingin menghubungi kami via WhatsApp:</p>
-            <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-link-button">
-                <i class="fab fa-whatsapp"></i> Chat WhatsApp
-            </a>
-        </div>
     </div>
 
     <script type="module">
@@ -449,28 +374,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
-        // Get the modal elements
-        const whatsappModal = document.getElementById('whatsappModal');
-        const openWhatsappModalBtn = document.getElementById('openWhatsappModal');
-        const closeWhatsappModalBtn = document.getElementsByClassName('close-button-whatsapp')[0];
-
-        // When the user clicks the button, open the modal
-        openWhatsappModalBtn.onclick = function() {
-            whatsappModal.style.display = 'flex'; // Use flex to center
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        closeWhatsappModalBtn.onclick = function() {
-            whatsappModal.style.display = 'none';
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == whatsappModal) {
-                whatsappModal.style.display = 'none';
-            }
-        }
 
         document.getElementById('checkStatusForm').addEventListener('submit', async (e) => {
             e.preventDefault();

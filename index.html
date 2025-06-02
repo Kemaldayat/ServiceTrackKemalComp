@@ -21,53 +21,63 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* --- START HEADER OPSI 4: Clean & Centered --- */
+        /* --- START HEADER OPSI 3: Professional & Bordered --- */
         .header-public {
-            background-color: transparent; /* Latar belakang transparan */
-            padding: 30px 20px;
+            background-color: var(--white-color); /* Latar belakang putih atau light */
+            padding: 20px 30px;
             margin-bottom: 40px;
-            text-align: center; /* Rata tengah */
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Jarak antara logo dan teks */
+            border-bottom: 3px solid var(--primary-color); /* Border bawah yang kuat */
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; /* Pojok atas melengkung */
+            box-shadow: var(--shadow-sm);
         }
 
         .header-public img {
-            max-height: 90px;
-            margin-bottom: 15px;
-            border-radius: 50%; /* Bentuk lingkaran untuk logo */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-height: 80px; /* Ukuran logo lebih kecil */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            text-align: left; /* Teks rata kiri */
         }
 
         .header-public h1 {
-            font-size: 2.8em;
+            font-size: 2.5em; /* Ukuran font lebih proporsional */
             margin: 0;
-            color: var(--primary-color);
-            font-weight: 700;
-            letter-spacing: -1px; /* Sedikit spasi antar huruf */
+            color: var(--primary-color); /* Warna sesuai tema */
+            font-weight: 600;
         }
 
         .header-public p.tagline {
-            font-size: 1.2em;
-            margin-top: 8px;
-            color: var(--text-color-light);
+            font-size: 1.1em;
+            margin: 5px 0 0 0;
+            color: var(--text-color-light); /* Warna teks lebih ringan */
             font-family: 'Playfair Display', serif;
             font-style: italic;
         }
 
-        /* Responsive adjustments for header Opsi 4 */
+        /* Responsive adjustments for header Opsi 3 */
         @media (max-width: 768px) {
             .header-public {
-                padding: 25px 15px;
+                flex-direction: column; /* Tata letak kolom di mobile */
+                text-align: center;
+                gap: 15px;
+                padding: 20px;
+            }
+            .header-public h1 {
+                font-size: 2em;
             }
             .header-public img {
                 max-height: 70px;
             }
-            .header-public h1 {
-                font-size: 2.2em;
-            }
-            .header-public p.tagline {
-                font-size: 1em;
+            .header-content {
+                text-align: center; /* Pastikan teks tetap rata tengah di mobile */
             }
         }
-        /* --- END HEADER OPSI 4 --- */
+        /* --- END HEADER OPSI 3 --- */
 
         .section-title {
             text-align: center;
@@ -314,8 +324,10 @@
     <div class="container">
         <header class="header-public">
             <img src="./images/logo.png" alt="Logo Kemal Computer">
-            <h1>Kemal Computer Service</h1>
-            <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+            <div class="header-content">
+                <h1>Kemal Computer Service</h1>
+                <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+            </div>
         </header>
 
         <section class="service-info-section">

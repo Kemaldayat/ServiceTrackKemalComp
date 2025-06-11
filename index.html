@@ -154,7 +154,7 @@
             padding: 15px 0;
         }
 
-        /* Status Badges */
+        /* Status Badges - Updated Colors */
         .status-badge {
             display: inline-block;
             padding: 5px 10px;
@@ -165,10 +165,10 @@
             margin-left: 5px;
         }
 
-        .status-waiting { background-color: var(--warning-color); } /* Kuning/Oranye */
-        .status-process { background-color: var(--info-color); } /* Biru */
-        .status-finished { background-color: var(--success-color); } /* Hijau */
-        .status-picked-up { background-color: var(--secondary-color); } /* Abu-abu/Gelap */
+        .status-waiting { background-color: #FF9800; } /* Orange */
+        .status-process { background-color: #2196F3; } /* Blue */
+        .status-finished { background-color: #4CAF50; } /* Green */
+        .status-picked-up { background-color: #607D8B; } /* Blue Grey */
 
 
         .map-section {
@@ -416,13 +416,6 @@
                         default: statusBadgeClass = ''; // Default or unknown status
                     }
                     
-                    // Format the timestamp for better readability
-                    const date = new Date(service.timestamp);
-                    const formattedDate = date.toLocaleDateString('id-ID', {
-                        year: 'numeric', month: 'long', day: 'numeric',
-                        hour: '2-digit', minute: '2-digit', second: '2-digit'
-                    });
-
                     resultContainer.innerHTML = `
                         <p><strong>Kode Service:</strong> ${serviceCode}</p>
                         <p><strong>Nama Pelanggan:</strong> ${service.nama}</p>
@@ -431,7 +424,6 @@
                         <p><strong>Nomor HP:</strong> ${service.nomorHp || '-'}</p>
                         <p><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
                         ${service.keterangan ? `<p><strong>Keterangan:</strong> ${service.keterangan}</p>` : ''}
-                        <p><strong>Tanggal Masuk:</strong> ${formattedDate}</p>
                     `;
                 } else {
                     resultContainer.innerHTML = '<p class="result-not-found">Kode service tidak ditemukan. Mohon periksa kembali.</p>';

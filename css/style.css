@@ -1,157 +1,121 @@
-/* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+/* Variables for consistent styling */
+:root {
+    --primary-color: #008080;
+    --primary-hover: #006666;
+    --danger-color: #F44336;
+    --danger-hover: #d32f2f;
+    --border-radius-sm: 5px;
+    --transition-ease: all 0.3s ease;
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    padding: 20px;
-}
 
-/* Container Styles */
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background-color: var(--container-bg);
-    padding: 30px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
-}
+    --text-color: #333333;
+    --text-color-light: #666666;
+    --bg-color: #F8F8F8;
+    --container-bg: #ffffff;
+    --light-bg: #FDFDFD;
+    --border-color: #E0E0E0;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
+    --border-radius-sm: 5px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --transition-ease: all 0.3s ease;
 
-.add-service-container {
-    margin-top: 20px;
-}
+    /* Status Colors */
+    --status-waiting-bg: #FFC107;
+    --status-waiting-text: #333;
+    --status-process-bg: #4CAF50;
+    --status-process-text: white;
+    --status-finished-bg: var(--primary-color);
+    --status-finished-text: white;
+    --status-picked-up-bg: #9C27B0;
+    --status-picked-up-text: white;
 
-/* Header Styles */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-header h1 {
-    font-size: 1.8em;
-    color: var(--primary-color);
-}
-
-/* Form Styles */
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-form > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-label {
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-input, textarea, select {
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 1em;
-    transition: var(--transition-ease);
-    background-color: var(--light-bg);
-}
-
-input:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.1);
-}
-
-textarea {
-    min-height: 100px;
-    resize: vertical;
+    /* Button Colors */
+    --info-button: #2196F3;
+    --info-hover: #1976D2;
+    --danger-color: #F44336;
+    --danger-hover: #d32f2f;
+    --success-color: #4CAF50;
+    --success-hover: #45a049;
+    --secondary-button: #9E9E9E;
+    --secondary-hover: #757575;
 }
 
 /* Button Styles */
-button {
-    padding: 12px 20px;
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+}
+
+/* Header Buttons Specific Styles */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-buttons button {
+    padding: 10px 15px;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: 1em;
     transition: var(--transition-ease);
     border: none;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    font-weight: 500;
 }
 
-button i {
+.header-buttons button i {
     font-size: 0.9em;
 }
 
-.back-button {
-    background-color: var(--secondary-button);
-    color: white;
-}
-
-.back-button:hover {
-    background-color: var(--secondary-hover);
-}
-
-button[type="submit"] {
+.btn-primary {
     background-color: var(--primary-color);
     color: white;
-    margin-top: 10px;
 }
 
-button[type="submit"]:hover {
+.btn-primary:hover {
     background-color: var(--primary-hover);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-    }
-    
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    input, textarea, select {
-        padding: 10px 12px;
-    }
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
 }
 
-/* Status Colors for Reference (not used in this page but good to have) */
-.status-waiting {
-    background-color: var(--status-waiting-bg);
-    color: var(--status-waiting-text);
+.btn-danger:hover {
+    background-color: var(--danger-hover);
 }
-
-.status-process {
-    background-color: var(--status-process-bg);
-    color: var(--status-process-text);
-}
-
-.status-finished {
-    background-color: var(--status-finished-bg);
-    color: var(--status-finished-text);
-}
-
-.status-picked-up {
-    background-color: var(--status-picked-up-bg);
-    color: var(--status-picked-up-text);
-}
+/* [Keep all your other existing CSS styles here] */

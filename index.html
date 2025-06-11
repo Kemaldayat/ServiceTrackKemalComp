@@ -5,11 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kemal Computer - Cek Status & Informasi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css"> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* Specific styles for index.html */
+        /* Variables for consistent styling (based on Kemal Computer logo colors) */
+        :root {
+            --primary-color: #008080;      /* Dark Teal/Tosca from logo (ikon dan teks "KEMAL") */
+            --primary-hover: #006666;      /* Slightly darker for hover */
+            --accent-color: #333333;       /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
+            --accent-dark: #1A1A1A;
+
+            --text-color: #333333;         /* Dark grey for readability */
+            --text-color-light: #666666;   /* Lighter grey for secondary text */
+            --bg-color: #F8F8F8;           /* Very light grey for background */
+            --container-bg: #ffffff;
+            --light-bg: #FDFDFD;           /* Lighter background for elements like search form */
+            --border-color: #E0E0E0;       /* Light grey border */
+            --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
+            --border-radius-sm: 5px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --transition-ease: all 0.3s ease;
+
+            /* Status Colors */
+            --status-waiting-bg: #FFC107;  /* Yellow */
+            --status-waiting-text: #333;
+            --status-process-bg: #4CAF50;  /* Green */
+            --status-process-text: white;
+            --status-finished-bg: var(--primary-color); /* Use primary color for "Selesai" */
+            --status-finished-text: white;
+            --status-picked-up-bg: #9C27B0; /* Purple */
+            --status-picked-up-text: white;
+
+            /* Button Colors */
+            --info-button: #2196F3; /* Blue for info/secondary */
+            --info-hover: #1976D2;
+            --danger-color: #F44336;       /* Red for delete/warning */
+            --danger-hover: #d32f2f;
+            --success-color: #4CAF50;      /* Green for add/submit */
+            --success-hover: #45a049;
+            --secondary-button: #9E9E9E;   /* Grey for cancel/back */
+            --secondary-hover: #757575;
+        }
+
+        /* General Styling */
         body {
-            font-family: 'Poppins', sans-serif; /* Menggunakan Poppins sebagai font dasar */
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -21,63 +67,43 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* --- START HEADER OPSI 3: Professional & Bordered --- */
+        /* Header */
         .header-public {
-            background-color: var(--white-color); /* Latar belakang putih atau light */
+            background-color: var(--white-color);
             padding: 20px 30px;
             margin-bottom: 40px;
             display: flex;
             align-items: center;
-            gap: 20px; /* Jarak antara logo dan teks */
-            border-bottom: 3px solid var(--primary-color); /* Border bawah yang kuat */
-            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; /* Pojok atas melengkung */
+            gap: 20px;
+            border-bottom: 3px solid var(--primary-color);
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
             box-shadow: var(--shadow-sm);
         }
 
         .header-public img {
-            max-height: 80px; /* Ukuran logo lebih kecil */
+            max-height: 80px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
-            text-align: left; /* Teks rata kiri */
+            text-align: left;
         }
 
         .header-public h1 {
-            font-size: 2.5em; /* Ukuran font lebih proporsional */
+            font-size: 2.5em;
             margin: 0;
-            color: var(--primary-color); /* Warna sesuai tema */
+            color: var(--primary-color);
             font-weight: 600;
         }
 
         .header-public p.tagline {
             font-size: 1.1em;
             margin: 5px 0 0 0;
-            color: var(--text-color-light); /* Warna teks lebih ringan */
+            color: var(--text-color-light);
             font-family: 'Playfair Display', serif;
             font-style: italic;
         }
-
-        /* Responsive adjustments for header Opsi 3 */
-        @media (max-width: 768px) {
-            .header-public {
-                flex-direction: column; /* Tata letak kolom di mobile */
-                text-align: center;
-                gap: 15px;
-                padding: 20px;
-            }
-            .header-public h1 {
-                font-size: 2em;
-            }
-            .header-public img {
-                max-height: 70px;
-            }
-            .header-content {
-                text-align: center; /* Pastikan teks tetap rata tengah di mobile */
-            }
-        }
-        /* --- END HEADER OPSI 3 --- */
 
         .section-title {
             text-align: center;
@@ -90,20 +116,23 @@
             display: inline-block;
         }
 
+        /* Search Form */
         .search-form {
             max-width: 500px;
             margin: 0 auto 30px auto;
             padding: 25px;
             background-color: var(--light-bg);
-            border-radius: 8px;
+            border-radius: var(--border-radius-md);
             box-shadow: var(--shadow-sm);
         }
+
         .search-form label {
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
             color: var(--text-color);
         }
+
         .search-form input[type="text"] {
             width: calc(100% - 24px);
             padding: 12px;
@@ -112,6 +141,7 @@
             font-size: 1em;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
+
         .search-form button {
             width: 100%;
             padding: 12px 20px;
@@ -124,10 +154,12 @@
             transition: var(--transition-ease);
             margin-top: 20px;
         }
+
         .search-form button:hover {
             background-color: var(--success-hover);
         }
 
+        /* Result Container */
         #resultContainer {
             margin-top: 20px;
             padding: 20px;
@@ -138,14 +170,17 @@
             min-height: 120px;
             box-shadow: var(--shadow-sm);
         }
+
         #resultContainer p {
             margin-bottom: 8px;
             font-size: 1em;
             color: var(--text-color);
         }
+
         #resultContainer strong {
             color: var(--primary-color);
         }
+
         .result-not-found {
             color: var(--danger-color);
             font-weight: bold;
@@ -154,34 +189,37 @@
             padding: 15px 0;
         }
 
-        /* Status Badges - Updated Colors */
+        /* Status Badges */
         .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
             font-weight: bold;
-            color: white;
-            text-transform: capitalize;
-            margin-left: 5px;
+            text-align: center;
+            display: inline-block;
+            min-width: 80px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .status-waiting { background-color: #FF9800; } /* Orange */
-        .status-process { background-color: #2196F3; } /* Blue */
-        .status-finished { background-color: #4CAF50; } /* Green */
-        .status-picked-up { background-color: #607D8B; } /* Blue Grey */
+        .status-waiting { background-color: var(--status-waiting-bg); color: var(--status-waiting-text); }
+        .status-process { background-color: var(--status-process-bg); color: var(--status-process-text); }
+        .status-finished { background-color: var(--status-finished-bg); color: var(--status-finished-text); }
+        .status-picked-up { background-color: var(--status-picked-up-bg); color: var(--status-picked-up-text); }
 
-
+        /* Map Section */
         .map-section {
             text-align: center;
             margin-top: 50px;
             margin-bottom: 40px;
         }
+
         .map-section p.address {
             margin-bottom: 20px;
             font-size: 1.1em;
             color: var(--text-color);
             line-height: 1.5;
         }
+
         .map-section iframe {
             width: 100%;
             max-width: 800px;
@@ -191,6 +229,7 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* Footer */
         footer {
             text-align: center;
             margin-top: 50px;
@@ -198,6 +237,7 @@
             border-top: 1px solid var(--border-color);
             color: var(--text-color);
         }
+
         footer .contact-info-footer {
             display: flex;
             flex-direction: column;
@@ -206,45 +246,49 @@
             gap: 10px;
             margin-bottom: 20px;
         }
+
         footer .contact-info-footer div {
             display: flex;
             align-items: center;
             font-size: 1em;
             color: var(--text-color-light);
         }
+
         footer .contact-info-footer i {
             margin-right: 8px;
             color: var(--primary-color);
             font-size: 1.2em;
         }
 
-        /* WhatsApp Button (Direct Link) specific styles - make it small and precise */
+        /* WhatsApp Button */
         .whatsapp-button-direct {
-            background-color: #25D366; /* WhatsApp Green */
+            background-color: #25D366;
             color: white;
-            padding: 6px 12px; /* Lebih kecil lagi */
+            padding: 6px 12px;
             border: none;
             border-radius: var(--border-radius-sm);
-            font-size: 0.8em; /* Font lebih kecil */
+            font-size: 0.8em;
             text-decoration: none;
-            margin-top: 15px; /* Jarak dari info kontak */
+            margin-top: 15px;
             cursor: pointer;
             transition: var(--transition-ease);
             box-shadow: var(--shadow-sm);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            width: fit-content; /* Sesuaikan lebar dengan konten */
+            width: fit-content;
         }
+
         .whatsapp-button-direct:hover {
             background-color: #1DA851;
             transform: translateY(-2px);
         }
+
         .whatsapp-button-direct i {
-            font-size: 1em; /* Ikon juga disesuaikan */
+            font-size: 1em;
         }
 
-        /* Background Service Section */
+        /* Service Info Section */
         .service-info-section {
             background: url('./images/bg.jpg') no-repeat center center / cover;
             color: white;
@@ -256,6 +300,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .service-info-section::before {
             content: '';
             position: absolute;
@@ -267,16 +312,19 @@
             border-radius: var(--border-radius-lg);
             z-index: 1;
         }
+
         .service-info-section > * {
             position: relative;
             z-index: 2;
         }
+
         .service-info-section h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
             color: white;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
+
         .service-info-section p {
             font-size: 1.2em;
             max-width: 700px;
@@ -285,8 +333,23 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* Responsive adjustments for index.html */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
+            .header-public {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 20px;
+            }
+            .header-public h1 {
+                font-size: 2em;
+            }
+            .header-public img {
+                max-height: 70px;
+            }
+            .header-content {
+                text-align: center;
+            }
             .search-form {
                 padding: 20px;
             }
@@ -294,7 +357,7 @@
                 height: 300px;
             }
             .whatsapp-button-direct {
-                padding: 5px 10px; /* Lebih kecil di mobile */
+                padding: 5px 10px;
                 font-size: 0.75em;
             }
             .service-info-section {
@@ -310,6 +373,7 @@
                 gap: 10px;
             }
         }
+
         @media (max-width: 480px) {
             .section-title {
                 font-size: 1.8em;

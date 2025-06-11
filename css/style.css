@@ -1,9 +1,12 @@
 /* Variables for consistent styling */
 :root {
-    --primary-color: #008080;      /* Dark Teal/Tosca */
+    --primary-color: #008080;
     --primary-hover: #006666;
-    --accent-color: #333333;
-    --accent-dark: #1A1A1A;
+    --danger-color: #F44336;
+    --danger-hover: #d32f2f;
+    --border-radius-sm: 5px;
+    --transition-ease: all 0.3s ease;
+
 
     --text-color: #333333;
     --text-color-light: #666666;
@@ -98,4 +101,21 @@
     font-size: 0.9em;
 }
 
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+}
 /* [Keep all your other existing CSS styles here] */

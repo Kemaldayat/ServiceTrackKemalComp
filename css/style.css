@@ -1,16 +1,16 @@
-/* Variables for consistent styling (based on Kemal Computer logo colors) */
+/* Variables for consistent styling */
 :root {
-    --primary-color: #008080;      /* Dark Teal/Tosca from logo (ikon dan teks "KEMAL") */
-    --primary-hover: #006666;      /* Slightly darker for hover */
-    --accent-color: #333333;       /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
+    --primary-color: #008080;      /* Dark Teal/Tosca */
+    --primary-hover: #006666;
+    --accent-color: #333333;
     --accent-dark: #1A1A1A;
 
-    --text-color: #333333;         /* Dark grey for readability */
-    --text-color-light: #666666;   /* Lighter grey for secondary text */
-    --bg-color: #F8F8F8;           /* Very light grey for background */
+    --text-color: #333333;
+    --text-color-light: #666666;
+    --bg-color: #F8F8F8;
     --container-bg: #ffffff;
-    --light-bg: #FDFDFD;           /* Lighter background for elements like search form */
-    --border-color: #E0E0E0;       /* Light grey border */
+    --light-bg: #FDFDFD;
+    --border-color: #E0E0E0;
     --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
     --border-radius-sm: 5px;
@@ -18,271 +18,33 @@
     --border-radius-lg: 12px;
     --transition-ease: all 0.3s ease;
 
-    /* Status Colors (can be adjusted if needed, but often good to keep standard) */
-    --status-waiting-bg: #FFC107;  /* Yellow */
+    /* Status Colors */
+    --status-waiting-bg: #FFC107;
     --status-waiting-text: #333;
-    --status-process-bg: #4CAF50;  /* Green */
+    --status-process-bg: #4CAF50;
     --status-process-text: white;
-    --status-finished-bg: var(--primary-color); /* Use primary color for "Selesai" */
+    --status-finished-bg: var(--primary-color);
     --status-finished-text: white;
-    --status-picked-up-bg: #9C27B0; /* Purple */
+    --status-picked-up-bg: #9C27B0;
     --status-picked-up-text: white;
 
     /* Button Colors */
-    --info-button: #2196F3; /* Blue for info/secondary */
+    --info-button: #2196F3;
     --info-hover: #1976D2;
-    --danger-color: #F44336;       /* Red for delete/warning */
+    --danger-color: #F44336;
     --danger-hover: #d32f2f;
-    --success-color: #4CAF50;      /* Green for add/submit */
+    --success-color: #4CAF50;
     --success-hover: #45a049;
-    --secondary-button: #9E9E9E;   /* Grey for cancel/back */
+    --secondary-button: #9E9E9E;
     --secondary-hover: #757575;
 }
 
-/* General Styling */
-body {
-    font-family: 'Poppins', sans-serif; /* Menggunakan Poppins */
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 30px;
-    background-color: var(--container-bg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-}
-
-/* Header */
-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-header h1 {
-    margin: 0;
-    color: var(--primary-color);
-    font-size: 2.5em;
-    font-weight: bold;
-}
-
-/* Controls (Search Bar) */
-.controls {
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: center;
-}
-
-#searchInput {
-    width: 100%;
-    max-width: 700px;
-    padding: 12px 20px;
-    border: 1px solid var(--border-color);
-    border-radius: 25px;
-    font-size: 1.05em;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-    background-color: var(--light-bg);
-}
-#searchInput::placeholder {
-    color: var(--text-color-light);
-}
-
-
-/* Table Styling */
-.table-responsive {
-    overflow-x: auto;
-    margin-bottom: 30px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--container-bg);
-    border-radius: var(--border-radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-}
-
-table thead th {
+/* Button Styles */
+.btn-primary {
     background-color: var(--primary-color);
     color: white;
-    padding: 15px 20px;
-    text-align: left;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.95em;
-    white-space: nowrap;
-}
-
-table tbody td {
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--border-color);
-    vertical-align: middle;
-    color: var(--text-color);
-}
-
-table tbody tr:nth-child(even) {
-    background-color: #fdfdfd;
-}
-
-table tbody tr:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
-}
-
-/* Status Badges */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    display: inline-block;
-    min-width: 80px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.status-waiting { background-color: var(--status-waiting-bg); color: var(--status-waiting-text); }
-.status-process { background-color: var(--status-process-bg); color: var(--status-process-text); }
-.status-finished { background-color: var(--status-finished-bg); color: var(--status-finished-text); }
-.status-picked-up { background-color: var(--status-picked-up-bg); color: var(--status-picked-up-text); }
-
-/* Action Buttons within table */
-.action-buttons button {
-    padding: 8px 12px;
     border: none;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: 0.8em;
-    transition: var(--transition-ease);
-    margin-right: 5px;
-    white-space: nowrap;
-}
-
-.edit-button {
-    background-color: var(--info-button);
-    color: white;
-}
-
-.edit-button:hover {
-    background-color: var(--info-hover);
-}
-
-.delete-button {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-.delete-button:hover {
-    background-color: var(--danger-hover);
-}
-
-.save-button {
-    background-color: var(--success-color);
-    color: white;
-}
-.save-button:hover {
-    background-color: var(--success-hover);
-}
-
-.cancel-button {
-    background-color: var(--secondary-button);
-    color: white;
-}
-.cancel-button:hover {
-    background-color: var(--secondary-hover);
-}
-
-/* Edit Mode Styling */
-tr.edit-mode td {
-    background-color: #f0f8ff; /* Lighter background for editing row */
     padding: 10px 15px;
-}
-
-tr.edit-mode input[type="text"],
-tr.edit-mode input[type="tel"],
-tr.edit-mode textarea,
-tr.edit-mode select {
-    width: calc(100% - 16px);
-    padding: 8px;
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius-sm);
-    box-sizing: border-box;
-    font-size: 0.95em;
-}
-
-tr.edit-mode textarea {
-    resize: vertical;
-    min-height: 40px;
-    max-height: 100px;
-}
-
-/* Add New Service Button */
-.add-new-button {
-    display: block;
-    width: fit-content;
-    margin: 30px auto 0;
-    padding: 15px 30px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius-md);
-    font-size: 1.15em;
-    cursor: pointer;
-    transition: var(--transition-ease);
-    box-shadow: var(--shadow-md);
-}
-
-.add-new-button:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-3px);
-}
-
-.add-new-button i {
-    margin-right: 10px;
-}
-
-/* No Data Row */
-.no-data-row td {
-    text-align: center;
-    font-style: italic;
-    color: var(--text-color-light);
-    padding: 25px;
-    font-size: 1.1em;
-}
-
-/* Admin.html form specific styling */
-.add-service-container {
-    max-width: 700px;
-}
-
-.add-service-container header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
-
-.add-service-container header h1 {
-    font-size: 2.5em;
-    margin-bottom: 15px;
-}
-
-.back-button {
-    background-color: var(--secondary-button);
-    color: white;
-    padding: 10px 18px;
-    border: none;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: 1em;
@@ -292,214 +54,48 @@ tr.edit-mode textarea {
     gap: 8px;
 }
 
-.back-button:hover {
-    background-color: var(--secondary-hover);
-}
-
-#addServiceForm div {
-    margin-bottom: 18px;
-}
-
-#addServiceForm label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--text-color);
-    font-size: 1.05em;
-}
-
-#addServiceForm input[type="text"],
-#addServiceForm input[type="tel"],
-#addServiceForm textarea,
-#addServiceForm select {
-    width: calc(100% - 24px);
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    font-size: 1em;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-    background-color: var(--light-bg);
-}
-
-#addServiceForm textarea {
-    resize: vertical;
-    min-height: 80px;
-    max-height: 200px;
-}
-
-#addServiceForm button[type="submit"] {
-    width: 100%;
-    padding: 15px 25px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius-sm);
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: var(--transition-ease);
-    margin-top: 25px;
-    box-shadow: var(--shadow-sm);
-}
-
-#addServiceForm button[type="submit"]:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-}
-
-
-/* General Modal Styles (used for login and other modals if any) */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(3px);
-}
-
-.modal-content {
-    background-color: var(--container-bg);
-    margin: auto;
-    padding: 30px;
-    border: 1px solid var(--border-color);
-    width: 90%;
-    max-width: 450px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
-    position: relative;
-    text-align: center;
-    animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.close-button {
-    color: var(--text-color-light);
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition-ease);
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: var(--danger-color);
-}
-
-#modalMessage {
-    margin-bottom: 25px;
-    font-size: 1.15em;
-    color: var(--text-color);
-}
-
-.modal-buttons button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: 1em;
-    margin: 0 8px;
-    transition: var(--transition-ease);
-}
-
-.modal-button.primary-button {
-    background-color: var(--primary-color);
-    color: white;
-}
-.modal-button.primary-button:hover {
+.btn-primary:hover {
     background-color: var(--primary-hover);
 }
 
-.modal-button.danger-button {
+.btn-danger {
     background-color: var(--danger-color);
     color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
-.modal-button.danger-button:hover {
+
+.btn-danger:hover {
     background-color: var(--danger-hover);
 }
 
-.modal-button.secondary-button {
-    background-color: var(--secondary-button);
-    color: white;
-}
-.modal-button.secondary-button:hover {
-    background-color: var(--secondary-hover);
+/* Header Buttons Specific Styles */
+.header-buttons {
+    display: flex;
+    gap: 10px;
 }
 
-/* Responsive adjustments (General) */
-@media (max-width: 768px) {
-    .container {
-        margin: 20px auto;
-        padding: 20px;
-    }
-    header {
-        align-items: center;
-    }
-    header h1 {
-        font-size: 2em;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-    .header-buttons {
-        margin-top: 15px;
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    .header-buttons button {
-        margin: 0;
-        flex-grow: 1;
-        font-size: 0.9em;
-        padding: 8px 12px;
-    }
-    table thead th, table tbody td {
-        padding: 10px 15px;
-        font-size: 0.85em;
-    }
-    .add-new-button {
-        padding: 12px 25px;
-        font-size: 1.05em;
-    }
-    .add-service-container header h1 {
-        font-size: 2em;
-    }
-    #addServiceForm input, #addServiceForm textarea, #addServiceForm select {
-        width: calc(100% - 20px);
-    }
-    .modal-content {
-        padding: 20px;
-    }
+.header-buttons button {
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.8em;
-    }
-    .header-public p.tagline {
-        font-size: 1em;
-    }
-    .section-title {
-        font-size: 1.8em;
-    }
-    footer .contact-info-footer div {
-        font-size: 0.95em;
-    }
-    .modal-whatsapp-content {
-        max-width: 90%;
-    }
+.header-buttons button i {
+    font-size: 0.9em;
 }
+
+/* [Keep all your other existing CSS styles here] */

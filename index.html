@@ -11,15 +11,15 @@
         :root {
             --primary-color: #008080;      /* Dark Teal/Tosca from logo (ikon dan teks "KEMAL") */
             --primary-hover: #006666;      /* Slightly darker for hover */
-            --accent-color: #333333;       /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
+            --accent-color: #333333;        /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
             --accent-dark: #1A1A1A;
 
-            --text-color: #333333;         /* Dark grey for readability */
-            --text-color-light: #666666;   /* Lighter grey for secondary text */
-            --bg-color: #F8F8F8;           /* Very light grey for background */
+            --text-color: #333333;          /* Dark grey for readability */
+            --text-color-light: #666666;    /* Lighter grey for secondary text */
+            --bg-color: #F8F8F8;            /* Very light grey for background */
             --container-bg: #ffffff;
-            --light-bg: #FDFDFD;           /* Lighter background for elements like search form */
-            --border-color: #E0E0E0;       /* Light grey border */
+            --light-bg: #FDFDFD;            /* Lighter background for elements like search form */
+            --border-color: #E0E0E0;        /* Light grey border */
             --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
             --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
             --border-radius-sm: 5px;
@@ -40,12 +40,14 @@
             /* Button Colors */
             --info-button: #2196F3; /* Blue for info/secondary */
             --info-hover: #1976D2;
-            --danger-color: #F44336;       /* Red for delete/warning */
+            --danger-color: #F44336;        /* Red for delete/warning */
             --danger-hover: #d32f2f;
             --success-color: #4CAF50;      /* Green for add/submit */
             --success-hover: #45a049;
-            --secondary-button: #9E9E9E;   /* Grey for cancel/back */
+            --secondary-button: #9E9E9E;    /* Grey for cancel/back */
             --secondary-hover: #757575;
+            /* Tambahkan --white-color jika belum ada */
+            --white-color: #FFFFFF;
         }
 
         /* General Styling */
@@ -69,7 +71,7 @@
 
         /* Header */
         .header-public {
-            background-color: var(--white-color);
+            background-color: var(--white-color); /* Pastikan --white-color ada atau ganti dengan #FFFFFF */
             padding: 20px 30px;
             margin-bottom: 40px;
             display: flex;
@@ -454,20 +456,26 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        document.getElementById('checkStatusForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const serviceCode = document.getElementById('serviceCode').value.trim();
-            const resultContainer = document.getElementById('resultContainer');
+        // Ambil referensi elemen DOM di awal
+        const serviceCodeInput = document.getElementById('serviceCode'); // Diperbarui dari 'serviceCode'
+        const resultContainer = document.getElementById('resultContainer');
+        const checkStatusForm = document.getElementById('checkStatusForm'); // Referensi form
+
+        // ===========================================
+        // FUNGSI PELACAKAN SERVICE YANG DI-REFACTOR
+        // ===========================================
+        async function trackService(codeToTrack = null) {
+            const code = codeToTrack ? codeToTrack : serviceCodeInput.value.trim().toUpperCase();
             resultContainer.innerHTML = ''; // Clear previous results
 
-            if (!serviceCode) {
+            if (!code) {
                 resultContainer.innerHTML = '<p class="result-not-found">Mohon masukkan kode service.</p>';
                 return;
             }
 
             try {
                 const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, `antrian/${serviceCode}`));
+                const snapshot = await get(child(dbRef, `antrian/${code}`));
 
                 if (snapshot.exists()) {
                     const service = snapshot.val();
@@ -481,7 +489,7 @@
                     }
                     
                     resultContainer.innerHTML = `
-                        <p><strong>Kode Service:</strong> ${serviceCode}</p>
+                        <p><strong>Kode Service:</strong> ${code}</p>
                         <p><strong>Nama Pelanggan:</strong> ${service.nama}</p>
                         <p><strong>Jenis Device:</strong> ${service.device || '-'}</p>
                         <p><strong>Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
@@ -495,6 +503,38 @@
             } catch (error) {
                 console.error("Error checking service status:", error);
                 resultContainer.innerHTML = '<p class="result-not-found">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>';
+            }
+        }
+
+        // ===========================================
+        // LISTENERS UNTUK MENGGUNAKAN FUNGSI BARU
+        // ===========================================
+        checkStatusForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            trackService(); // Panggil fungsi trackService tanpa argumen (akan pakai nilai dari input)
+        });
+
+        // Tambahkan listener untuk keypress (Enter) pada input field
+        serviceCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Mencegah form submit default jika ada
+                trackService();
+            }
+        });
+
+
+        // ===========================================
+        // BAGIAN BARU: Otomatis lacak dari URL
+        // ===========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const serviceCodeFromUrl = urlParams.get('code');
+
+            if (serviceCodeFromUrl) {
+                // Isi input field dengan kode service dari URL
+                serviceCodeInput.value = serviceCodeFromUrl.toUpperCase();
+                // Langsung panggil fungsi pelacakan dengan kode dari URL
+                trackService(serviceCodeFromUrl.toUpperCase());
             }
         });
     </script>

@@ -7,7 +7,6 @@
     --border-radius-sm: 5px;
     --transition-ease: all 0.3s ease;
 
-
     --text-color: #333333;
     --text-color-light: #666666;
     --bg-color: #F8F8F8;
@@ -16,10 +15,9 @@
     --border-color: #E0E0E0;
     --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
-    --border-radius-sm: 5px;
-    --border-radius-md: 8px;
+    --border-radius-md: 8px; /* Sudah ada, tidak perlu duplikat */
     --border-radius-lg: 12px;
-    --transition-ease: all 0.3s ease;
+    /* --transition-ease: all 0.3s ease; -- Sudah ada di atas */
 
     /* Status Colors */
     --status-waiting-bg: #FFC107;
@@ -31,18 +29,53 @@
     --status-picked-up-bg: #9C27B0;
     --status-picked-up-text: white;
 
-    /* Button Colors */
+    /* Button Colors (sudah ada di root, ini hanya penamaan ulang di dalam root) */
     --info-button: #2196F3;
     --info-hover: #1976D2;
-    --danger-color: #F44336;
-    --danger-hover: #d32f2f;
+    /* --danger-color: #F44336; -- Sudah ada di atas */
+    /* --danger-hover: #d32f2f; -- Sudah ada di atas */
     --success-color: #4CAF50;
     --success-hover: #45a049;
     --secondary-button: #9E9E9E;
     --secondary-hover: #757575;
 }
 
-/* Button Styles */
+/* Base Body Styling - Aturan sangat penting (untuk seluruh halaman) */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color); /* Menggunakan variabel CSS */
+    margin: 0;
+    padding: 0; /* Ubah padding body dari 20px menjadi 0 untuk kontrol lebih baik */
+    color: var(--text-color);
+    line-height: 1.6; /* Kerapihan teks */
+}
+
+/* Container styling - Aturan sangat penting (untuk bagian konten utama) */
+.container {
+    max-width: 800px; /* Sesuaikan lebar sesuai keinginan */
+    margin: 40px auto; /* Memberi jarak atas bawah dan tengah secara horizontal */
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+/* Header dalam container - Aturan sangat penting (untuk header di dalam .container) */
+.container header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px; /* Sedikit padding di bawah header */
+    border-bottom: 1px solid var(--border-color); /* Garis pemisah */
+}
+
+.container header h1 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+/* Button Styles (dari kode awal Anda) */
 .btn-primary {
     background-color: var(--primary-color);
     color: white;
@@ -79,7 +112,7 @@
     background-color: var(--danger-hover);
 }
 
-/* Header Buttons Specific Styles */
+/* Header Buttons Specific Styles (dari kode awal Anda) */
 .header-buttons {
     display: flex;
     gap: 10px;
@@ -101,21 +134,88 @@
     font-size: 0.9em;
 }
 
-.btn-primary {
+/* Back button style (Aturan sangat penting) */
+.back-button {
+    background-color: var(--secondary-button); /* Atau bisa var(--info-button) */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    transition: var(--transition-ease);
+    display: inline-flex; /* Penting untuk ikon dan teks */
+    align-items: center;
+    gap: 8px;
+}
+
+.back-button:hover {
+    background-color: var(--secondary-hover);
+}
+
+
+/* Form element styling - Aturan sangat penting (untuk semua input form) */
+form div {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color-light);
+}
+
+form input[type="text"],
+form input[type="tel"],
+form textarea,
+form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-sizing: border-box;
+    font-size: 1em;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="tel"]:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
+}
+
+form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23008080%22%20d%3D%22M287%2C146.2L146.2%2C287c-4.4%2C4.4-11.4%2C4.4-15.8%2C0L5.4%2C146.2c-4.4-4.4-4.4-11.4%2C0-15.8l15.8-15.8c4.4-4.4%2C11.4-4.4%2C15.8%2C0L146.2%2C226.6c4.4%2C4.4%2C11.4%2C4.4%2C15.8%2C0l110.8-110.8c4.4-4.4%2C11.4-4.4%2C15.8%2C0l15.8%2C15.8C291.4%2C134.8%2C291.4%2C141.8%2C287%2C146.2z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 1em auto;
+    padding-right: 30px;
+}
+
+/* Gaya untuk tombol submit di form - Aturan sangat penting (override btn-primary agar lebih besar dan block) */
+form button[type="submit"] {
     background-color: var(--primary-color);
     color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: var(--transition-ease);
+    width: auto;
+    display: block; /* Mengambil baris sendiri */
+    margin-top: 25px; /* Jarak dari input terakhir */
 }
 
-.btn-primary:hover {
+form button[type="submit"]:hover {
     background-color: var(--primary-hover);
 }
-
-.btn-danger {
-    background-color: var(--danger-color);
-    color: white;
-}
-
-.btn-danger:hover {
-    background-color: var(--danger-hover);
-}
-/* [Keep all your other existing CSS styles here] */

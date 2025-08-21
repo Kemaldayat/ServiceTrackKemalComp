@@ -6,7 +6,7 @@
     <title>Dashboard Admin - Kemal Computer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/style.css">
     <style>
         /* Inline styles for dashboard.html to ensure specific overrides or initial layout */
         body {
@@ -84,14 +84,16 @@
         .table-responsive {
             overflow-x: auto;
             margin-bottom: 20px;
+            position: relative; /* Penting untuk efek sticky dan bayangan */
         }
 
         #serviceTable {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            box-shadow: none; /* Hilangkan bayangan default tabel */
         }
-
+        
         #serviceTable th, #serviceTable td {
             border: 1px solid var(--border-color);
             padding: 12px;
@@ -112,6 +114,21 @@
         #serviceTable tr:hover:not(.edit-mode):not(.no-data-row) {
             background-color: #f5f5f5; /* Using a fixed lighter hover for tables if not defined in root */
         }
+        
+        /* CSS untuk kolom aksi yang menempel */
+        .action-column {
+            position: sticky;
+            right: 0;
+            z-index: 10;
+            background-color: var(--container-bg);
+        }
+        #serviceTable th.action-column {
+            background-color: var(--primary-color);
+        }
+        /* Tambahan untuk mode edit */
+        #serviceTable tr.edit-mode .action-column {
+            background-color: #f0f8ff; /* Warna latar belakang edit */
+        }
 
         .action-buttons button {
             padding: 8px 12px;
@@ -125,6 +142,16 @@
         .action-buttons button:last-child {
             margin-right: 0;
         }
+        
+        /* New button for whatsapp notification */
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+        }
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+        }
+
 
         /* Using specific button classes from style.css for consistency */
         .edit-button {
@@ -408,7 +435,7 @@
                         <th>Nomor HP</th>
                         <th>Status</th>
                         <th>Keterangan</th>
-                        <th>Aksi</th>
+                        <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -431,7 +458,7 @@
     <script type="module">
         // Firebase Configuration (Ganti dengan konfigurasi Anda yang sebenarnya)
         const firebaseConfig = {
-            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4", // Contoh: Ganti dengan API Key Anda
+            apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
             authDomain: "website-track-service.firebaseapp.com",
             databaseURL: "https://website-track-service-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "website-track-service",
@@ -452,7 +479,7 @@
         const auth = getAuth(app);
 
         // Email admin yang diizinkan untuk mengakses dashboard
-        const adminEmail = "dayatkemal16@gmail.com"; // <--- **PASTIKAN INI ADALAH EMAIL ADMIN YANG VALID DI FIREBASE ANDA**
+        const adminEmail = "dayatkemal16@gmail.com";
 
         let servicesData = {};
         let editingRowId = null;
@@ -460,12 +487,9 @@
         // Listener status autentikasi untuk memeriksa hak akses admin
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Pengguna login
                 if (user.email === adminEmail) {
-                    // Pengguna adalah admin, muat data
                     loadServices();
                 } else {
-                    // Pengguna bukan admin, logout dan redirect ke login
                     signOut(auth).then(() => {
                         window.location.href = 'login.html';
                     }).catch((error) => {
@@ -474,7 +498,6 @@
                     });
                 }
             } else {
-                // Tidak ada pengguna yang login, redirect ke login
                 window.location.href = 'login.html';
             }
         });
@@ -497,9 +520,9 @@
             const servicesRef = ref(db, 'antrian');
             onValue(servicesRef, (snapshot) => {
                 const tableBody = document.getElementById('serviceTable').getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ''; // Bersihkan tabel sebelum mengisi ulang
+                tableBody.innerHTML = '';
 
-                servicesData = {}; // Reset data
+                servicesData = {};
 
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
@@ -526,7 +549,8 @@
                             <td data-field="nomorHp">${service.nomorHp || '-'}</td>
                             <td data-field="status"><span class="status-badge ${statusBadgeClass}">${service.status}</span></td>
                             <td data-field="keterangan">${service.keterangan || '-'}</td>
-                            <td class="action-buttons">
+                            <td class="action-buttons action-column">
+                                <button class="whatsapp-button" onclick="sendWhatsappNotification('${serviceCode}')"><i class="fab fa-whatsapp"></i> Notif</button>
                                 <button class="edit-button" onclick="editRow('${serviceCode}')">Edit</button>
                                 <button class="delete-button" onclick="deleteService('${serviceCode}')">Hapus</button>
                             </td>
@@ -537,20 +561,56 @@
                     row.className = 'no-data-row';
                     row.innerHTML = '<td colspan="8" style="text-align:center;">Tidak ada data service.</td>';
                 }
-                filterTable(); // Terapkan filter setelah memuat data
+                filterTable();
             }, (error) => {
                 console.error("Error loading services:", error);
                 showModal("Gagal memuat data service. Silakan refresh halaman.", "info");
             });
         };
 
-        // Fungsi untuk refresh data secara manual
+        window.sendWhatsappNotification = (serviceCode) => {
+            const service = servicesData[serviceCode];
+            if (!service) {
+                showModal("Data tidak ditemukan.", "info");
+                return;
+            }
+
+            const namaPelanggan = service.nama;
+            const device = service.device;
+            const nomorInvoice = serviceCode;
+            const kerusakan = service.kerusakan;
+            const nomorHp = service.nomorHp;
+            const status = service.status;
+            
+            let pesanStatus = '';
+            if (status === 'Selesai' || status === 'Diambil') {
+                pesanStatus = `Sudah selesai pengerjaan. Silakan ambil di toko kami.`;
+            } else if (status === 'Proses') {
+                pesanStatus = `Sedang dalam pengerjaan.`;
+            } else {
+                pesanStatus = `Sedang ${status.toLowerCase()} dan menunggu antrian.`;
+            }
+
+            const message = `
+*Notifikasi |Kemal Computer| Service*
+*==============================*
+Kepada Yth. ${namaPelanggan},
+Service-an anda ${device} dengan nomor invoice ${nomorInvoice}, ${pesanStatus}
+*==============================*
+Untuk Proses Tracking, Kamu bisa memantau melalui link dibawah ini. Terimakasih 😊🙏
+https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}
+            `.trim();
+
+            const whatsappUrl = `https://wa.me/${nomorHp}?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank');
+        };
+
         window.refreshData = () => {
             loadServices();
             showModal("Data diperbarui.", "info");
         };
 
-        // Fungsi untuk memfilter tabel
         window.filterTable = () => {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase();
@@ -560,7 +620,6 @@
             let found = false;
             let hasActualData = false;
 
-            // Periksa apakah ada data asli (bukan baris "no-data-row" atau "edit-mode")
             for (let i = 0; i < rows.length; i++) {
                 if (!rows[i].classList.contains('no-data-row') && !rows[i].classList.contains('edit-mode')) {
                     hasActualData = true;
@@ -568,15 +627,12 @@
                 }
             }
 
-            // Iterasi melalui baris untuk memfilter
             for (let i = 0; i < rows.length; i++) {
-                // Sembunyikan baris khusus saat memfilter
                 if (rows[i].classList.contains('no-data-row') || rows[i].classList.contains('edit-mode')) {
                     rows[i].style.display = 'none';
                     continue;
                 }
 
-                // Ambil konten sel dan periksa kecocokan filter
                 const serviceCode = rows[i].cells[0].textContent.toLowerCase();
                 const nama = rows[i].cells[1].textContent.toLowerCase();
                 const device = rows[i].cells[2].textContent.toLowerCase();
@@ -588,20 +644,18 @@
                 if (serviceCode.includes(filter) || nama.includes(filter) || device.includes(filter) ||
                     kerusakan.includes(filter) || nomorHp.includes(filter) || status.includes(filter) ||
                     keterangan.includes(filter)) {
-                    rows[i].style.display = ""; // Tampilkan baris
+                    rows[i].style.display = "";
                     found = true;
                 } else {
-                    rows[i].style.display = "none"; // Sembunyikan baris
+                    rows[i].style.display = "none";
                 }
             }
 
-            // Hapus baris "no-data-row" yang mungkin ada sebelum menambahkan yang baru
             const existingNoDataRow = tableBody.querySelector('.no-data-row');
             if (existingNoDataRow) {
                 existingNoDataRow.remove();
             }
 
-            // Logika untuk menampilkan "Data tidak ditemukan" atau "Tidak ada data service"
             if (!found && hasActualData && filter !== '') {
                 const row = tableBody.insertRow();
                 row.className = 'no-data-row';
@@ -613,10 +667,9 @@
             }
         };
 
-        // Fungsi untuk mengaktifkan mode edit pada baris tabel
         window.editRow = (serviceCode) => {
             if (editingRowId && editingRowId !== serviceCode) {
-                cancelEdit(editingRowId); // Batalkan edit sebelumnya jika ada
+                cancelEdit(editingRowId);
             }
 
             editingRowId = serviceCode;
@@ -631,7 +684,6 @@
                 status: row.querySelector('[data-field="status"]').textContent.trim(),
                 keterangan: row.querySelector('[data-field="keterangan"]').textContent
             };
-            // Simpan data asli sebagai atribut data untuk pembatalan
             row.setAttribute('data-original-nama', originalData.nama);
             row.setAttribute('data-original-device', originalData.device);
             row.setAttribute('data-original-kerusakan', originalData.kerusakan);
@@ -639,14 +691,12 @@
             row.setAttribute('data-original-status', originalData.status);
             row.setAttribute('data-original-keterangan', originalData.keterangan);
 
-            // Ganti teks dengan input/textarea
             row.querySelector('[data-field="nama"]').innerHTML = `<input type="text" value="${originalData.nama}">`;
             row.querySelector('[data-field="device"]').innerHTML = `<input type="text" value="${originalData.device}">`;
             row.querySelector('[data-field="kerusakan"]').innerHTML = `<textarea>${originalData.kerusakan}</textarea>`;
             row.querySelector('[data-field="nomorHp"]').innerHTML = `<input type="tel" value="${originalData.nomorHp}">`;
             row.querySelector('[data-field="keterangan"]').innerHTML = `<textarea>${originalData.keterangan}</textarea>`;
 
-            // Buat dropdown untuk status
             const statusSelect = document.createElement('select');
             ['Menunggu', 'Proses', 'Selesai', 'Diambil'].forEach(statusOpt => {
                 const option = document.createElement('option');
@@ -660,14 +710,12 @@
             row.querySelector('[data-field="status"]').innerHTML = '';
             row.querySelector('[data-field="status"]').appendChild(statusSelect);
 
-            // Ganti tombol aksi
             row.querySelector('.action-buttons').innerHTML = `
                 <button class="save-button" onclick="saveEdit('${serviceCode}')">Simpan</button>
                 <button class="cancel-button" onclick="cancelEdit('${serviceCode}')">Batal</button>
             `;
         };
 
-        // Fungsi untuk menyimpan perubahan setelah diedit
         window.saveEdit = async (serviceCode) => {
             const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
             const updatedNama = row.querySelector('[data-field="nama"] input').value.trim();
@@ -682,14 +730,12 @@
                 return;
             }
 
-            // Validasi sederhana untuk format nomor telepon (dimulai dengan 62, hanya angka)
             if (!/^\d+$/.test(updatedNomorHp) || !updatedNomorHp.startsWith('62')) {
                 showModal('Nomor HP tidak valid. Gunakan format dimulai 62 (misal: 62812...) dan hanya angka.', 'info');
                 return;
             }
 
             try {
-                // Pertahankan timestamp asli jika ada, jika tidak, gunakan timestamp saat ini
                 const originalTimestamp = servicesData[serviceCode]?.timestamp || new Date().toISOString();
 
                 await set(ref(db, `antrian/${serviceCode}`), {
@@ -703,26 +749,23 @@
                 });
                 showModal("Data berhasil diperbarui!", "info");
                 editingRowId = null;
-                loadServices(); // Muat ulang data untuk memastikan tampilan diperbarui dengan benar
+                loadServices();
             } catch (error) {
                 console.error("Error updating service:", error);
                 showModal("Gagal memperbarui data. Silakan coba lagi.", "info");
             }
         };
 
-        // Fungsi untuk membatalkan mode edit
         window.cancelEdit = (serviceCode) => {
             const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
             row.classList.remove('edit-mode');
 
-            // Kembalikan ke tampilan teks asli
             row.querySelector('[data-field="nama"]').innerHTML = row.getAttribute('data-original-nama');
             row.querySelector('[data-field="device"]').innerHTML = row.getAttribute('data-original-device');
             row.querySelector('[data-field="kerusakan"]').innerHTML = row.getAttribute('data-original-kerusakan');
             row.querySelector('[data-field="nomorHp"]').innerHTML = row.getAttribute('data-original-nomorHp');
             row.querySelector('[data-field="keterangan"]').innerHTML = row.getAttribute('data-original-keterangan');
 
-            // Kembalikan status badge
             const originalStatus = row.getAttribute('data-original-status');
             let statusBadgeClass = '';
             switch (originalStatus) {
@@ -734,15 +777,14 @@
             }
             row.querySelector('[data-field="status"]').innerHTML = `<span class="status-badge ${statusBadgeClass}">${originalStatus}</span>`;
 
-            // Kembalikan tombol aksi
             row.querySelector('.action-buttons').innerHTML = `
+                <button class="whatsapp-button" onclick="sendWhatsappNotification('${serviceCode}')"><i class="fab fa-whatsapp"></i> Notif</button>
                 <button class="edit-button" onclick="editRow('${serviceCode}')">Edit</button>
                 <button class="delete-button" onclick="deleteService('${serviceCode}')">Hapus</button>
             `;
             editingRowId = null;
         };
 
-        // Fungsi untuk mengkonfirmasi penghapusan layanan
         window.deleteService = (serviceCode) => {
             showModal(
                 `Apakah Anda yakin ingin menghapus layanan dengan kode ${serviceCode}?`,
@@ -751,9 +793,8 @@
             );
         };
 
-        // Fungsi untuk melakukan penghapusan layanan setelah konfirmasi
         const confirmDelete = async (serviceCode) => {
-            closeModal(); // Tutup modal segera setelah pengguna mengkonfirmasi
+            closeModal();
             try {
                 await remove(ref(db, `antrian/${serviceCode}`));
                 showModal("Layanan berhasil dihapus!", "info");
@@ -763,7 +804,6 @@
             }
         };
 
-        // Variabel dan fungsi untuk custom modal
         const customModal = document.getElementById('customModal');
         const modalMessage = document.getElementById('modalMessage');
         const modalButtons = document.getElementById('modalButtons');
@@ -778,7 +818,7 @@
                 okButton.className = 'modal-button primary-button';
                 okButton.onclick = () => {
                     closeModal();
-                    if (callback) callback(); // Jalankan callback setelah menutup modal
+                    if (callback) callback();
                 };
                 modalButtons.appendChild(okButton);
             } else if (type === "confirm") {
@@ -786,8 +826,8 @@
                 confirmButton.textContent = 'Ya';
                 confirmButton.className = 'modal-button danger-button';
                 confirmButton.onclick = () => {
-                    if (callback) callback(); // Jalankan callback terlebih dahulu
-                    closeModal(); // Kemudian tutup modal
+                    if (callback) callback();
+                    closeModal();
                 };
                 modalButtons.appendChild(confirmButton);
 
@@ -797,14 +837,13 @@
                 cancelButton.onclick = closeModal;
                 modalButtons.appendChild(cancelButton);
             }
-            customModal.style.display = 'flex'; // Tampilkan modal
+            customModal.style.display = 'flex';
         };
 
         window.closeModal = () => {
-            customModal.style.display = 'none'; // Sembunyikan modal
+            customModal.style.display = 'none';
         };
 
-        // Tutup modal ketika mengklik di luar area modal
         window.onclick = (event) => {
             if (event.target == customModal) {
                 closeModal();

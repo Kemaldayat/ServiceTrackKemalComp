@@ -93,7 +93,7 @@
             margin-top: 20px;
             box-shadow: none; /* Hilangkan bayangan default tabel */
         }
-        
+
         #serviceTable th, #serviceTable td {
             border: 1px solid var(--border-color);
             padding: 12px;
@@ -114,8 +114,18 @@
         #serviceTable tr:hover:not(.edit-mode):not(.no-data-row) {
             background-color: #f5f5f5; /* Using a fixed lighter hover for tables if not defined in root */
         }
-        
-        /* CSS untuk kolom aksi yang menempel */
+
+        /* CSS untuk kolom status dan aksi yang menempel */
+        .status-column {
+            position: sticky;
+            right: 180px; /* Sesuaikan dengan lebar kolom aksi */
+            z-index: 5; /* Z-index lebih rendah dari kolom aksi */
+            background-color: var(--container-bg);
+        }
+        #serviceTable th.status-column {
+            background-color: var(--primary-color);
+            color: white;
+        }
         .action-column {
             position: sticky;
             right: 0;
@@ -124,8 +134,10 @@
         }
         #serviceTable th.action-column {
             background-color: var(--primary-color);
+            color: white;
         }
         /* Tambahan untuk mode edit */
+        #serviceTable tr.edit-mode .status-column,
         #serviceTable tr.edit-mode .action-column {
             background-color: #f0f8ff; /* Warna latar belakang edit */
         }
@@ -142,7 +154,7 @@
         .action-buttons button:last-child {
             margin-right: 0;
         }
-        
+
         /* New button for whatsapp notification */
         .whatsapp-button {
             background-color: #25D366;
@@ -433,7 +445,7 @@
                         <th>Device</th>
                         <th>Kerusakan</th>
                         <th>Nomor HP</th>
-                        <th>Status</th>
+                        <th class="status-column">Status</th>
                         <th>Keterangan</th>
                         <th class="action-column">Aksi</th>
                     </tr>
@@ -547,7 +559,7 @@
                             <td data-field="device">${service.device || '-'}</td>
                             <td data-field="kerusakan">${service.kerusakan}</td>
                             <td data-field="nomorHp">${service.nomorHp || '-'}</td>
-                            <td data-field="status"><span class="status-badge ${statusBadgeClass}">${service.status}</span></td>
+                            <td class="status-column" data-field="status"><span class="status-badge ${statusBadgeClass}">${service.status}</span></td>
                             <td data-field="keterangan">${service.keterangan || '-'}</td>
                             <td class="action-buttons action-column">
                                 <button class="whatsapp-button" onclick="sendWhatsappNotification('${serviceCode}')"><i class="fab fa-whatsapp"></i> Notif</button>
@@ -581,7 +593,7 @@
             const kerusakan = service.kerusakan;
             const nomorHp = service.nomorHp;
             const status = service.status;
-            
+
             let pesanStatus = '';
             if (status === 'Selesai' || status === 'Diambil') {
                 pesanStatus = `Sudah selesai pengerjaan. Silakan ambil di toko kami.`;

@@ -36,7 +36,7 @@
         }
         .slider-wrapper {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
         .slider-wrapper img {
             width: 100%;
@@ -47,6 +47,53 @@
         /* Hide scrollbar for the slider container */
         .slider-container::-webkit-scrollbar {
             display: none;
+        }
+
+        /* CSS BARU UNTUK ANIMASI */
+        .page-transition {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+        }
+
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .page-loader.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+        display: none; /* Sembunyikan secara default */
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid #fff;
+        border-radius: 50%;
+        width: 1.25rem; /* Ukuran spinner */
+        height: 1.25rem;
+        animation: spin 1s linear infinite;
+        margin-left: 0.5rem; /* Jarak dari teks */
+        }
+
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -68,6 +115,10 @@
             </button>
         </div>
     </header>
+
+    <div id="page-loader" class="page-loader">
+        <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-teal-500 border-r-transparent"></div>
+    </div>
 
     <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg py-4 px-6 z-40 fixed w-full top-16">
         <nav class="flex flex-col space-y-4">
@@ -191,8 +242,9 @@
                         <label for="serviceCode" class="block text-sm font-medium mb-1">Kode Service</label>
                         <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required class="w-full px-4 py-3 border rounded-lg">
                     </div>
-                    <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-teal-700 transition">
-                        <i class="fas fa-search mr-2"></i> Cek Status
+                    <button type="submit" id="searchButton" class="w-full bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-teal-700 transition flex items-center justify-center">
+                        <span id="searchButtonText">Cek Status</span>
+                        <div id="searchSpinner" class="loading-spinner"></div>
                     </button>
                 </form>
                 <div id="resultContainer" class="mt-8 bg-gray-50 p-6 rounded-lg hidden">
@@ -259,6 +311,9 @@
         const pages = document.querySelectorAll('.page-content');
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        
+        // BARU: Elemen untuk loading
+        const pageLoader = document.getElementById('page-loader');
 
         const reservationForm = document.getElementById('reservationForm');
         const checkStatusForm = document.getElementById('checkStatusForm');
@@ -275,13 +330,34 @@
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
 
+        // FUNGSI showPage() YANG SUDAH DIUBAH
         window.showPage = (pageId) => {
-            pages.forEach(page => {
-                page.classList.add('hidden');
-            });
-            document.getElementById(pageId).classList.remove('hidden');
+            const activePage = document.querySelector('.page-content:not(.hidden)');
+            if (activePage) {
+                activePage.classList.remove('page-transition', 'active');
+                activePage.classList.add('page-transition');
+            }
+
+            pageLoader.classList.add('show');
+
+            setTimeout(() => {
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                });
+
+                const newPage = document.getElementById(pageId);
+                newPage.classList.remove('hidden');
+                newPage.classList.add('page-transition');
+
+                setTimeout(() => {
+                    newPage.classList.add('active');
+                    pageLoader.classList.remove('show');
+                    document.documentElement.scrollTop = 0;
+                }, 100);
+                
+            }, 500);
+            
             mobileMenu.classList.add('hidden');
-            document.documentElement.scrollTop = 0;
         };
 
         function startSlider() {
@@ -359,51 +435,100 @@
             });
         }
         
-        async function trackService(codeToTrack = null) {
-            const code = (codeToTrack || serviceCodeInput.value).trim().toUpperCase();
-            
-            resultContainer.classList.add('hidden');
-            trackingContent.innerHTML = `<p class="text-center text-gray-400">Mencari...</p>`;
-            
-            if (!code) {
-                trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Mohon masukkan kode service.</p>`;
-                resultContainer.classList.remove('hidden');
-                return;
-            }
+    // Ganti seluruh fungsi trackService() dengan kode ini
+    async function trackService(codeToTrack = null) {
+    // Dapatkan elemen-elemen baru
+    const searchButton = document.getElementById('searchButton');
+    const searchButtonText = document.getElementById('searchButtonText');
+    const searchSpinner = document.getElementById('searchSpinner');
 
-            try {
-                const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, `antrian/${code}`));
+    const code = (codeToTrack || serviceCodeInput.value).trim().toUpperCase();
 
-                if (snapshot.exists()) {
-                    const service = snapshot.val();
-                    let statusBadgeClass = '';
-                    switch (service.status) {
-                        case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
-                        case 'Proses': statusBadgeClass = 'status-process'; break;
-                        case 'Selesai': statusBadgeClass = 'status-finished'; break;
-                        case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
-                        default: statusBadgeClass = 'bg-gray-400';
-                    }
-                    
-                    trackingContent.innerHTML = `
-                        <p><strong class="font-semibold text-teal-700">Nama Pelanggan:</strong> ${service.nama}</p>
-                        <p><strong class="font-semibold text-teal-700">Jenis Device:</strong> ${service.device || '-'}</p>
-                        <p><strong class="font-semibold text-teal-700">Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
-                        <p class="mt-4"><strong class="font-semibold text-teal-700">Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
-                        ${service.keterangan ? `<p class="mt-4"><strong class="font-semibold text-teal-700">Keterangan:</strong> ${service.keterangan}</p>` : ''}
-                    `;
-                } else {
-                    trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Kode service tidak ditemukan. Mohon periksa kembali.</p>`;
-                }
-            } catch (error) {
-                console.error("Error checking service status:", error);
-                trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>`;
-            } finally {
-                resultContainer.classList.remove('hidden');
+    // 1. Tampilkan spinner dan nonaktifkan tombol
+    searchButtonText.textContent = 'Mencari...';
+    searchSpinner.style.display = 'inline-block';
+    searchButton.disabled = true;
+
+    // Sembunyikan hasil lama dengan fade-out
+    if (!resultContainer.classList.contains('hidden')) {
+        resultContainer.style.opacity = '0';
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    resultContainer.classList.add('hidden');
+
+    if (!code) {
+        trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Mohon masukkan kode service.</p>`;
+        resultContainer.style.opacity = '0';
+        resultContainer.classList.remove('hidden');
+        await new Promise(resolve => setTimeout(resolve, 50));
+        resultContainer.style.opacity = '1';
+        
+        searchButtonText.textContent = 'Cek Status';
+        searchSpinner.style.display = 'none';
+        searchButton.disabled = false;
+        return;
+    }
+
+    try {
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `antrian/${code}`));
+
+        if (snapshot.exists()) {
+            const service = snapshot.val();
+            let statusBadgeClass = '';
+            switch (service.status) {
+                case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
+                case 'Proses': statusBadgeClass = 'status-process'; break;
+                case 'Selesai': statusBadgeClass = 'status-finished'; break;
+                case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
+                default: statusBadgeClass = 'bg-gray-400';
             }
+            
+            trackingContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <strong class="font-semibold text-teal-700 w-1/3">Nama Pelanggan:</strong>
+                        <span class="w-2/3">${service.nama}</span>
+                    </div>
+                    <div class="flex items-start">
+                        <strong class="font-semibold text-teal-700 w-1/3">Jenis Device:</strong>
+                        <span class="w-2/3">${service.device || '-'}</span>
+                    </div>
+                    <div class="flex items-start">
+                        <strong class="font-semibold text-teal-700 w-1/3">Kerusakan:</strong>
+                        <span class="w-2/3">${service.kerusakan}</span>
+                    </div>
+                    ${service.keterangan ? `
+                    <div class="flex items-start">
+                        <strong class="font-semibold text-teal-700 w-1/3">Keterangan:</strong>
+                        <span class="w-2/3">${service.keterangan}</span>
+                    </div>
+                    ` : ''}
+                    <div class="flex items-start">
+                        <strong class="font-semibold text-teal-700 w-1/3">Status:</strong>
+                        <span class="status-badge ${statusBadgeClass}">${service.status}</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Kode service tidak ditemukan. Mohon periksa kembali.</p>`;
         }
+    } catch (error) {
+        console.error("Error checking service status:", error);
+        trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>`;
+    } finally {
+        // 2. Tampilkan hasil dengan fade-in
+        resultContainer.style.opacity = '0';
+        resultContainer.classList.remove('hidden');
+        await new Promise(resolve => setTimeout(resolve, 50));
+        resultContainer.style.opacity = '1';
 
+        // 3. Sembunyikan spinner dan aktifkan kembali tombol
+        searchButtonText.textContent = 'Cek Status';
+        searchSpinner.style.display = 'none';
+        searchButton.disabled = false;
+    }
+}
         if (checkStatusForm) {
             checkStatusForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -415,7 +540,14 @@
             mobileMenu.classList.toggle('hidden');
         });
 
+        // BARU: Perubahan di DOMContentLoaded
         document.addEventListener('DOMContentLoaded', () => {
+            // Tambahkan class transisi ke halaman awal
+            const initialPage = document.getElementById('home-page');
+            if (initialPage) {
+                initialPage.classList.add('page-transition', 'active');
+            }
+            
             const urlParams = new URLSearchParams(window.location.search);
             const serviceCodeFromUrl = urlParams.get('code');
 

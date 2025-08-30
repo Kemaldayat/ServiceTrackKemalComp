@@ -9,6 +9,40 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* Inline styles for dashboard.html to ensure specific overrides or initial layout */
+        :root {
+            --primary-color: #008080;
+            --primary-hover: #006666;
+            --secondary-color: #f0f0f0;
+            --secondary-hover: #e0e0e0;
+            --success-color: #22c55e;
+            --success-hover: #16a34a;
+            --info-color: #3b82f6;
+            --info-hover: #2563eb;
+            --warning-color: #f59e0b;
+            --warning-hover: #d97706;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --text-color-light: #6b7280;
+            --border-color: #e5e7eb;
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition-ease: all 0.3s ease;
+            --status-waiting-bg: #f59e0b;
+            --status-waiting-text: white;
+            --status-process-bg: #22c55e;
+            --status-process-text: white;
+            --status-finished-bg: #008080;
+            --status-finished-text: white;
+            --status-picked-up-bg: #6a08eb;
+            --status-picked-up-text: white;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
@@ -46,10 +80,9 @@
             margin: 0;
         }
 
-        /* Header buttons will now primarily use classes from style.css */
         .header-buttons {
             display: flex;
-            gap: 10px; /* Space between buttons */
+            gap: 10px;
         }
         .header-buttons button {
             padding: 10px 15px;
@@ -57,8 +90,8 @@
             cursor: pointer;
             font-size: 1em;
             transition: var(--transition-ease);
-            color: white; /* Default text color for header buttons */
-            border: none; /* Ensure no default border */
+            color: white;
+            border: none;
         }
 
         .controls {
@@ -77,28 +110,27 @@
         #searchInput:focus {
             outline: none;
             border-color: var(--primary-color);
-            /* Menggunakan rgba untuk kompatibilitas yang lebih luas */
-            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.2); /* Menggunakan warna primary-color dengan opacity */
+            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.2);
         }
 
         .table-responsive {
             overflow-x: auto;
             margin-bottom: 20px;
-            position: relative; /* Penting untuk efek sticky dan bayangan */
+            position: relative;
         }
 
         #serviceTable {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            box-shadow: none; /* Hilangkan bayangan default tabel */
+            box-shadow: none;
         }
 
         #serviceTable th, #serviceTable td {
             border: 1px solid var(--border-color);
             padding: 12px;
             text-align: left;
-            white-space: nowrap; /* Prevent wrapping for better table view */
+            white-space: nowrap;
         }
 
         #serviceTable th {
@@ -108,18 +140,17 @@
         }
 
         #serviceTable tr:nth-child(even) {
-            background-color: var(--light-bg);
+            background-color: var(--secondary-color);
         }
 
         #serviceTable tr:hover:not(.edit-mode):not(.no-data-row) {
-            background-color: #f5f5f5; /* Using a fixed lighter hover for tables if not defined in root */
+            background-color: #f5f5f5;
         }
 
-        /* CSS untuk kolom status dan aksi yang menempel */
         .status-column {
             position: sticky;
-            right: 180px; /* Sesuaikan dengan lebar kolom aksi */
-            z-index: 5; /* Z-index lebih rendah dari kolom aksi */
+            right: 180px;
+            z-index: 5;
             background-color: var(--container-bg);
         }
         #serviceTable th.status-column {
@@ -136,11 +167,6 @@
             background-color: var(--primary-color);
             color: white;
         }
-        /* Tambahan untuk mode edit */
-        #serviceTable tr.edit-mode .status-column,
-        #serviceTable tr.edit-mode .action-column {
-            background-color: #f0f8ff; /* Warna latar belakang edit */
-        }
 
         .action-buttons button {
             padding: 8px 12px;
@@ -155,7 +181,6 @@
             margin-right: 0;
         }
 
-        /* New button for whatsapp notification */
         .whatsapp-button {
             background-color: #25D366;
             color: white;
@@ -164,10 +189,8 @@
             background-color: #128C7E;
         }
 
-
-        /* Using specific button classes from style.css for consistency */
         .edit-button {
-            background-color: var(--info-button);
+            background-color: var(--info-color);
             color: white;
         }
         .edit-button:hover {
@@ -191,28 +214,11 @@
         }
 
         .cancel-button {
-            background-color: var(--secondary-button);
-            color: white;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
         }
         .cancel-button:hover {
             background-color: var(--secondary-hover);
-        }
-
-        /* Edit mode styles */
-        #serviceTable tr.edit-mode td {
-            background-color: #f0f8ff; /* Lighter background for editing row */
-        }
-        #serviceTable tr.edit-mode input[type="text"],
-        #serviceTable tr.edit-mode input[type="tel"],
-        #serviceTable tr.edit-mode textarea,
-        #serviceTable tr.edit-mode select {
-            width: calc(100% - 10px); /* Adjust for padding */
-            padding: 5px;
-            border: 1px solid var(--primary-color);
-            border-radius: var(--border-radius-sm);
-            box-sizing: border-box;
-            font-size: 0.9em;
-            resize: vertical; /* Allow textarea to be resized vertically */
         }
 
         .status-badge {
@@ -224,14 +230,13 @@
             text-transform: capitalize;
             font-size: 0.85em;
         }
-        /* Menggunakan variabel status baru dari style.css */
         .status-waiting { background-color: var(--status-waiting-bg); color: var(--status-waiting-text); }
         .status-process { background-color: var(--status-process-bg); color: var(--status-process-text); }
         .status-finished { background-color: var(--status-finished-bg); color: var(--status-finished-text); }
         .status-picked-up { background-color: var(--status-picked-up-bg); color: var(--status-picked-up-text); }
 
         .add-new-button {
-            background-color: var(--primary-color); /* Menggunakan primary color */
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -242,16 +247,16 @@
             width: fit-content;
             margin: 30px auto 0 auto;
             transition: var(--transition-ease);
-            box-shadow: var(--shadow-md); /* Add shadow for consistency */
+            box-shadow: var(--shadow-md);
         }
         .add-new-button:hover {
-            background-color: var(--primary-hover); /* Menggunakan primary hover */
+            background-color: var(--primary-hover);
             transform: translateY(-2px);
         }
 
         /* Modal styles */
         .modal {
-            display: none; /* Hidden by default, JS will change to flex */
+            display: none;
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -259,10 +264,11 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.5); /* Semi-transparent black overlay */
+            background-color: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(3px); /* Optional: blur background */
+            backdrop-filter: blur(3px);
+            animation: fadeIn 0.3s ease-out;
         }
 
         .modal-content {
@@ -297,22 +303,55 @@
             cursor: pointer;
         }
 
-        #modalMessage {
+        /* Edit Modal Form Styles */
+        #editModal .modal-content {
+            max-width: 600px;
+            text-align: left;
+        }
+        #editModal h2 {
+            text-align: center;
             margin-bottom: 20px;
-            font-size: 1.1em;
-            color: var(--text-color);
+            color: var(--primary-color);
+        }
+        #editForm .form-group {
+            margin-bottom: 15px;
+        }
+        #editForm .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        #editForm .form-group input,
+        #editForm .form-group textarea,
+        #editForm .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        #editForm .form-group input:focus,
+        #editForm .form-group textarea:focus,
+        #editForm .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
         .modal-buttons button {
             padding: 10px 20px;
-            margin: 5px;
             border: none;
             border-radius: var(--border-radius-sm);
             cursor: pointer;
             font-size: 1em;
             transition: var(--transition-ease);
         }
-
         .modal-button.primary-button {
             background-color: var(--primary-color);
             color: white;
@@ -330,27 +369,32 @@
         }
 
         .modal-button.secondary-button {
-            background-color: var(--secondary-button);
-            color: white;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
         }
         .modal-button.secondary-button:hover {
             background-color: var(--secondary-hover);
         }
+        
+        .modal-button.success-button {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .modal-button.success-button:hover {
+            background-color: var(--success-hover);
+        }
 
-        /* No data row style */
         .no-data-row td {
             font-style: italic;
             color: var(--text-color-light);
             padding: 20px;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive adjustments for dashboard */
         @media (max-width: 992px) {
             header {
                 flex-direction: column;
@@ -391,7 +435,7 @@
                 font-size: 2em;
             }
             #searchInput {
-                width: calc(100% - 20px); /* Adjust for smaller padding */
+                width: calc(100% - 20px);
                 padding: 10px;
             }
             .table-responsive {
@@ -399,7 +443,7 @@
                 overflow-x: auto;
             }
             #serviceTable {
-                min-width: 700px; /* Ensure table is scrollable if needed */
+                min-width: 700px;
             }
             .status-badge {
                 padding: 4px 8px;
@@ -451,7 +495,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -463,12 +507,57 @@
             <span class="close-button" onclick="closeModal()">&times;</span>
             <p id="modalMessage"></p>
             <div class="modal-buttons" id="modalButtons">
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Layanan</h2>
+            <form id="editForm">
+                <div class="form-group">
+                    <label for="editKodeService">Kode Service</label>
+                    <input type="text" id="editKodeService" readonly>
                 </div>
+                <div class="form-group">
+                    <label for="editNama">Nama Pelanggan</label>
+                    <input type="text" id="editNama" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDevice">Device</label>
+                    <input type="text" id="editDevice" required>
+                </div>
+                <div class="form-group">
+                    <label for="editKerusakan">Kerusakan</label>
+                    <textarea id="editKerusakan" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editNomorHp">Nomor HP</label>
+                    <input type="tel" id="editNomorHp" required>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" required>
+                        <option value="Menunggu">Menunggu</option>
+                        <option value="Proses">Proses</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Diambil">Diambil</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editKeterangan">Keterangan</label>
+                    <textarea id="editKeterangan" rows="3"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="modal-button success-button" onclick="saveEdit()">Simpan Perubahan</button>
+                    <button type="button" class="modal-button secondary-button" onclick="closeEditModal()">Batal</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script type="module">
-        // Firebase Configuration (Ganti dengan konfigurasi Anda yang sebenarnya)
         const firebaseConfig = {
             apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
             authDomain: "website-track-service.firebaseapp.com",
@@ -480,23 +569,18 @@
             measurementId: "G-64T8XNWK5F"
         };
 
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // Email admin yang diizinkan untuk mengakses dashboard
         const adminEmail = "dayatkemal16@gmail.com";
 
         let servicesData = {};
-        let editingRowId = null;
 
-        // Listener status autentikasi untuk memeriksa hak akses admin
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 if (user.email === adminEmail) {
@@ -514,7 +598,6 @@
             }
         });
 
-        // Fungsi Logout Admin
         window.logoutAdmin = async () => {
             try {
                 await signOut(auth);
@@ -527,13 +610,11 @@
             }
         };
 
-        // Fungsi untuk memuat data service dari Firebase
         window.loadServices = () => {
             const servicesRef = ref(db, 'antrian');
             onValue(servicesRef, (snapshot) => {
                 const tableBody = document.getElementById('serviceTable').getElementsByTagName('tbody')[0];
                 tableBody.innerHTML = '';
-
                 servicesData = {};
 
                 if (snapshot.exists()) {
@@ -563,7 +644,7 @@
                             <td data-field="keterangan">${service.keterangan || '-'}</td>
                             <td class="action-buttons action-column">
                                 <button class="whatsapp-button" onclick="sendWhatsappNotification('${serviceCode}')"><i class="fab fa-whatsapp"></i> Notif</button>
-                                <button class="edit-button" onclick="editRow('${serviceCode}')">Edit</button>
+                                <button class="edit-button" onclick="openEditModal('${serviceCode}')">Edit</button>
                                 <button class="delete-button" onclick="deleteService('${serviceCode}')">Hapus</button>
                             </td>
                         `;
@@ -610,11 +691,10 @@ Kepada Yth. ${namaPelanggan},
 Service-an anda ${device} dengan nomor invoice ${nomorInvoice}, ${pesanStatus}
 *==============================*
 Untuk Proses Tracking, Kamu bisa memantau melalui link dibawah ini. Terimakasih 😊🙏
-_https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}_
+https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}
             `.trim();
 
             const whatsappUrl = `https://wa.me/${nomorHp}?text=${encodeURIComponent(message)}`;
-
             window.open(whatsappUrl, '_blank');
         };
 
@@ -633,14 +713,14 @@ _https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}_
             let hasActualData = false;
 
             for (let i = 0; i < rows.length; i++) {
-                if (!rows[i].classList.contains('no-data-row') && !rows[i].classList.contains('edit-mode')) {
+                if (!rows[i].classList.contains('no-data-row')) {
                     hasActualData = true;
                     break;
                 }
             }
 
             for (let i = 0; i < rows.length; i++) {
-                if (rows[i].classList.contains('no-data-row') || rows[i].classList.contains('edit-mode')) {
+                if (rows[i].classList.contains('no-data-row')) {
                     rows[i].style.display = 'none';
                     continue;
                 }
@@ -679,66 +759,42 @@ _https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}_
             }
         };
 
-        window.editRow = (serviceCode) => {
-            if (editingRowId && editingRowId !== serviceCode) {
-                cancelEdit(editingRowId);
+        // FUNGSI BARU UNTUK MEMBUKA MODAL EDIT
+        window.openEditModal = (serviceCode) => {
+            const service = servicesData[serviceCode];
+            if (!service) {
+                showModal("Data tidak ditemukan.", "info");
+                return;
             }
 
-            editingRowId = serviceCode;
-            const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
-            row.classList.add('edit-mode');
-
-            const originalData = {
-                nama: row.querySelector('[data-field="nama"]').textContent,
-                device: row.querySelector('[data-field="device"]').textContent,
-                kerusakan: row.querySelector('[data-field="kerusakan"]').textContent,
-                nomorHp: row.querySelector('[data-field="nomorHp"]').textContent,
-                status: row.querySelector('[data-field="status"]').textContent.trim(),
-                keterangan: row.querySelector('[data-field="keterangan"]').textContent
-            };
-            row.setAttribute('data-original-nama', originalData.nama);
-            row.setAttribute('data-original-device', originalData.device);
-            row.setAttribute('data-original-kerusakan', originalData.kerusakan);
-            row.setAttribute('data-original-nomorHp', originalData.nomorHp);
-            row.setAttribute('data-original-status', originalData.status);
-            row.setAttribute('data-original-keterangan', originalData.keterangan);
-
-            row.querySelector('[data-field="nama"]').innerHTML = `<input type="text" value="${originalData.nama}">`;
-            row.querySelector('[data-field="device"]').innerHTML = `<input type="text" value="${originalData.device}">`;
-            row.querySelector('[data-field="kerusakan"]').innerHTML = `<textarea>${originalData.kerusakan}</textarea>`;
-            row.querySelector('[data-field="nomorHp"]').innerHTML = `<input type="tel" value="${originalData.nomorHp}">`;
-            row.querySelector('[data-field="keterangan"]').innerHTML = `<textarea>${originalData.keterangan}</textarea>`;
-
-            const statusSelect = document.createElement('select');
-            ['Menunggu', 'Proses', 'Selesai', 'Diambil'].forEach(statusOpt => {
-                const option = document.createElement('option');
-                option.value = statusOpt;
-                option.textContent = statusOpt;
-                if (statusOpt === originalData.status) {
-                    option.selected = true;
-                }
-                statusSelect.appendChild(option);
-            });
-            row.querySelector('[data-field="status"]').innerHTML = '';
-            row.querySelector('[data-field="status"]').appendChild(statusSelect);
-
-            row.querySelector('.action-buttons').innerHTML = `
-                <button class="save-button" onclick="saveEdit('${serviceCode}')">Simpan</button>
-                <button class="cancel-button" onclick="cancelEdit('${serviceCode}')">Batal</button>
-            `;
+            document.getElementById('editKodeService').value = serviceCode;
+            document.getElementById('editNama').value = service.nama;
+            document.getElementById('editDevice').value = service.device || '';
+            document.getElementById('editKerusakan').value = service.kerusakan;
+            document.getElementById('editNomorHp').value = service.nomorHp || '';
+            document.getElementById('editStatus').value = service.status;
+            document.getElementById('editKeterangan').value = service.keterangan || '';
+            
+            document.getElementById('editModal').style.display = 'flex';
         };
 
-        window.saveEdit = async (serviceCode) => {
-            const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
-            const updatedNama = row.querySelector('[data-field="nama"] input').value.trim();
-            const updatedDevice = row.querySelector('[data-field="device"] input').value.trim();
-            const updatedKerusakan = row.querySelector('[data-field="kerusakan"] textarea').value.trim();
-            const updatedNomorHp = row.querySelector('[data-field="nomorHp"] input').value.trim();
-            const updatedStatus = row.querySelector('[data-field="status"] select').value;
-            const updatedKeterangan = row.querySelector('[data-field="keterangan"] textarea').value.trim();
+        // FUNGSI BARU UNTUK MENUTUP MODAL EDIT
+        window.closeEditModal = () => {
+            document.getElementById('editModal').style.display = 'none';
+        };
+
+        // FUNGSI BARU UNTUK MENYIMPAN PERUBAHAN DARI MODAL
+        window.saveEdit = async () => {
+            const serviceCode = document.getElementById('editKodeService').value;
+            const updatedNama = document.getElementById('editNama').value.trim();
+            const updatedDevice = document.getElementById('editDevice').value.trim();
+            const updatedKerusakan = document.getElementById('editKerusakan').value.trim();
+            const updatedNomorHp = document.getElementById('editNomorHp').value.trim();
+            const updatedStatus = document.getElementById('editStatus').value;
+            const updatedKeterangan = document.getElementById('editKeterangan').value.trim();
 
             if (!updatedNama || !updatedDevice || !updatedKerusakan || !updatedNomorHp || !updatedStatus) {
-                showModal('Nama, Device, Keluhan, Nomor HP, dan Status wajib diisi!', 'info');
+                showModal('Nama, Device, Kerusakan, Nomor HP, dan Status wajib diisi!', 'info');
                 return;
             }
 
@@ -760,41 +816,12 @@ _https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}_
                     timestamp: originalTimestamp
                 });
                 showModal("Data berhasil diperbarui!", "info");
-                editingRowId = null;
+                closeEditModal();
                 loadServices();
             } catch (error) {
                 console.error("Error updating service:", error);
                 showModal("Gagal memperbarui data. Silakan coba lagi.", "info");
             }
-        };
-
-        window.cancelEdit = (serviceCode) => {
-            const row = document.querySelector(`tr[data-id="${serviceCode}"]`);
-            row.classList.remove('edit-mode');
-
-            row.querySelector('[data-field="nama"]').innerHTML = row.getAttribute('data-original-nama');
-            row.querySelector('[data-field="device"]').innerHTML = row.getAttribute('data-original-device');
-            row.querySelector('[data-field="kerusakan"]').innerHTML = row.getAttribute('data-original-kerusakan');
-            row.querySelector('[data-field="nomorHp"]').innerHTML = row.getAttribute('data-original-nomorHp');
-            row.querySelector('[data-field="keterangan"]').innerHTML = row.getAttribute('data-original-keterangan');
-
-            const originalStatus = row.getAttribute('data-original-status');
-            let statusBadgeClass = '';
-            switch (originalStatus) {
-                case 'Menunggu': statusBadgeClass = 'status-waiting'; break;
-                case 'Proses': statusBadgeClass = 'status-process'; break;
-                case 'Selesai': statusBadgeClass = 'status-finished'; break;
-                case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
-                default: statusBadgeClass = '';
-            }
-            row.querySelector('[data-field="status"]').innerHTML = `<span class="status-badge ${statusBadgeClass}">${originalStatus}</span>`;
-
-            row.querySelector('.action-buttons').innerHTML = `
-                <button class="whatsapp-button" onclick="sendWhatsappNotification('${serviceCode}')"><i class="fab fa-whatsapp"></i> Notif</button>
-                <button class="edit-button" onclick="editRow('${serviceCode}')">Edit</button>
-                <button class="delete-button" onclick="deleteService('${serviceCode}')">Hapus</button>
-            `;
-            editingRowId = null;
         };
 
         window.deleteService = (serviceCode) => {
@@ -857,8 +884,14 @@ _https://kemaldayat.github.io/ServiceTrackKemalComp/?code=${nomorInvoice}_
         };
 
         window.onclick = (event) => {
-            if (event.target == customModal) {
+            if (event.target == customModal || event.target == document.getElementById('editModal')) {
+                // Do nothing when clicking inside modal content
+                if (event.target.closest('.modal-content')) {
+                    return;
+                }
+                // Close modals if clicking outside the content
                 closeModal();
+                closeEditModal();
             }
         };
     </script>

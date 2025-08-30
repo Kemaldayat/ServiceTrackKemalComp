@@ -3,442 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kemal Computer - Cek Status & Informasi</title>
+    <title>Kemal Computer - Solusi Servis Elektronik Anda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* Variables for consistent styling (based on Kemal Computer logo colors) */
-        :root {
-            --primary-color: #008080;      /* Dark Teal/Tosca from logo (ikon dan teks "KEMAL") */
-            --primary-hover: #006666;      /* Slightly darker for hover */
-            --accent-color: #333333;        /* Dark Grey from logo (teks "COMPUTER") - bisa juga untuk aksen sekunder */
-            --accent-dark: #1A1A1A;
-
-            --text-color: #333333;          /* Dark grey for readability */
-            --text-color-light: #666666;    /* Lighter grey for secondary text */
-            --bg-color: #F8F8F8;            /* Very light grey for background */
-            --container-bg: #ffffff;
-            --light-bg: #FDFDFD;            /* Lighter background for elements like search form */
-            --border-color: #E0E0E0;        /* Light grey border */
-            --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
-            --border-radius-sm: 5px;
-            --border-radius-md: 8px;
-            --border-radius-lg: 12px;
-            --transition-ease: all 0.3s ease;
-
-            /* Status Colors */
-            --status-waiting-bg: #FFC107;  /* Yellow */
-            --status-waiting-text: #333;
-            --status-process-bg: #4CAF50;  /* Green */
-            --status-process-text: white;
-            --status-finished-bg: var(--primary-color); /* Use primary color for "Selesai" */
-            --status-finished-text: white;
-            --status-picked-up-bg: #9C27B0; /* Purple */
-            --status-picked-up-text: white;
-
-            /* Button Colors */
-            --info-button: #2196F3; /* Blue for info/secondary */
-            --info-hover: #1976D2;
-            --danger-color: #F44336;        /* Red for delete/warning */
-            --danger-hover: #d32f2f;
-            --success-color: #4CAF50;      /* Green for add/submit */
-            --success-hover: #45a049;
-            --secondary-button: #9E9E9E;    /* Grey for cancel/back */
-            --secondary-hover: #757575;
-            /* Tambahkan --white-color jika belum ada */
-            --white-color: #FFFFFF;
-        }
-
-        /* General Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 30px;
-            background-color: var(--container-bg);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Header */
-        .header-public {
-            background-color: var(--white-color); /* Pastikan --white-color ada atau ganti dengan #FFFFFF */
-            padding: 20px 30px;
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 3px solid var(--primary-color);
-            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .header-public img {
-            max-height: 80px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            text-align: left;
-        }
-
-        .header-public h1 {
-            font-size: 2.5em;
-            margin: 0;
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .header-public p.tagline {
-            font-size: 1.1em;
-            margin: 5px 0 0 0;
-            color: var(--text-color-light);
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-        }
-
-        .section-title {
-            text-align: center;
-            color: var(--primary-color);
-            margin-top: 40px;
-            margin-bottom: 25px;
-            font-size: 2em;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        /* Search Form */
-        .search-form {
-            max-width: 500px;
-            margin: 0 auto 30px auto;
-            padding: 25px;
-            background-color: var(--light-bg);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .search-form label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .search-form input[type="text"] {
-            width: calc(100% - 24px);
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
-            font-size: 1em;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .search-form button {
-            width: 100%;
-            padding: 12px 20px;
-            background-color: var(--success-color);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: var(--transition-ease);
-            margin-top: 20px;
-        }
-
-        .search-form button:hover {
-            background-color: var(--success-hover);
-        }
-
-        /* Result Container */
-        #resultContainer {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            background-color: var(--light-bg);
-            text-align: left;
-            min-height: 120px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        #resultContainer p {
-            margin-bottom: 8px;
-            font-size: 1em;
-            color: var(--text-color);
-        }
-
-        #resultContainer strong {
-            color: var(--primary-color);
-        }
-
-        .result-not-found {
-            color: var(--danger-color);
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.1em;
-            padding: 15px 0;
-        }
-
-        /* Status Badges */
+        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #008080; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #006666; }
+        .page-content.hidden { display: none; }
+        .service-card { transform: translateY(0); transition: transform .3s, box-shadow .3s; }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-            text-align: center;
             display: inline-block;
-            min-width: 80px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: #fff;
+            text-transform: capitalize;
         }
-
-        .status-waiting { background-color: var(--status-waiting-bg); color: var(--status-waiting-text); }
-        .status-process { background-color: var(--status-process-bg); color: var(--status-process-text); }
-        .status-finished { background-color: var(--status-finished-bg); color: var(--status-finished-text); }
-        .status-picked-up { background-color: var(--status-picked-up-bg); color: var(--status-picked-up-text); }
-
-        /* Map Section */
-        .map-section {
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 40px;
-        }
-
-        .map-section p.address {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: var(--text-color);
-            line-height: 1.5;
-        }
-
-        .map-section iframe {
-            width: 100%;
-            max-width: 800px;
-            height: 450px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-color);
-        }
-
-        footer .contact-info-footer {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        footer .contact-info-footer div {
-            display: flex;
-            align-items: center;
-            font-size: 1em;
-            color: var(--text-color-light);
-        }
-
-        footer .contact-info-footer i {
-            margin-right: 8px;
-            color: var(--primary-color);
-            font-size: 1.2em;
-        }
-
-        /* WhatsApp Button */
-        .whatsapp-button-direct {
-            background-color: #25D366;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: var(--border-radius-sm);
-            font-size: 0.8em;
-            text-decoration: none;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: var(--transition-ease);
-            box-shadow: var(--shadow-sm);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            width: fit-content;
-        }
-
-        .whatsapp-button-direct:hover {
-            background-color: #1DA851;
-            transform: translateY(-2px);
-        }
-
-        .whatsapp-button-direct i {
-            font-size: 1em;
-        }
-
-        /* Service Info Section */
-        .service-info-section {
-            background: url('./images/bg.jpg') no-repeat center center / cover;
-            color: white;
-            padding: 50px 20px;
-            margin-top: 50px;
-            border-radius: var(--border-radius-lg);
-            text-align: center;
-            box-shadow: var(--shadow-md);
+        .status-waiting { background-color: #f59e0b; }
+        .status-process { background-color: #22c55e; }
+        .status-finished { background-color: #008080; }
+        .status-picked-up { background-color: #ef4444; }
+        
+        .slider-container {
             position: relative;
             overflow: hidden;
         }
-
-        .service-info-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slider-wrapper img {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            border-radius: var(--border-radius-lg);
-            z-index: 1;
+            height: auto;
+            flex-shrink: 0;
+            border-radius: 1rem;
         }
-
-        .service-info-section > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        .service-info-section h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .service-info-section p {
-            font-size: 1.2em;
-            max-width: 700px;
-            margin: 0 auto 30px auto;
-            line-height: 1.8;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .header-public {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-                padding: 20px;
-            }
-            .header-public h1 {
-                font-size: 2em;
-            }
-            .header-public img {
-                max-height: 70px;
-            }
-            .header-content {
-                text-align: center;
-            }
-            .search-form {
-                padding: 20px;
-            }
-            .map-section iframe {
-                height: 300px;
-            }
-            .whatsapp-button-direct {
-                padding: 5px 10px;
-                font-size: 0.75em;
-            }
-            .service-info-section {
-                padding: 30px 15px;
-            }
-            .service-info-section h2 {
-                font-size: 2em;
-            }
-            .service-info-section p {
-                font-size: 1.1em;
-            }
-            footer .contact-info-footer {
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .section-title {
-                font-size: 1.8em;
-            }
-            footer .contact-info-footer div {
-                font-size: 0.95em;
-            }
+        /* Hide scrollbar for the slider container */
+        .slider-container::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header class="header-public">
-            <img src="./images/logo.png" alt="Logo Kemal Computer">
-            <div class="header-content">
-                <h1>Kemal Computer Service</h1>
-                <p class="tagline">Solusi Terbaik untuk Perbaikan Perangkat Anda</p>
+<body class="bg-gray-100">
+
+    <header class="bg-white shadow-md py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showPage('home-page')">
+                <img src="images/logo.png" alt="Logo Kemal Computer" class="w-10 h-10 rounded-lg">
+                <span class="text-xl md:text-2xl font-bold text-teal-700">Kemal Computer</span>
             </div>
-        </header>
-
-        <section class="service-info-section">
-            <h2>Tentang Layanan Kami</h2>
-            <p>
-                Kami menyediakan layanan perbaikan komputer dan perangkat elektronik dengan cepat, handal, dan bergaransi.
-                Tim teknisi berpengalaman kami siap mengatasi berbagai jenis kerusakan, mulai dari software hingga hardware.
-                Percayakan perangkat Anda kepada kami!
-            </p>
-        </section>
-
-        <h2 class="section-title">Cek Status Layanan Anda</h2>
-        <form id="checkStatusForm" class="search-form">
-            <div>
-                <label for="serviceCode">Masukkan Kode Service:</label>
-                <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required>
-            </div>
-            <button type="submit"><i class="fas fa-search"></i> Cek Status</button>
-        </form>
-
-        <div id="resultContainer" class="table-responsive">
-            <p style="text-align: center; color: var(--text-color-light);">Masukkan kode service untuk melihat status layanan Anda.</p>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-600 hover:text-teal-600 font-semibold transition" onclick="showPage('home-page')">Beranda</a>
+                <a href="#" class="text-gray-600 hover:text-teal-600 font-semibold transition" onclick="showPage('reservation-page')">Reservasi Servis</a>
+                <a href="#" class="text-gray-600 hover:text-teal-600 font-semibold transition" onclick="showPage('tracking-page')">Cek Status</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-gray-600 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
+    </header>
 
-        <h2 class="section-title">Lokasi Kami</h2>
-        <section class="map-section">
-            <p class="address">
-                Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia
-            </p>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d494.13952150458374!2d110.39919779496459!3d-7.777504966685223!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a598283967701%3A0x7977e22b3102f91b!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1748915290509!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </section>
-
-        <footer>
-            <div class="contact-info-footer">
-                <div><i class="fas fa-phone"></i> WA Admin: +62 882-2897-7367</div>
-                <div><i class="fab fa-instagram"></i> Instagram: @Kemal_Computer</div>
-                <a href="https://wa.me/6288228977367?text=Halo%20Kemal%20Computer,%20saya%20ingin%20bertanya%20mengenai%20layanan%20service." target="_blank" class="whatsapp-button-direct">
-                    <i class="fab fa-whatsapp"></i> Hubungi Admin
-                </a>
-            </div>
-        </footer>
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg py-4 px-6 z-40 fixed w-full top-16">
+        <nav class="flex flex-col space-y-4">
+            <a href="#" class="text-gray-600 hover:text-teal-600 font-semibold transition" onclick="showPage('home-page')">Beranda</a>
+            <a href="https://wa.me/6281254812473?text=Halo%2C%20saya%20ingin%20reservasi%20servis.%20Mohon%20info%20lebih%20lanjut." target="_blank" class="mt-8 inline-block bg-teal-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-teal-700 transition">Reservasi Sekarang</a>
+            <a href="#" class="text-gray-600 hover:text-teal-600 font-semibold transition" onclick="showPage('tracking-page')">Cek Status</a>
+        </nav>
     </div>
 
+    <main class="container mx-auto mt-8 px-4 py-8 md:px-8 max-w-7xl">
+        <section id="home-page" class="page-content">
+            <div class="bg-white shadow-xl p-8 md:p-12 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-teal-700 leading-tight">
+                        Solusi Cepat & <br> Terpercaya untuk Masalah Device Anda
+                    </h1>
+                    <p class="text-lg text-gray-600 mt-4 max-w-lg">
+                        Kami adalah mitra terpercaya Anda dalam mengatasi berbagai masalah perangkat elektronik.
+                    </p>
+                    <a href="#" class="mt-8 inline-block bg-teal-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-teal-700 transition" onclick="showPage('reservation-page')">
+                        Reservasi Sekarang
+                    </a>
+                </div>
+                <div class="md:w-1/2 flex justify-center relative">
+                    <div class="slider-container rounded-xl shadow-lg">
+                        <div class="slider-wrapper" id="image-slider">
+                            <img src="images/servislaptop.jpg" alt="Servis Laptop">
+                            <img src="images/servishp.jpg" alt="Servis HP">
+                            <img src="images/bg.jpg" alt="Layanan Servis">
+                            <img src="images/1.jpg" alt="Servis 1">
+                            <img src="images/2.jpg" alt="Servis 2">
+                            <img src="images/3.jpg" alt="Servis 3">
+                        </div>
+                    </div>
+                    <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full opacity-50 hover:opacity-100 transition-opacity z-10">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full opacity-50 hover:opacity-100 transition-opacity z-10">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-teal-700 mb-8">Layanan Kami</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/servislaptop.jpg" alt="Servis Laptop & PC" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Servis Laptop & PC</h3>
+                        <p class="text-gray-600">Perbaikan perangkat keras, instalasi sistem, dan pembersihan virus.</p>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/servishp.jpg" alt="Servis HP & Tablet" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Servis HP & Tablet</h3>
+                        <p class="text-gray-600">Penggantian layar, baterai, dan perbaikan komponen internal.</p>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/bg.jpg" alt="Servis Periferal" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Upgrade and Maintenance</h3>
+                        <p class="text-gray-600">Upgrade dan Maintenance perangkat yang mengalami lemot, gagal booting, overheating.</p>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/1.jpg" alt="Servis 1" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Servis Part & Komponen HP</h3>
+                        <p class="text-gray-600">Perbaikan Part dan Komponen HP anda.</p>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/2.jpg" alt="Servis 2" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Unlock and Bypass FRP</h3>
+                        <p class="text-gray-600">Perbaikan Hp lupa sandi, pola, dan akun Google.</p>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-xl shadow-md text-center">
+                        <img src="images/3.jpg" alt="Servis 3" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                        <h3 class="text-xl font-semibold mb-2">Install Firmware</h3>
+                        <p class="text-gray-600">Install ulang Firmware Android Iphone.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-teal-700 text-white p-8 md:p-12 rounded-2xl shadow-xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Testimoni Pelanggan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white text-gray-800 p-6 rounded-lg shadow-md">
+                        <p class="italic mb-4">"Pelayanan sangat cepat dan ramah! Laptop saya kembali normal dalam sehari."</p>
+                        <p class="font-semibold text-right">- Budi S.</p>
+                    </div>
+                    <div class="bg-white text-gray-800 p-6 rounded-lg shadow-md">
+                        <p class="italic mb-4">"Kerusakan HP saya bisa diperbaiki dengan biaya yang sangat terjangkau. Recommended!"</p>
+                        <p class="font-semibold text-right">- Sita A.</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="bg-white p-8 md:p-12 rounded-2xl shadow-xl w-full max-w-2xl mx-auto text-center mt-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-700 mb-4">Lokasi Kami</h2>
+                <h3 class="text-3xl md:text-3xl font-bold text-black-500 mb-1">KEMAL COMPUTER</h3>
+                <p class="text-center text-gray-600 mb-8">Gg. Serai No.127B, Tempel, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281, Indonesia</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d494.13952150458374!2d110.39919779496459!3d-7.777504966685223!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a598283967701%3A0x7977e22b3102f91b!2sKemal%20Computer!5e0!3m2!1sid!2sid!4v1748915290509!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </iframe>
+            </section>
+        </section>
+
+        <section id="reservation-page" class="page-content hidden">
+           <div class="bg-white p-8 md:p-12 rounded-2xl shadow-xl w-full max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-700 mb-4">Reservasi Servis</h2>
+                <p class="text-center text-gray-600 mb-8">
+                    Untuk melakukan reservasi servis, silakan hubungi kami langsung melalui WhatsApp.
+                </p>
+                <a href="https://wa.me/6281254812473?text=Halo%2C%20saya%20ingin%20reservasi%20servis.%20Mohon%20info%20lebih%20lanjut." target="_blank" class="w-full inline-block bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-green-600 transition">
+                <i class="fab fa-whatsapp mr-2"></i> Reservasi via WhatsApp
+                    </a>
+            </div>
+        </section>
+
+        <section id="tracking-page" class="page-content hidden">
+            <div class="bg-white p-8 md:p-12 rounded-2xl shadow-xl w-full max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-teal-700 mb-4 text-center">Cek Status Layanan Anda</h2>
+                <p class="text-center text-gray-600 mb-8">Masukkan kode service untuk melihat status perbaikan perangkat Anda.</p>
+                <form id="checkStatusForm" class="space-y-6">
+                    <div>
+                        <label for="serviceCode" class="block text-sm font-medium mb-1">Kode Service</label>
+                        <input type="text" id="serviceCode" placeholder="Contoh: KC-YYMMDD-HHMMSS-RANDOM" required class="w-full px-4 py-3 border rounded-lg">
+                    </div>
+                    <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-teal-700 transition">
+                        <i class="fas fa-search mr-2"></i> Cek Status
+                    </button>
+                </form>
+                <div id="resultContainer" class="mt-8 bg-gray-50 p-6 rounded-lg hidden">
+                    <div id="trackingContent" class="space-y-2">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-teal-700 text-white py-10 mt-12">
+        <div class="container mx-auto px-4 md:px-8 max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 border-b border-teal-600 pb-8 mb-8">
+                <div class="text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-4">
+                        <img src="images/logo.png" alt="Logo Kemal Computer" class="w-12 h-12 rounded-lg">
+                        <span class="text-2xl font-bold">Kemal Computer</span>
+                    </div>
+                    <p class="text-sm text-gray-300 max-w-sm">
+                        Kami adalah mitra terpercaya Anda dalam mengatasi berbagai masalah perangkat elektronik dengan cepat dan andal.
+                    </p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold mb-4">Kontak Kami</h3>
+                    <p class="text-sm text-gray-300">Gg. Serai No.127B, Tempel, Caturtunggal,<br> Kec. Depok, Sleman, DIY 55281</p>
+                    <p class="text-sm text-gray-300 mt-2">Telp: <a href="tel:+6281254812473" class="hover:underline">+62 812-5481-2473</a></p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold mb-4">Ikuti Kami</h3>
+                    <div class="flex justify-center md:justify-start space-x-4 text-2xl">
+                        <a href="https://www.instagram.com/kemal_computer" target="_blank" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/channel/Kemal Comp" target="_blank" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@kemal_computer" target="_blank" class="hover:text-gray-300 transition"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/6281254812473?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20servis." target="_blank" class="hover:text-gray-300 transition"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-300 text-sm">
+                <p>© 2021 Kemal Computer. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script type="module">
-        // Firebase Configuration
+        // Firebase Configuration (Ganti dengan konfigurasi Anda yang sebenarnya)
         const firebaseConfig = {
             apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
             authDomain: "website-track-service.firebaseapp.com",
@@ -451,25 +251,123 @@
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Ambil referensi elemen DOM di awal
-        const serviceCodeInput = document.getElementById('serviceCode'); // Diperbarui dari 'serviceCode'
+        const pages = document.querySelectorAll('.page-content');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        const reservationForm = document.getElementById('reservationForm');
+        const checkStatusForm = document.getElementById('checkStatusForm');
+        const serviceCodeInput = document.getElementById('serviceCode');
         const resultContainer = document.getElementById('resultContainer');
-        const checkStatusForm = document.getElementById('checkStatusForm'); // Referensi form
+        const trackingContent = document.getElementById('trackingContent');
+        
+        const slider = document.getElementById('image-slider');
+        const slides = slider ? slider.querySelectorAll('img') : [];
+        let currentSlide = 0;
+        let slideInterval;
+        const intervalTime = 5000;
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
 
-        // ===========================================
-        // FUNGSI PELACAKAN SERVICE YANG DI-REFACTOR
-        // ===========================================
+        window.showPage = (pageId) => {
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+            mobileMenu.classList.add('hidden');
+            document.documentElement.scrollTop = 0;
+        };
+
+        function startSlider() {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlider();
+            }, intervalTime);
+        }
+
+        function stopSlider() {
+            clearInterval(slideInterval);
+        }
+        
+        function updateSlider() {
+            const offset = -currentSlide * 100;
+            slider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            stopSlider();
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlider();
+            startSlider();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            stopSlider();
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlider();
+            startSlider();
+        });
+        
+        if (reservationForm) {
+            reservationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nama = document.getElementById('nama').value.trim();
+                const device = document.getElementById('device').value.trim();
+                const kerusakan = document.getElementById('kerusakan').value.trim();
+                const nomorHp = document.getElementById('nomorHp').value.trim();
+
+                if (!nama || !device || !kerusakan || !nomorHp) {
+                    alert('Semua kolom harus diisi.');
+                    return;
+                }
+
+                if (!nomorHp.startsWith('62')) {
+                    alert('Nomor HP harus dimulai dengan 62 (contoh: 62812...).');
+                    return;
+                }
+
+                const d = new Date();
+                const randomString = Math.random().toString(36).substring(2, 6).toUpperCase();
+                const serviceCode = `KC-${d.getFullYear().toString().slice(-2)}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${d.getHours()}${d.getMinutes()}${d.getSeconds()}-${randomString}`;
+                
+                try {
+                    await set(ref(db, `antrian/${serviceCode}`), {
+                        nama,
+                        device,
+                        kerusakan,
+                        nomorHp,
+                        status: 'Menunggu',
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    alert(`Reservasi berhasil! Kode servis Anda adalah: ${serviceCode}`);
+                    reservationForm.reset();
+                    showPage('tracking-page');
+                    serviceCodeInput.value = serviceCode;
+                    trackService();
+
+                } catch (error) {
+                    console.error("Error menambahkan layanan baru:", error);
+                    alert("Gagal menambahkan layanan baru. Silakan coba lagi.");
+                }
+            });
+        }
+        
         async function trackService(codeToTrack = null) {
-            const code = codeToTrack ? codeToTrack : serviceCodeInput.value.trim().toUpperCase();
-            resultContainer.innerHTML = ''; // Clear previous results
-
+            const code = (codeToTrack || serviceCodeInput.value).trim().toUpperCase();
+            
+            resultContainer.classList.add('hidden');
+            trackingContent.innerHTML = `<p class="text-center text-gray-400">Mencari...</p>`;
+            
             if (!code) {
-                resultContainer.innerHTML = '<p class="result-not-found">Mohon masukkan kode service.</p>';
+                trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Mohon masukkan kode service.</p>`;
+                resultContainer.classList.remove('hidden');
                 return;
             }
 
@@ -485,56 +383,52 @@
                         case 'Proses': statusBadgeClass = 'status-process'; break;
                         case 'Selesai': statusBadgeClass = 'status-finished'; break;
                         case 'Diambil': statusBadgeClass = 'status-picked-up'; break;
-                        default: statusBadgeClass = ''; // Default or unknown status
+                        default: statusBadgeClass = 'bg-gray-400';
                     }
                     
-                    resultContainer.innerHTML = `
-                        <p><strong>Kode Service:</strong> ${code}</p>
-                        <p><strong>Nama Pelanggan:</strong> ${service.nama}</p>
-                        <p><strong>Jenis Device:</strong> ${service.device || '-'}</p>
-                        <p><strong>Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
-                        <p><strong>Nomor HP:</strong> ${service.nomorHp || '-'}</p>
-                        <p><strong>Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
-                        ${service.keterangan ? `<p><strong>Keterangan:</strong> ${service.keterangan}</p>` : ''}
+                    trackingContent.innerHTML = `
+                        <p><strong class="font-semibold text-teal-700">Nama Pelanggan:</strong> ${service.nama}</p>
+                        <p><strong class="font-semibold text-teal-700">Jenis Device:</strong> ${service.device || '-'}</p>
+                        <p><strong class="font-semibold text-teal-700">Deskripsi Kerusakan:</strong> ${service.kerusakan}</p>
+                        <p class="mt-4"><strong class="font-semibold text-teal-700">Status:</strong> <span class="status-badge ${statusBadgeClass}">${service.status}</span></p>
+                        ${service.keterangan ? `<p class="mt-4"><strong class="font-semibold text-teal-700">Keterangan:</strong> ${service.keterangan}</p>` : ''}
                     `;
                 } else {
-                    resultContainer.innerHTML = '<p class="result-not-found">Kode service tidak ditemukan. Mohon periksa kembali.</p>';
+                    trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Kode service tidak ditemukan. Mohon periksa kembali.</p>`;
                 }
             } catch (error) {
                 console.error("Error checking service status:", error);
-                resultContainer.innerHTML = '<p class="result-not-found">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>';
+                trackingContent.innerHTML = `<p class="text-center text-red-500 font-bold">Terjadi kesalahan saat mencari status. Silakan coba lagi.</p>`;
+            } finally {
+                resultContainer.classList.remove('hidden');
             }
         }
 
-        // ===========================================
-        // LISTENERS UNTUK MENGGUNAKAN FUNGSI BARU
-        // ===========================================
-        checkStatusForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            trackService(); // Panggil fungsi trackService tanpa argumen (akan pakai nilai dari input)
-        });
-
-        // Tambahkan listener untuk keypress (Enter) pada input field
-        serviceCodeInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Mencegah form submit default jika ada
+        if (checkStatusForm) {
+            checkStatusForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
                 trackService();
-            }
+            });
+        }
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-
-        // ===========================================
-        // BAGIAN BARU: Otomatis lacak dari URL
-        // ===========================================
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const serviceCodeFromUrl = urlParams.get('code');
 
             if (serviceCodeFromUrl) {
-                // Isi input field dengan kode service dari URL
+                showPage('tracking-page');
                 serviceCodeInput.value = serviceCodeFromUrl.toUpperCase();
-                // Langsung panggil fungsi pelacakan dengan kode dari URL
                 trackService(serviceCodeFromUrl.toUpperCase());
+            } else {
+                showPage('home-page');
+            }
+
+            if (slides.length > 1) {
+                startSlider();
             }
         });
     </script>

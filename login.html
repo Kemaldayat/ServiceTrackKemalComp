@@ -7,28 +7,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Specific styles for login page */
+        /* [STYLES UTAMA LOGIN] */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: var(--bg-color); /* Using CSS variable */
-            font-family: 'Poppins', sans-serif; /* Pastikan font Poppins juga di login page */
+            background-color: var(--bg-color, #f4f4f4); 
+            font-family: 'Poppins', sans-serif;
         }
 
         .login-container {
-            background-color: var(--container-bg);
+            background-color: var(--container-bg, #ffffff);
             padding: 40px;
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow-md);
+            border-radius: var(--border-radius-lg, 8px);
+            box-shadow: var(--shadow-md, 0 4px 8px rgba(0,0,0,0.1));
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
 
         .login-container h1 {
-            color: var(--primary-color);
+            color: var(--primary-color, #007bff);
             margin-bottom: 30px;
             font-size: 2.2em;
         }
@@ -42,60 +42,92 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: var(--text-color);
+            color: var(--text-color, #333);
         }
 
         .login-form input {
-            width: calc(100% - 24px); /* Adjust for padding and border */
+            width: 100%;
             padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
+            box-sizing: border-box; 
+            border: 1px solid var(--border-color, #ccc);
+            border-radius: var(--border-radius-sm, 4px);
             font-size: 1em;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.3s ease;
         }
         .login-form input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+            border-color: var(--primary-color, #007bff);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); 
         }
 
         .login-form button {
             width: 100%;
             padding: 12px 20px;
-            background-color: var(--primary-color);
+            background-color: var(--primary-color, #007bff);
             color: white;
             border: none;
-            border-radius: var(--border-radius-sm);
+            border-radius: var(--border-radius-sm, 4px);
             font-size: 1.1em;
             cursor: pointer;
-            transition: var(--transition-ease);
+            transition: 0.3s ease;
             margin-top: 10px;
         }
 
         .login-form button:hover {
-            background-color: var(--primary-hover);
+            background-color: var(--primary-hover, #0056b3);
             transform: translateY(-2px);
         }
 
-        /* Error message styles (optional, if you want a more refined error display later) */
         #errorMessage {
-            color: var(--danger-color);
+            color: var(--danger-color, #dc3545);
             margin-top: 15px;
             font-size: 0.95em;
             font-weight: bold;
         }
+        /* [END STYLES UTAMA] */
 
-        /* Responsive for login */
-        @media (max-width: 480px) {
-            .login-container {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-            .login-container h1 {
-                font-size: 1.8em;
-            }
+        /* [STYLE NATIVE POP-UP TENGAH] */
+        #customToast {
+            position: fixed;
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%) scale(0.8); 
+            
+            color: white;
+            padding: 25px 40px; 
+            min-width: 280px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0; 
+            visibility: hidden;
+            
+            /* Durasi Transisi 0.5s untuk animasi lebih lambat */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; 
+            
+            display: flex;
+            align-items: center;
+            flex-direction: column; 
+            text-align: center;
         }
+
+        #customToast.success-toast {
+            background-color: #4CAF50; /* Hijau untuk sukses */
+        }
+        
+        #customToast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1); /* Pindah ke posisi akhir (tengah) */
+        }
+        
+        #customToast i {
+            margin-right: 0; 
+            margin-bottom: 10px; 
+            font-size: 2.2em; 
+        }
+        /* [END STYLE NATIVE POP-UP] */
     </style>
 </head>
 <body>
@@ -111,11 +143,17 @@
                 <input type="password" id="password" required>
             </div>
             <button type="submit">Login</button>
-            <div id="errorMessage" style="display: none;"></div> </form>
+            <div id="errorMessage" style="display: none;"></div> 
+        </form>
+    </div>
+
+    <div id="customToast" class="success-toast">
+        <i class="fas fa-check-circle"></i> 
+        <span id="toastMessage"></span>
     </div>
 
     <script type="module">
-        // Firebase Configuration (GANTI DENGAN KONFIGURASI ANDA SENDIRI)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDRvkYXHUb42q2H8F_2687CTihtDDNuYQ4",
             authDomain: "website-track-service.firebaseapp.com",
@@ -128,15 +166,35 @@
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        // import onAuthStateChanged dihapus karena menyebabkan masalah
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        const adminEmail = "dayatkemal16@gmail.com"; // <--- GANTI DENGAN EMAIL ADMIN YANG VALID DI FIREBASE ANDA
+        const adminEmail = "dayatkemal16@gmail.com"; 
 
         const errorMessageDiv = document.getElementById('errorMessage');
+        const customToast = document.getElementById('customToast');
+        const toastMessage = document.getElementById('toastMessage');
 
+        // Fungsi Native Pop-up (Menangani display 3 detik dan redirect)
+        function showToast(message) {
+            toastMessage.textContent = message;
+            customToast.classList.add('show');
+            
+            // Atur timer untuk menghilangkan pop-up dan melakukan redirect
+            setTimeout(() => {
+                customToast.classList.remove('show');
+                
+                // Lakukan redirect setelah transisi CSS selesai (0.5 detik)
+                setTimeout(() => {
+                     window.location.href = 'dashboard.html'; 
+                }, 500); 
+            }, 1000); // Tampilkan selama 1 detik
+        }
+        
+        // Fungsi Error 
         function displayError(message) {
             errorMessageDiv.textContent = message;
             errorMessageDiv.style.display = 'block';
@@ -147,62 +205,45 @@
             errorMessageDiv.style.display = 'none';
         }
 
-        // Check if user is already logged in (and is admin)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Redirect if already logged in AND is the designated admin
-                if (user.email === adminEmail) {
-                    // console.log("User already logged in as admin, redirecting to dashboard.");
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // Logged in but not the specific admin.
-                    // Force logout and show message.
-                    signOut(auth).then(() => {
-                        alert("Akun ini tidak memiliki izin akses admin. Silakan login dengan akun yang benar.");
-                        // console.log("Logged out non-admin user.");
-                    }).catch((error) => {
-                        console.error("Error signing out non-admin user:", error);
-                    });
-                }
-            }
-        });
-
+        // EVENT LISTENER LOGIKA UTAMA
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            hideError(); // Clear any previous errors
+            hideError(); 
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!email || !password) {
+                 displayError("Email dan Password wajib diisi.");
+                 return;
+            }
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                if (user.email === adminEmail) { // <--- GANTI DENGAN EMAIL ADMIN YANG VALID DI FIREBASE ANDA
-                    alert("Login berhasil! Selamat datang, Admin.");
-                    window.location.href = 'dashboard.html';
+                if (user.email === adminEmail) {
+                    
+                    // --- AKTIVASI NATIVE POP-UP TENGAH ---
+                    showToast('Login berhasil! Mengarahkan ke Dashboard...');
+                    // ------------------------------------
                 } else {
-                    // This case should ideally not be reached if onAuthStateChanged works correctly,
-                    // but as a fallback, explicitly sign out if somehow a non-admin gets through.
-                    alert("Email ini tidak memiliki izin akses admin.");
-                    await signOut(auth); // Force logout if not the specific admin
+                    displayError("Email ini tidak memiliki izin akses admin.");
+                    await signOut(auth); 
                 }
             } catch (error) {
                 console.error("Error logging in:", error);
+                
                 let errorMessage = "Login gagal. Periksa email dan password Anda.";
                 if (error.code === 'auth/wrong-password') {
                     errorMessage = "Password salah.";
                 } else if (error.code === 'auth/user-not-found') {
                     errorMessage = "Email tidak terdaftar.";
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = "Format email tidak valid.";
-                } else if (error.code === 'auth/user-disabled') {
-                    errorMessage = "Akun Anda telah dinonaktifkan.";
                 } else if (error.code === 'auth/too-many-requests') {
-                    errorMessage = "Terlalu banyak percobaan login gagal. Coba lagi nanti atau reset password Anda.";
+                    errorMessage = "Terlalu banyak percobaan login gagal. Coba lagi nanti.";
                 }
-                displayError(errorMessage); // Display error below the form
-                // alert(errorMessage); // If you prefer alert for ALL errors
+                
+                displayError(errorMessage); 
             }
         });
     </script>
